@@ -150,8 +150,10 @@ export const getGoalDetails =
       const goal = await Goal.findOne({
         _id: req.params.id,
         owner: req.user._id,
-      });
-
+      }).populate(
+        "objective",
+        "title"
+      );
       if (!goal) {
         return res.status(404).json({
           message: "Meta no encontrada",

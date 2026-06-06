@@ -224,8 +224,7 @@ const Goals = () => {
               <div>
                 <Link
                   to={`/goals/${goal._id}`}
-                  className="text-xl font-semibold"
-                >
+                  className="text-xl font-semibold">
                   {goal.title}
                 </Link>
 

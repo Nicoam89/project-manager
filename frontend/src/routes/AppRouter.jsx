@@ -90,7 +90,14 @@ const AppRouter = () => {
             path="/activities/:id"
             element={
               <ProtectedRoute>
-      <ActivityDetail />
+      <Route
+          path="/activities/:id"
+          element={
+            <ProtectedRoute>
+              <ActivityDetail />
+            </ProtectedRoute>
+          }
+        />
     </ProtectedRoute>
   }
 />

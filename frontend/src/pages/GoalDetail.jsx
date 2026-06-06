@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import {
+  Link,
+  useParams,
+} from "react-router-dom";
 
 import api from "../api/axios";
 
@@ -36,14 +39,32 @@ const GoalDetail = () => {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl font-bold">
-        {data.goal.title}
-      </h1>
+
+      <Link
+          to="/goals"
+          className="text-blue-500"
+        >
+          ← Volver a metas
+        </Link>
+        <h1 className="text-3xl font-bold mt-4">
+          {data.goal.title}
+        </h1>
 
       <p className="mt-2">
         {data.goal.description}
       </p>
 
+      {data.goal.objective && (
+        <p className="mt-2">
+          Objetivo:{" "}
+          <Link
+            to={`/objectives/${data.goal.objective._id}`}
+            className="text-blue-600"
+          >
+            {data.goal.objective.title}
+          </Link>
+        </p>
+)}
       <div className="mt-6">
         <div className="w-full bg-gray-200 h-4 rounded">
           <div
@@ -106,10 +127,12 @@ const GoalDetail = () => {
               key={activity._id}
               className="border rounded p-4"
             >
-              <h3>
-                {activity.title}
-              </h3>
-
+            <Link
+              to={`/activities/${activity._id}`}
+              className="text-xl font-semibold text-blue-600"
+            >
+              {activity.title}
+            </Link>
               <p>
                 {
                   activity.status

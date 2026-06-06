@@ -35,9 +35,12 @@ const ActivityCard = ({
   priorityColors.MEDIUM
 }`}
     >
-      <h3>
+      <Link
+        to={`/activities/${activity._id}`}
+        className="text-xl font-semibold text-blue-600"
+      >
         {activity.title}
-      </h3>
+      </Link>
 
       <p className="text-sm">
         {

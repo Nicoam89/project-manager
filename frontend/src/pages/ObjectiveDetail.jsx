@@ -1,6 +1,9 @@
 import { useEffect, useState } from "react";
 
-import { useParams } from "react-router-dom";
+import {
+  Link,
+  useParams,
+} from "react-router-dom";
 
 import api from "../api/axios";
 
@@ -29,6 +32,7 @@ const ObjectiveDetail = () => {
   if (!data) {
     return (
       <MainLayout>
+        
         Cargando...
       </MainLayout>
     );
@@ -36,9 +40,16 @@ const ObjectiveDetail = () => {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl font-bold">
-        {data.objective.title}
-      </h1>
+    <Link
+      to="/objectives"
+      className="text-blue-500"
+    >
+      ← Volver a objetivos
+    </Link>
+
+    <h1 className="text-3xl font-bold mt-4">
+      {data.objective.title}
+    </h1>
 
       <p className="mt-2">
         {
@@ -49,7 +60,12 @@ const ObjectiveDetail = () => {
 
       <div className="grid grid-cols-3 gap-4 mt-8">
         <div className="border rounded p-4">
-          <h3>Metas</h3>
+          <Link
+            to={`/goals/${goal._id}`}
+            className="text-xl font-semibold text-blue-600"
+          >
+            {goal.title}
+          </Link>
 
           <p className="text-3xl">
             {data.stats.goals}

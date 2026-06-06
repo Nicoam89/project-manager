@@ -166,19 +166,41 @@ export const getActivityDetails =
         });
       }
 
+      const trackedHours =
+        activity.timeEntries.reduce(
+          (sum, entry) =>
+            sum + Number(entry.hours),
+          0
+        );
+
       const completedSubtasks =
         activity.subtasks.filter(
           (subtask) =>
             subtask.completed
         );
 
+      res.json({
+        activity,
+
+        stats: {
+          trackedHours,
+
+          subtasks:
+            activity.subtasks.length,
+
+          completedSubtasks:
+            completedSubtasks.length,
+
+          comments:
+            activity.comments.length,
+        },
+      });
     } catch (error) {
       res.status(500).json({
         message: error.message,
       });
     }
   };
-
   export const addTimeEntry =
   async (req, res) => {
     try {
@@ -199,7 +221,7 @@ export const getActivityDetails =
         description:
           req.body.description,
 
-        hours: req.body.hours,
+        hours: Number(req.body.hours),
 
         user: req.user._id,
       });
