@@ -51,11 +51,11 @@ const Sidebar = () => {
 
         <div className="mt-4">
           <h1 className="text-xl font-bold tracking-tight text-slate-950">
-            Project Manager
+            A.M.O. iQ
           </h1>
 
           <p className="mt-1 text-sm text-slate-500">
-            Objetivos, metas y actividades
+            Objetivos, metas y actividades Inteligentes
           </p>
         </div>
       </div>

@@ -25,13 +25,10 @@ const Header = () => {
     <header className="sticky top-0 z-10 border-b border-slate-200 bg-white/80 px-6 py-4 backdrop-blur">
       <div className="flex items-center justify-between gap-4">
         <div>
-          <p className="text-sm font-medium text-slate-500">
+          <h2 className="text-sm font-medium text-slate-500">
             Bienvenido
-          </p>
-
-          <h2 className="text-xl font-bold text-slate-950">
-            Dashboard
           </h2>
+
         </div>
 
         <div className="flex items-center gap-3">

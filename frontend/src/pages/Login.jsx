@@ -1,11 +1,21 @@
+import { useState } from "react";
+import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import api from "../api/axios";
 
 import useAuthStore from "../store/authStore";
 
 const Login = () => {
-  const { register, handleSubmit } =
-    useForm();
+  const [errorMessage, setErrorMessage] =
+    useState("");
+
+  const navigate = useNavigate();
+
+  const {
+    register,
+    handleSubmit,
+    formState: { isSubmitting },
+  } = useForm();
 
   const loginStore =
     useAuthStore(
@@ -13,6 +23,8 @@ const Login = () => {
     );
 
   const onSubmit = async (data) => {
+    setErrorMessage("");
+
     try {
       const response =
         await api.post(
@@ -29,30 +41,63 @@ const Login = () => {
         },
         response.data.token
       );
+
+      navigate("/", {
+        replace: true,
+      });
     } catch (error) {
-      console.error(error);
+      setErrorMessage(
+        error.response?.data?.message ||
+          "No se pudo iniciar sesión. Intenta de nuevo."
+      );
     }
   };
 
   return (
+
     <form
       onSubmit={handleSubmit(
         onSubmit
       )}
+      className="pm-card mb-8 space-y-4 p-5 login"
     >
+      {errorMessage ? (
+        <p role="alert">
+          {errorMessage}
+        </p>
+      ) : null}
+
       <input
+        type="email"
         placeholder="Email"
-        {...register("email")}
+        autoComplete="email"
+        {...register("email", {
+          required:
+            "El email es obligatorio",
+        })}
+        className="pm-input"
       />
 
       <input
         type="password"
         placeholder="Password"
-        {...register("password")}
+        autoComplete="current-password"
+        {...register("password", {
+          required:
+            "La contraseña es obligatoria",
+        })}
+        className="pm-input"
       />
 
-      <button type="submit">
-        Login
+      <button
+        type="submit"
+        disabled={isSubmitting}
+        className="border px-4 py-2 rounded"
+      >
+        {isSubmitting
+          ? "Ingresando..."
+          : "Login"}
+
       </button>
     </form>
   );
