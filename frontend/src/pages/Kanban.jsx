@@ -28,8 +28,11 @@ const Kanban = () => {
   const [workflowType, setWorkflowType] =
     useState("STANDARD");
 
-  const loadActivities = useCallback(
-    async () => {
+const loadActivities = useCallback(
+  async () => {
+    try {
+      setError("");
+
       const response =
         await api.get(
           `/activities?workflowType=${workflowType}`
@@ -38,25 +41,46 @@ const Kanban = () => {
       setActivities(
         response.data
       );
-    },
-    [workflowType]
-  );
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          "Error cargando actividades"
+      );
+    }
+  },
+  [workflowType]
+);
 
   useEffect(() => {
     loadActivities();
   }, [loadActivities]);
 
   const handleDragEnd =
-    async (event) => {
-      const activityId =
-        event.active.id;
+  async (event) => {
+    const activityId =
+      event.active.id;
 
-      const newStatus =
-        event.over?.id;
+    const newStatus =
+      event.over?.id;
 
-      if (!newStatus) {
-        return;
-      }
+    if (!newStatus) {
+      return;
+    }
+
+    const activity =
+      activities.find(
+        (item) => item._id === activityId
+      );
+
+    if (
+      activity &&
+      activity.status === newStatus
+    ) {
+      return;
+    }
+
+    try {
+      setError("");
 
       await api.patch(
         `/activities/${activityId}/status`,
@@ -66,8 +90,13 @@ const Kanban = () => {
       );
 
       await loadActivities();
-    };
-
+    } catch (err) {
+      setError(
+        err.response?.data?.message ||
+          "Error actualizando estado"
+      );
+    }
+  };
 
   return (
     <MainLayout>

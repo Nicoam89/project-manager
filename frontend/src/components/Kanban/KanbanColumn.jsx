@@ -19,9 +19,10 @@ const KanbanColumn = ({
       ref={setNodeRef}
       className="border rounded p-4 min-h-[500px]"
     >
-      <h2 className="font-bold mb-4">
-        {status}
-      </h2>
+<h2 className="font-bold mb-4 flex justify-between">
+  <span>{status}</span>
+  <span>{activities.length}</span>
+</h2>
 
       {activities.map(
         (activity) => (

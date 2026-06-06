@@ -263,11 +263,14 @@ export const getActivityDetails =
           req.query.workflowType;
       }
 
-      const activities =
-        await Activity.find(
-          filter
-        );
+  const activities =
+  await Activity.find(filter)
+    .populate("goal", "title")
+    .sort({
+      createdAt: -1,
+    });
 
+res.json(activities);
       res.json(
         activities
       );

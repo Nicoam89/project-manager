@@ -23,3 +23,13 @@ export const createActivityValidation = [
       "CRM",
     ]),
 ];
+
+export const updateActivityStatusValidation = [
+  body("status")
+    .isIn([
+      "PENDING",
+      "IN_PROGRESS",
+      "COMPLETED",
+    ])
+    .withMessage("Estado inválido"),
+];

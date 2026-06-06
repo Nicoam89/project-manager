@@ -8,6 +8,7 @@ import { validate } from "../middleware/validation.middleware.js";
 
 import {
   createActivityValidation,
+  updateActivityStatusValidation,
 } from "../validators/activity.validator.js";
 
 import { addTimeValidation } from "../validators/time.validator.js";
@@ -45,7 +46,8 @@ router.post(
 
 router.patch(
   "/:id/status",
+  updateActivityStatusValidation,
+  validate,
   activityController.updateActivityStatus
 );
-
 export default router;

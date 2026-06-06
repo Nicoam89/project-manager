@@ -30,7 +30,10 @@ const ActivityCard = ({
       style={style}
       {...listeners}
       {...attributes}
-      className="border rounded p-3 mb-2 bg-white cursor-grab"
+      className={`border-l-4 rounded p-3 mb-2 bg-white cursor-grab ${
+  priorityColors[activity.priority] ||
+  priorityColors.MEDIUM
+}`}
     >
       <h3>
         {activity.title}
