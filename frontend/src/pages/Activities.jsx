@@ -121,13 +121,13 @@ const Activities = () => {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl mb-6">
+      <h1 className="pm-page-title mb-6">
         Actividades
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="border rounded p-4 mb-8 space-y-4"
+        className="pm-card mb-8 space-y-4 p-5"
       >
         <h2 className="text-xl font-semibold">
           Nueva actividad
@@ -143,7 +143,7 @@ const Activities = () => {
           name="goal"
           value={form.goal}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="pm-input"
           required
         >
           <option value="">
@@ -164,7 +164,7 @@ const Activities = () => {
           name="title"
           value={form.title}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="pm-input"
           placeholder="Título"
           required
         />
@@ -173,7 +173,7 @@ const Activities = () => {
           name="description"
           value={form.description}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="pm-input"
           placeholder="Descripción"
         />
 
@@ -181,7 +181,7 @@ const Activities = () => {
           name="workflowType"
           value={form.workflowType}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="pm-input"
         >
           {workflowTypes.map((workflowType) => (
             <option

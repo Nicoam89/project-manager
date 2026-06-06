@@ -24,10 +24,9 @@ const Dashboard = () => {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl font-bold mb-6">
+      <h1 className="pm-page-title mb-6">
         Dashboard
       </h1>
-
       <div className="grid grid-cols-3 gap-4">
         <div className="border rounded p-4">
           <h3>Objetivos</h3>

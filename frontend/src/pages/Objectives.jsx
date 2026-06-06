@@ -36,7 +36,7 @@ const Objectives = () => {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl mb-6">
+      <h1 className="pm-page-title mb-6">
         Objetivos
       </h1>
 

@@ -5,7 +5,7 @@ const ObjectiveCard = ({
   onDelete,
 }) => {
   return (
-    <div className="border rounded-lg p-4 shadow-sm">
+    <div className="pm-card pm-card-hover p-5">
       <h3 className="text-xl font-semibold">
         {objective.title}
       </h3>
@@ -36,7 +36,7 @@ const ObjectiveCard = ({
       </div>
 
       <div className="mt-4 flex gap-2">
-        <button className="border px-3 py-1 rounded">
+        <button className="pm-button pm-button-secondary">
           Editar
         </button>
 
@@ -44,7 +44,7 @@ const ObjectiveCard = ({
           onClick={() =>
             onDelete(objective._id)
           }
-          className="border px-3 py-1 rounded"
+          className="pm-button pm-button-secondary"
         >
           Eliminar
         </button>

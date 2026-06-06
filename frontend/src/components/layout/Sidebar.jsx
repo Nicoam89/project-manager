@@ -6,63 +6,86 @@ import {
   FaCog,
 } from "react-icons/fa";
 
-import { Link } from "react-router-dom";
+import { NavLink } from "react-router-dom";
+
+const links = [
+  {
+    to: "/",
+    label: "Dashboard",
+    icon: FaHome,
+  },
+  {
+    to: "/objectives",
+    label: "Objetivos",
+    icon: FaBullseye,
+  },
+  {
+    to: "/goals",
+    label: "Metas",
+    icon: FaTasks,
+  },
+  {
+    to: "/activities",
+    label: "Actividades",
+    icon: FaTasks,
+  },
+  {
+    to: "/kanban",
+    label: "Kanban",
+    icon: FaColumns,
+  },
+  {
+    to: "/settings",
+    label: "Configuración",
+    icon: FaCog,
+  },
+];
 
 const Sidebar = () => {
   return (
-    <aside className="w-64 border-r">
-      <div className="p-4 text-xl font-bold">
-        Project Manager
+    <aside className="hidden w-72 shrink-0 border-r border-slate-200 bg-white/90 px-4 py-5 shadow-sm backdrop-blur lg:block">
+      <div className="mb-8 px-3">
+        <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 text-lg font-black text-white shadow-lg shadow-blue-600/20">
+          PM
+        </div>
+
+        <div className="mt-4">
+          <h1 className="text-xl font-bold tracking-tight text-slate-950">
+            Project Manager
+          </h1>
+
+          <p className="mt-1 text-sm text-slate-500">
+            Objetivos, metas y actividades
+          </p>
+        </div>
       </div>
 
-      <nav className="flex flex-col">
-        <Link
-          to="/"
-          className="p-4 hover:bg-gray-100"
-        >
-          <FaHome className="inline mr-2" />
-          Dashboard
-        </Link>
+      <nav className="space-y-1">
+        {links.map((link) => {
+          const Icon = link.icon;
 
-        <Link
-          to="/objectives"
-          className="p-4 hover:bg-gray-100"
-        >
-          <FaBullseye className="inline mr-2" />
-          Objetivos
-        </Link>
+          return (
+            <NavLink
+              key={link.to}
+              to={link.to}
+              end={link.to === "/"}
+              className={({ isActive }) =>
+                [
+                  "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
+                  isActive
+                    ? "bg-blue-50 text-blue-700"
+                    : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
+                ].join(" ")
+              }
+            >
+              <Icon className="text-base" />
 
-        <Link
-          to="/goals"
-          className="p-4 hover:bg-gray-100"
-        >
-          <FaTasks className="inline mr-2" />
-          Metas
-        </Link>
-
-        <Link
-          to="/activities"
-          className="p-4 hover:bg-gray-100"
-        >
-          <FaTasks className="inline mr-2" />
-          Actividades
-        </Link>
-
-        <Link
-          to="/kanban"
-          className="p-4 hover:bg-gray-100"
-        >
-          <FaColumns className="inline mr-2" />
-          Kanban
-        </Link>
-
-        <Link
-          to="/settings"
-          className="p-4 hover:bg-gray-100"
-        >
-          <FaCog className="inline mr-2" />
-          Configuración
-        </Link>
+              <span>
+                {link.label}
+              </span>
+            </NavLink>
+          );
+        })}
       </nav>
     </aside>
   );

@@ -3,15 +3,19 @@ import Header from "../components/layout/Header";
 
 const MainLayout = ({ children }) => {
   return (
-    <div className="flex h-screen">
-      <Sidebar />
+    <div className="min-h-screen bg-slate-50 text-slate-900">
+      <div className="flex min-h-screen">
+        <Sidebar />
 
-      <div className="flex-1 flex flex-col">
-        <Header />
+        <div className="flex min-w-0 flex-1 flex-col">
+          <Header />
 
-        <main className="p-6 overflow-auto">
-          {children}
-        </main>
+          <main className="flex-1 overflow-auto px-6 py-6 lg:px-8">
+            <div className="mx-auto max-w-7xl">
+              {children}
+            </div>
+          </main>
+        </div>
       </div>
     </div>
   );

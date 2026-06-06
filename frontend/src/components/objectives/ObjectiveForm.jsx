@@ -16,16 +16,16 @@ const ObjectiveForm = ({
       onSubmit={handleSubmit(
         onSubmit
       )}
-      className="space-y-4"
+      className="pm-card space-y-4 p-5"
     >
       <input
-        className="border p-2 w-full"
+        className="pm-input"
         placeholder="Título"
         {...register("title")}
       />
 
       <textarea
-        className="border p-2 w-full"
+        className="pm-input"
         placeholder="Descripción"
         {...register(
           "description"
@@ -33,7 +33,7 @@ const ObjectiveForm = ({
       />
 
       <button
-        className="border px-4 py-2"
+        className="pm-button"
         type="submit"
       >
         Guardar

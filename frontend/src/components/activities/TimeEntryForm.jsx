@@ -27,7 +27,7 @@ const TimeEntryForm = ({
       className="space-y-2"
     >
       <input
-        className="border p-2 w-full"
+        className="pm-input"
         placeholder="Descripción"
         {...register(
           "description"
@@ -37,7 +37,7 @@ const TimeEntryForm = ({
       <input
         type="number"
         step="0.1"
-        className="border p-2 w-full"
+        className="pm-input"
         placeholder="Horas"
         {...register("hours")}
       />

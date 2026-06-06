@@ -120,13 +120,13 @@ const Goals = () => {
 
   return (
     <MainLayout>
-      <h1 className="text-3xl mb-6">
+      <h1 className="pm-page-title mb-6">
         Metas
       </h1>
 
       <form
         onSubmit={handleSubmit}
-        className="border rounded p-4 mb-8 space-y-4"
+        className="pm-card mb-8 space-y-4 p-5"
       >
         <h2 className="text-xl font-semibold">
           Nueva meta
@@ -142,7 +142,7 @@ const Goals = () => {
           name="objective"
           value={form.objective}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="pm-input"
           required
         >
           <option value="">
@@ -163,7 +163,7 @@ const Goals = () => {
           name="title"
           value={form.title}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="pm-input"
           placeholder="Título"
           required
         />
@@ -172,7 +172,7 @@ const Goals = () => {
           name="description"
           value={form.description}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="pm-input"
           placeholder="Descripción"
         />
 
@@ -180,7 +180,7 @@ const Goals = () => {
           name="type"
           value={form.type}
           onChange={handleChange}
-          className="border p-2 w-full"
+          className="pm-input"
         >
           {goalTypes.map((type) => (
             <option
@@ -197,7 +197,7 @@ const Goals = () => {
             name="targetValue"
             value={form.targetValue}
             onChange={handleChange}
-            className="border p-2 w-full"
+            className="pm-input"
             placeholder="Valor objetivo"
             required
           />
