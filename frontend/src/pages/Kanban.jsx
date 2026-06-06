@@ -28,6 +28,9 @@ const Kanban = () => {
   const [workflowType, setWorkflowType] =
     useState("STANDARD");
 
+const [error, setError] =
+    useState("");
+
 const loadActivities = useCallback(
   async () => {
     try {
@@ -103,6 +106,11 @@ const loadActivities = useCallback(
       <h1 className="pm-page-title mb-6">
         Kanban
       </h1>
+     {error && (
+        <p className="text-red-500 mb-4">
+          {error}
+        </p>
+      )}
 
       <select
         value={workflowType}

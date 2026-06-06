@@ -18,7 +18,7 @@ const Objectives = () => {
 
   useEffect(() => {
     loadObjectives();
-  }, []);
+  }, [loadObjectives]);
 
   const handleCreate =
     async (data) => {

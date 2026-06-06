@@ -19,6 +19,12 @@ import GoalDetail from "../pages/GoalDetail";
 import Kanban from "../pages/Kanban";
 import ActivityDetail from "../pages/ActivityDetail";
 
+const protectedPage = (children) => (
+  <ProtectedRoute>
+    {children}
+  </ProtectedRoute>
+);
+
 const AppRouter = () => {
   return (
     <BrowserRouter>
@@ -30,82 +36,46 @@ const AppRouter = () => {
 
         <Route
           path="/"
-          element={
-            <ProtectedRoute>
-              <Dashboard />
-            </ProtectedRoute>
-          }
+          element={protectedPage(<Dashboard />)}
         />
+
         <Route
-            path="/objectives"
-            element={
-              <ProtectedRoute>
-                <Objectives />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/goals"
-            element={
-              <ProtectedRoute>
-                <Goals />
-              </ProtectedRoute>
-            }
-          />
-
-          <Route
-            path="/activities"
-            element={
-              <ProtectedRoute>
-                <Activities />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-          path="/objectives/:id"
-          element={
-            <ProtectedRoute>
-              <ObjectiveDetail />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/goals/:id"
-            element={
-              <ProtectedRoute>
-                <GoalDetail />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/kanban"
-            element={
-              <ProtectedRoute>
-                <Kanban />
-              </ProtectedRoute>
-            }
-          />
-          <Route
-            path="/activities/:id"
-            element={
-              <ProtectedRoute>
-      <Route
-          path="/activities/:id"
-          element={
-            <ProtectedRoute>
-              <ActivityDetail />
-            </ProtectedRoute>
-          }
+          path="/objectives"
+          element={protectedPage(<Objectives />)}
         />
-    </ProtectedRoute>
-  }
-/>
+
+        <Route
+
+path="/objectives/:id"
+          element={protectedPage(<ObjectiveDetail />)}
+        />
+
+        <Route
+          path="/goals"
+          element={protectedPage(<Goals />)}
+        />
+
+        <Route
+          path="/goals/:id"
+          element={protectedPage(<GoalDetail />)}
+        />
+
+        <Route
+          path="/activities"
+          element={protectedPage(<Activities />)}
+        />
+
+        <Route
+          path="/activities/:id"
+          element={protectedPage(<ActivityDetail />)}
+        />
+
+        <Route
+          path="/kanban"
+          element={protectedPage(<Kanban />)}
+        />
       </Routes>
     </BrowserRouter>
-    
-
-
   );
 };
 

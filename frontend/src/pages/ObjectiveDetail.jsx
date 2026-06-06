@@ -60,12 +60,7 @@ const ObjectiveDetail = () => {
 
       <div className="grid grid-cols-3 gap-4 mt-8">
         <div className="border rounded p-4">
-          <Link
-            to={`/goals/${goal._id}`}
-            className="text-xl font-semibold text-blue-600"
-          >
-            {goal.title}
-          </Link>
+           <h3>Metas</h3>
 
           <p className="text-3xl">
             {data.stats.goals}
@@ -102,9 +97,12 @@ const ObjectiveDetail = () => {
             key={goal._id}
             className="border rounded p-4"
           >
-            <h3>
+            <Link
+              to={`/goals/${goal._id}`}
+              className="text-xl font-semibold text-blue-600"
+            >
               {goal.title}
-            </h3>
+            </Link>
 
             <p>
               {goal.type}
