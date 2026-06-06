@@ -6,7 +6,7 @@ import useObjectiveStore from "../store/objectiveStore";
 
 import ObjectiveForm from "../components/objectives/ObjectiveForm";
 
-import ObjectiveTable from "../components/objectives/ObjectiveTable";
+import ObjectiveGrid from "../components/objectives/ObjectiveGrid";
 
 const Objectives = () => {
   const {

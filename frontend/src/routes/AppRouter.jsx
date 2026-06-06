@@ -17,6 +17,7 @@ import ObjectiveDetail from "../pages/ObjectiveDetail";
 import GoalDetail from "../pages/GoalDetail";
 
 import Kanban from "../pages/Kanban";
+import ActivityDetail from "../pages/ActivityDetail";
 
 const AppRouter = () => {
   return (
@@ -85,7 +86,14 @@ const AppRouter = () => {
               </ProtectedRoute>
             }
           />
-
+          <Route
+            path="/activities/:id"
+            element={
+              <ProtectedRoute>
+      <ActivityDetail />
+    </ProtectedRoute>
+  }
+/>
       </Routes>
     </BrowserRouter>
     

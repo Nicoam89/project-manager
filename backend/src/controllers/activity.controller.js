@@ -23,15 +23,14 @@ export const createActivity = async (
         owner: req.user._id,
       });
 
-    await Goal.findByIdAndUpdate(
-      goal._id,
-      {
-        $inc: {
-          activitiesCount: 1,
-        },
-      }
-    );
-
+await Goal.findByIdAndUpdate(
+  goal._id,
+  {
+    $inc: {
+      activitiesCount: 1,
+    },
+  }
+);
     res.status(201).json(activity);
   } catch (error) {
     res.status(500).json({
@@ -167,35 +166,12 @@ export const getActivityDetails =
         });
       }
 
-      const trackedHours =
-        activity.timeEntries.reduce(
-          (sum, entry) =>
-            sum + entry.hours,
-          0
-        );
-
       const completedSubtasks =
         activity.subtasks.filter(
           (subtask) =>
             subtask.completed
         );
 
-      res.json({
-        activity,
-
-        stats: {
-          trackedHours,
-
-          subtasks:
-            activity.subtasks.length,
-
-          completedSubtasks:
-            completedSubtasks.length,
-
-          comments:
-            activity.comments.length,
-        },
-      });
     } catch (error) {
       res.status(500).json({
         message: error.message,

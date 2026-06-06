@@ -37,10 +37,15 @@ const activitySchema = new mongoose.Schema(
       default: "STANDARD",
     },
 
-    status: {
-      type: String,
-      default: "PENDING",
-    },
+      status: {
+        type: String,
+        enum: [
+          "PENDING",
+          "IN_PROGRESS",
+          "COMPLETED",
+        ],
+        default: "PENDING",
+      },
 
     priorityType: {
       type: String,
@@ -64,11 +69,6 @@ const activitySchema = new mongoose.Schema(
     completedAt: Date,
 
     estimatedHours: {
-      type: Number,
-      default: 0,
-    },
-
-    trackedHours: {
       type: Number,
       default: 0,
     },
@@ -106,6 +106,12 @@ const activitySchema = new mongoose.Schema(
 
           hours: {
             type: Number,
+            required: true,
+          },
+
+          user: {
+            type: mongoose.Schema.Types.ObjectId,
+            ref: "User",
             required: true,
           },
 
