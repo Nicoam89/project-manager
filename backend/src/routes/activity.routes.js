@@ -1,15 +1,6 @@
 import { Router } from "express";
 
-import {
-  createActivity,
-  getActivities,
-  getActivityById,
-  updateActivity,
-  deleteActivity,
-  getActivityDetails,
-  addTimeEntry,
-  updateActivityStatus,
-} from "../controllers/activity.controller.js";
+import * as activityController from "../controllers/activity.controller.js";
 
 import { protect } from "../middleware/auth.middleware.js";
 
@@ -30,33 +21,31 @@ router.route("/")
   .post(
     createActivityValidation,
     validate,
-    createActivity
+    activityController.createActivity
   )
-  .get(getActivities);
+  .get(activityController.getActivities);
 
 router.route("/:id")
-  .get(getActivityById)
-  .put(updateActivity)
-  .delete(deleteActivity);
+  .get(activityController.getActivityById)
+  .put(activityController.updateActivity)
+  .delete(activityController.deleteActivity);
 
 
-  router.get(  "/:id/details",  getActivityDetails);
-
-router.post(  "/:id/time",  addTimeEntry);
+router.get(
+  "/:id/details",
+  activityController.getActivityDetails
+);
 
 router.post(
   "/:id/time",
-
   addTimeValidation,
-
   validate,
-
-  addTimeEntry
+  activityController.addTimeEntry
 );
 
 router.patch(
   "/:id/status",
-  updateActivityStatus
+  activityController.updateActivityStatus
 );
 
 export default router;

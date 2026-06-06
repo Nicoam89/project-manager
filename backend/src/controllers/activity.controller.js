@@ -40,6 +40,109 @@ export const createActivity = async (
   }
 };
 
+export const getActivityById = async (
+  req,
+  res
+) => {
+  try {
+    const activity =
+      await Activity.findOne({
+        _id: req.params.id,
+        owner: req.user._id,
+      }).populate(
+        "goal",
+        "title"
+      );
+
+    if (!activity) {
+      return res.status(404).json({
+        message:
+          "Actividad no encontrada",
+      });
+    }
+
+    res.json(activity);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const updateActivity = async (
+  req,
+  res
+) => {
+  try {
+    if (req.body.goal) {
+      const goal = await Goal.findOne({
+        _id: req.body.goal,
+        owner: req.user._id,
+      });
+
+      if (!goal) {
+        return res.status(404).json({
+          message: "Meta no encontrada",
+        });
+      }
+    }
+
+    const activity =
+      await Activity.findOneAndUpdate(
+        {
+          _id: req.params.id,
+          owner: req.user._id,
+        },
+        req.body,
+        {
+          new: true,
+        }
+      );
+
+    if (!activity) {
+      return res.status(404).json({
+        message:
+          "Actividad no encontrada",
+      });
+    }
+
+    res.json(activity);
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
+export const deleteActivity = async (
+  req,
+  res
+) => {
+  try {
+    const activity =
+      await Activity.findOneAndDelete({
+        _id: req.params.id,
+        owner: req.user._id,
+      });
+
+    if (!activity) {
+      return res.status(404).json({
+        message:
+          "Actividad no encontrada",
+      });
+    }
+
+    res.json({
+      message:
+        "Actividad eliminada correctamente",
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};
+
 export const getActivityDetails =
   async (req, res) => {
     try {

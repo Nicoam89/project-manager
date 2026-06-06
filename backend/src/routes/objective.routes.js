@@ -17,9 +17,6 @@ import {
   createObjectiveValidation,
 } from "../validators/objective.validator.js";
 
-router.get( "/:id/details", getObjectiveDetails);
-
-
 const router = Router();
 
 router.use(protect);
@@ -36,5 +33,7 @@ router.route("/:id")
   .get(getObjectiveById)
   .put(updateObjective)
   .delete(deleteObjective);
+
+router.get("/:id/details", getObjectiveDetails);
 
 export default router;

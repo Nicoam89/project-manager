@@ -32,19 +32,18 @@ app.use("/api/auth", authRoutes);
 
 app.use("/api/objectives", objectiveRoutes);
 
-app.use(notFound);
+app.use("/api/goals", goalRoutes);
 
-app.use(errorHandler);
-
-app.use( "/api/goals", goalRoutes);
-
-
-app.use(  "/api/activities",  activityRoutes);
+app.use("/api/activities", activityRoutes);
 
 app.use(
   "/api/dashboard",
   dashboardRoutes
 );
+
+app.use(notFound);
+
+app.use(errorHandler);
 
 
 export default app;

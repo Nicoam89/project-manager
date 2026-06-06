@@ -1,4 +1,5 @@
 import {
+  useCallback,
   useEffect,
   useState,
 } from "react";
@@ -12,7 +13,7 @@ import {
 } from "@dnd-kit/core";
 
 import KanbanColumn
-  from "../components/kanban/KanbanColumn";
+  from "../components/Kanban/KanbanColumn";
 
 const STATUSES = [
   "PENDING",
@@ -24,21 +25,26 @@ const Kanban = () => {
   const [activities, setActivities] =
     useState([]);
 
-  const loadActivities =
+  const [workflowType, setWorkflowType] =
+    useState("STANDARD");
+
+  const loadActivities = useCallback(
     async () => {
       const response =
         await api.get(
-          "/activities"
+          `/activities?workflowType=${workflowType}`
         );
 
       setActivities(
         response.data
       );
-    };
+    },
+    [workflowType]
+  );
 
   useEffect(() => {
     loadActivities();
-  }, []);
+  }, [loadActivities]);
 
   const handleDragEnd =
     async (event) => {
@@ -59,16 +65,8 @@ const Kanban = () => {
         }
       );
 
-      loadActivities();
+      await loadActivities();
     };
-
-    const [workflowType, setWorkflowType] = useState("STANDARD");
-
-    const response = await api.get(`/activities?workflowType=${workflowType}` );
-
-    useEffect(() => {
-  loadActivities();
-}, [workflowType]);
 
 
   return (
@@ -77,43 +75,44 @@ const Kanban = () => {
         Kanban
       </h1>
 
+      <select
+        value={workflowType}
+        onChange={(e) =>
+          setWorkflowType(
+            e.target.value
+          )
+        }
+        className="border p-2 mb-6"
+      >
+        <option value="STANDARD">
+          Standard
+        </option>
+
+        <option value="SCRUM">
+          Scrum
+        </option>
+
+        <option value="KANBAN">
+          Kanban
+        </option>
+
+        <option value="MARKETING">
+          Marketing
+        </option>
+
+        <option value="CRM">
+          CRM
+        </option>
+      </select>
+
       <DndContext
         onDragEnd={
           handleDragEnd
         }
-        
       >
         <div className="grid grid-cols-3 gap-4">
-            <select
-                value={workflowType}
-                onChange={(e) =>
-                    setWorkflowType(
-                    e.target.value
-                    )
-                }
-                className="border p-2 mb-6"
-                >
-                <option value="STANDARD">
-                    Standard
-                </option>
 
-                <option value="SCRUM">
-                    Scrum
-                </option>
-
-                <option value="KANBAN">
-                    Kanban
-                </option>
-
-                <option value="MARKETING">
-                    Marketing
-                </option>
-
-                <option value="CRM">
-                    CRM
-                </option>
-                </select>
-          {STATUSES.map(
+                {STATUSES.map(
             (status) => (
               <KanbanColumn
                 key={status}
@@ -133,3 +132,4 @@ const Kanban = () => {
 };
 
 export default Kanban;
+    
