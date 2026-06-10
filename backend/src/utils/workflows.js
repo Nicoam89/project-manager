@@ -42,3 +42,26 @@ export const WORKFLOWS = {
     "CANCELLED",
   ],
 };
+
+export const WORKFLOW_TYPES =
+  Object.keys(WORKFLOWS);
+
+export const WORKFLOW_STATUSES = [
+  ...new Set(
+    Object.values(WORKFLOWS).flat()
+  ),
+];
+
+export const getInitialWorkflowStatus = (
+  workflowType = "STANDARD"
+) => (
+  WORKFLOWS[workflowType] ||
+  WORKFLOWS.STANDARD
+)[0];
+
+export const isWorkflowStatus = (
+  workflowType,
+  status
+) => (
+  WORKFLOWS[workflowType] || []
+).includes(status);

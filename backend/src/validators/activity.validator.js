@@ -1,5 +1,10 @@
 import { body } from "express-validator";
 
+import {
+  WORKFLOW_STATUSES,
+  WORKFLOW_TYPES,
+} from "../utils/workflows.js";
+
 export const createActivityValidation = [
   body("goal")
     .notEmpty()
@@ -15,21 +20,11 @@ export const createActivityValidation = [
 
   body("workflowType")
     .optional()
-    .isIn([
-      "STANDARD",
-      "SCRUM",
-      "KANBAN",
-      "MARKETING",
-      "CRM",
-    ]),
+    .isIn(WORKFLOW_TYPES),
 ];
 
 export const updateActivityStatusValidation = [
   body("status")
-    .isIn([
-      "PENDING",
-      "IN_PROGRESS",
-      "COMPLETED",
-    ])
+    .isIn(WORKFLOW_STATUSES)
     .withMessage("Estado inválido"),
 ];

@@ -1,5 +1,14 @@
 import mongoose from "mongoose";
 
+import {
+  getInitialWorkflowStatus,
+  WORKFLOW_STATUSES,
+  WORKFLOW_TYPES,
+} from "../utils/workflows.js";
+
+import { ACTIVITY_STATUSES } from "../utils/activityStatus.js";
+
+
 const activitySchema = new mongoose.Schema(
   {
     goal: {
@@ -27,25 +36,20 @@ const activitySchema = new mongoose.Schema(
 
     workflowType: {
       type: String,
-      enum: [
-        "STANDARD",
-        "SCRUM",
-        "KANBAN",
-        "MARKETING",
-        "CRM",
-      ],
+      enum: WORKFLOW_TYPES,
       default: "STANDARD",
     },
 
       status: {
         type: String,
-        enum: [
-          "PENDING",
-          "IN_PROGRESS",
-          "COMPLETED",
-        ],
-        default: "PENDING",
+        enum: WORKFLOW_STATUSES,
+        default() {
+          return getInitialWorkflowStatus(
+            this.workflowType
+          );
+        },
       },
+
 
     priorityType: {
       type: String,

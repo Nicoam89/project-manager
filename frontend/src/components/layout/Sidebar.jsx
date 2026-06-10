@@ -46,7 +46,7 @@ const Sidebar = () => {
     <aside className="hidden w-72 shrink-0 border-r border-slate-200 bg-white/90 px-4 py-5 shadow-sm backdrop-blur lg:block">
       <div className="mb-8 px-3">
         <div className="flex h-11 w-11 items-center justify-center rounded-2xl bg-blue-600 text-lg font-black text-white shadow-lg shadow-blue-600/20">
-          PM
+          <img src="/1.png" alt="Logo"></img>
         </div>
 
         <div className="mt-4">
@@ -55,7 +55,7 @@ const Sidebar = () => {
           </h1>
 
           <p className="mt-1 text-sm text-slate-500">
-            Objetivos, metas y actividades Inteligentes
+            Actividades, Metas & Objetivos Inteligentes
           </p>
         </div>
       </div>

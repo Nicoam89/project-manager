@@ -1,7 +1,7 @@
 import Goal from "../models/Goal.js";
 import Objective from "../models/Objective.js";
 import Activity from "../models/Activity.js";
-
+import { isCompletedActivityStatus } from "../utils/activityStatus.js";
 
 export const createGoal = async (
   req,
@@ -167,12 +167,11 @@ export const getGoalDetails =
         });
 
       const completed =
-        activities.filter(
-          (activity) =>
-            activity.status ===
-              "COMPLETED" ||
-            activity.status ===
-              "CLOSED"
+          activities.filter((activity) =>
+                    isCompletedActivityStatus(
+                      activity.status
+                    )
+
         );
 
       const progress =

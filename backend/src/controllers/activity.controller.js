@@ -1,6 +1,11 @@
 import Activity from "../models/Activity.js";
 import Goal from "../models/Goal.js";
 
+import {
+  getInitialWorkflowStatus,
+  isWorkflowStatus,
+} from "../utils/workflows.js";
+
 export const createActivity = async (
   req,
   res
@@ -17,20 +22,22 @@ export const createActivity = async (
       });
     }
 
+    const workflowType =
+      req.body.workflowType ||
+      "STANDARD";
+
     const activity =
       await Activity.create({
         ...req.body,
+        workflowType,
+        status: getInitialWorkflowStatus(
+          workflowType
+        ),
+
         owner: req.user._id,
       });
 
-await Goal.findByIdAndUpdate(
-  goal._id,
-  {
-    $inc: {
-      activitiesCount: 1,
-    },
-  }
-);
+
     res.status(201).json(activity);
   } catch (error) {
     res.status(500).json({
@@ -239,22 +246,14 @@ export const getActivityDetails =
     }
   };
 
-  export const updateActivityStatus =
+export const updateActivityStatus =
   async (req, res) => {
     try {
       const activity =
-        await Activity.findOneAndUpdate(
-          {
-            _id: req.params.id,
-            owner: req.user._id,
-          },
-          {
-            status: req.body.status,
-          },
-          {
-            new: true,
-          }
-        );
+        await Activity.findOne({
+          _id: req.params.id,
+          owner: req.user._id,
+        });
 
       if (!activity) {
         return res.status(404).json({
@@ -262,6 +261,22 @@ export const getActivityDetails =
             "Actividad no encontrada",
         });
       }
+
+      if (
+        !isWorkflowStatus(
+          activity.workflowType,
+          req.body.status
+        )
+      ) {
+        return res.status(400).json({
+          message:
+            "Estado inválido para el flujo de trabajo",
+        });
+      }
+
+      activity.status = req.body.status;
+
+      await activity.save();
 
       res.json(activity);
     } catch (error) {
@@ -285,17 +300,14 @@ export const getActivityDetails =
           req.query.workflowType;
       }
 
-  const activities =
-  await Activity.find(filter)
-    .populate("goal", "title")
-    .sort({
-      createdAt: -1,
-    });
+      const activities =
+        await Activity.find(filter)
+          .populate("goal", "title")
+          .sort({
+            createdAt: -1,
+          });
 
-res.json(activities);
-      res.json(
-        activities
-      );
+      res.json(activities);
     } catch (error) {
       res.status(500).json({
         message:

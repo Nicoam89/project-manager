@@ -15,10 +15,31 @@ import {
 import KanbanColumn
   from "../components/Kanban/KanbanColumn";
 
-const STATUSES = [
-  "PENDING",
-  "IN_PROGRESS",
-  "COMPLETED",
+import {
+  WORKFLOWS,
+} from "../constants/workflows";
+
+const workflowTypes = [
+  {
+    value: "STANDARD",
+    label: "Standard",
+  },
+  {
+    value: "SCRUM",
+    label: "Scrum",
+  },
+  {
+    value: "KANBAN",
+    label: "Kanban",
+  },
+  {
+    value: "MARKETING",
+    label: "Marketing",
+  },
+  {
+    value: "CRM",
+    label: "CRM",
+  },
 ];
 
 const Kanban = () => {
@@ -28,8 +49,13 @@ const Kanban = () => {
   const [workflowType, setWorkflowType] =
     useState("STANDARD");
 
-const [error, setError] =
+  const [error, setError] =
     useState("");
+
+  const statuses =
+    WORKFLOWS[workflowType] ||
+    WORKFLOWS.STANDARD;
+
 
 const loadActivities = useCallback(
   async () => {
@@ -121,25 +147,14 @@ const loadActivities = useCallback(
         }
         className="border p-2 mb-6"
       >
-        <option value="STANDARD">
-          Standard
-        </option>
-
-        <option value="SCRUM">
-          Scrum
-        </option>
-
-        <option value="KANBAN">
-          Kanban
-        </option>
-
-        <option value="MARKETING">
-          Marketing
-        </option>
-
-        <option value="CRM">
-          CRM
-        </option>
+        {workflowTypes.map((type) => (
+          <option
+            key={type.value}
+            value={type.value}
+          >
+            {type.label}
+          </option>
+        ))}
       </select>
 
       <DndContext
@@ -147,9 +162,14 @@ const loadActivities = useCallback(
           handleDragEnd
         }
       >
-        <div className="grid grid-cols-3 gap-4">
-
-                {STATUSES.map(
+        <div
+          className="grid gap-4"
+          style={{
+            gridTemplateColumns:
+              `repeat(${statuses.length}, minmax(16rem, 1fr))`,
+          }}
+        >
+          {statuses.map(
             (status) => (
               <KanbanColumn
                 key={status}
