@@ -5,6 +5,9 @@ import {
   getInitialWorkflowStatus,
   isWorkflowStatus,
 } from "../utils/workflows.js";
+import { pickAllowedFields } from "../utils/payload.js";
+import { activityUpdateFields } from "../validators/activity.validator.js";
+
 
 export const createActivity = async (
   req,
@@ -93,15 +96,68 @@ export const updateActivity = async (
       }
     }
 
+const existingActivity =
+      await Activity.findOne({
+        _id: req.params.id,
+        owner: req.user._id,
+      });
+
+    if (!existingActivity) {
+      return res.status(404).json({
+        message:
+          "Actividad no encontrada",
+      });
+    }
+
+    const updatePayload = pickAllowedFields(
+      req.body,
+      activityUpdateFields
+    );
+
+    const workflowType =
+      updatePayload.workflowType ||
+      existingActivity.workflowType;
+
+    const status = updatePayload.status;
+
+    if (
+      status &&
+      !isWorkflowStatus(
+        workflowType,
+        status
+      )
+    ) {
+      return res.status(400).json({
+        message:
+          "Estado inválido para el flujo de trabajo",
+      });
+    }
+
+    if (
+      updatePayload.workflowType &&
+      !updatePayload.status &&
+      !isWorkflowStatus(
+        updatePayload.workflowType,
+        existingActivity.status
+      )
+    ) {
+      updatePayload.status =
+        getInitialWorkflowStatus(
+          updatePayload.workflowType
+        );
+    }
+
     const activity =
       await Activity.findOneAndUpdate(
         {
           _id: req.params.id,
           owner: req.user._id,
         },
-        req.body,
+        updatePayload,
         {
           new: true,
+          runValidators: true,
+
         }
       );
 

@@ -15,7 +15,11 @@ import { validate } from "../middleware/validation.middleware.js";
 
 import {
   createObjectiveValidation,
+  objectiveUpdateFields,
+  updateObjectiveValidation,
 } from "../validators/objective.validator.js";
+
+import { validateAllowedFields } from "../middleware/allowedFields.middleware.js";
 
 const router = Router();
 
@@ -31,7 +35,12 @@ router.route("/")
 
 router.route("/:id")
   .get(getObjectiveById)
-  .put(updateObjective)
+  .put(
+    validateAllowedFields(objectiveUpdateFields),
+    updateObjectiveValidation,
+    validate,
+    updateObjective
+  )
   .delete(deleteObjective);
 
 router.get("/:id/details", getObjectiveDetails);

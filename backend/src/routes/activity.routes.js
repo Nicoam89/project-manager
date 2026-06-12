@@ -7,9 +7,13 @@ import { protect } from "../middleware/auth.middleware.js";
 import { validate } from "../middleware/validation.middleware.js";
 
 import {
+  activityUpdateFields,
   createActivityValidation,
+  updateActivityValidation,
   updateActivityStatusValidation,
 } from "../validators/activity.validator.js";
+
+import { validateAllowedFields } from "../middleware/allowedFields.middleware.js";
 
 import { addTimeValidation } from "../validators/time.validator.js";
 
@@ -28,9 +32,12 @@ router.route("/")
 
 router.route("/:id")
   .get(activityController.getActivityById)
-  .put(activityController.updateActivity)
-  .delete(activityController.deleteActivity);
-
+  .put(
+    validateAllowedFields(activityUpdateFields),
+    updateActivityValidation,
+    validate,
+    activityController.updateActivity
+  )
 
 router.get(
   "/:id/details",

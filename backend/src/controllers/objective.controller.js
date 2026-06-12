@@ -2,6 +2,8 @@ import Objective from "../models/Objective.js";
 import Goal from "../models/Goal.js";
 import Activity from "../models/Activity.js";
 import { isCompletedActivityStatus } from "../utils/activityStatus.js";
+import { pickAllowedFields } from "../utils/payload.js";
+import { objectiveUpdateFields } from "../validators/objective.validator.js";
 
 export const createObjective = async (
   req,
@@ -79,9 +81,14 @@ export const updateObjective = async (
           _id: req.params.id,
           owner: req.user._id,
         },
-        req.body,
+        pickAllowedFields(
+          req.body,
+          objectiveUpdateFields
+        ),
         {
           new: true,
+          runValidators: true,
+
         }
       );
 

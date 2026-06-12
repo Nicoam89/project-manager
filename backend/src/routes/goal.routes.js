@@ -15,7 +15,11 @@ import { validate } from "../middleware/validation.middleware.js";
 
 import {
   createGoalValidation,
+  goalUpdateFields,
+  updateGoalValidation,
 } from "../validators/goal.validator.js";
+
+import { validateAllowedFields } from "../middleware/allowedFields.middleware.js";
 
 
 
@@ -33,9 +37,17 @@ router.route("/")
 
 router.route("/:id")
   .get(getGoalById)
-  .put(updateGoal)
+  .put(
+    validateAllowedFields(goalUpdateFields),
+    updateGoalValidation,
+    validate,
+    updateGoal
+  )
   .delete(deleteGoal);
 
-router.get(  "/:id/details",  getGoalDetails);
+router.get(
+  "/:id/details",
+  getGoalDetails
+);
 
 export default router;

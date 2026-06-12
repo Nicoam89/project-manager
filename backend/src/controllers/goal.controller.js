@@ -2,6 +2,9 @@ import Goal from "../models/Goal.js";
 import Objective from "../models/Objective.js";
 import Activity from "../models/Activity.js";
 import { isCompletedActivityStatus } from "../utils/activityStatus.js";
+import { pickAllowedFields } from "../utils/payload.js";
+import { goalUpdateFields } from "../validators/goal.validator.js";
+
 
 export const createGoal = async (
   req,
@@ -88,15 +91,33 @@ export const updateGoal = async (
   res
 ) => {
   try {
+    if (req.body.objective) {
+      const objective =
+        await Objective.findOne({
+          _id: req.body.objective,
+          owner: req.user._id,
+        });
+
+      if (!objective) {
+        return res.status(404).json({
+          message:
+            "Objetivo no encontrado",
+        });
+      }
+    }
     const goal =
       await Goal.findOneAndUpdate(
         {
           _id: req.params.id,
           owner: req.user._id,
         },
-        req.body,
+pickAllowedFields(
+          req.body,
+          goalUpdateFields
+        ),
         {
           new: true,
+          runValidators: true,
         }
       );
 
