@@ -9,6 +9,9 @@ const TimeEntryForm = ({
     register,
     handleSubmit,
     reset,
+    formState: {
+      isSubmitting,
+    },
   } = useForm();
 
   const submit = async (
@@ -24,29 +27,51 @@ const TimeEntryForm = ({
       onSubmit={handleSubmit(
         submit
       )}
-      className="space-y-2"
+      className="space-y-4"
     >
-      <input
-        className="pm-input"
-        placeholder="Descripción"
-        {...register(
-          "description"
-        )}
-      />
+      <label className="block">
+        <span className="mb-1 block text-sm font-medium text-slate-700">
+          Descripción
+        </span>
 
-      <input
-        type="number"
-        step="0.1"
-        className="pm-input"
-        placeholder="Horas"
-        {...register("hours")}
-      />
+        <input
+          className="pm-input"
+          placeholder="Ej. Reunión de seguimiento"
+          required
+          {...register(
+            "description",
+            { required: true }
+          )}
+        />
+      </label>
+
+      <label className="block">
+        <span className="mb-1 block text-sm font-medium text-slate-700">
+          Horas
+        </span>
+
+        <input
+          type="number"
+          step="0.1"
+          min="0.1"
+          className="pm-input"
+          placeholder="Ej. 1.5"
+          required
+          {...register("hours", {
+            required: true,
+            valueAsNumber: true,
+          })}
+        />
+      </label>
 
       <button
         type="submit"
-        className="border px-4 py-2"
+        disabled={isSubmitting}
+        className="pm-button w-full"
       >
-        Registrar
+        {isSubmitting
+          ? "Registrando..."
+          : "Registrar tiempo"}
       </button>
     </form>
   );
