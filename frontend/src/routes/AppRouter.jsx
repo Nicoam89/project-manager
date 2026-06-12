@@ -45,8 +45,7 @@ const AppRouter = () => {
         />
 
         <Route
-
-path="/objectives/:id"
+          path="/objectives/:id"
           element={protectedPage(<ObjectiveDetail />)}
         />
 
