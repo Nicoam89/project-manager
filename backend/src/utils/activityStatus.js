@@ -8,6 +8,12 @@ export const ACTIVITY_STATUSES = Object.freeze(
   Object.values(ACTIVITY_STATUS)
 );
 
-export const isCompletedActivityStatus = (
-  status
-) => status === ACTIVITY_STATUS.COMPLETED;
+const COMPLETED_WORKFLOW_STATUSES = new Set([
+  ACTIVITY_STATUS.COMPLETED,
+  "ACCEPTED",
+  "CLOSED",
+  "WON",
+]);
+
+export const isCompletedActivityStatus = (status) =>
+  COMPLETED_WORKFLOW_STATUSES.has(status);
