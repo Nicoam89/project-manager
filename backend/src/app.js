@@ -13,6 +13,7 @@ import {
 import goalRoutes from "./routes/goal.routes.js";
 import activityRoutes from "./routes/activity.routes.js";
 import dashboardRoutes from "./routes/dashboard.routes.js";
+import { requireDatabaseConnection } from "./middleware/database.middleware.js";
 
 const app = express();
 
@@ -27,6 +28,8 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: true }));
 
 app.use("/api/health", healthRoutes);
+
+app.use(requireDatabaseConnection);
 
 app.use("/api/auth", authRoutes);
 

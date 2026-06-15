@@ -1,4 +1,5 @@
 import { Router } from "express";
+import { getDatabaseState } from "../config/db.js";
 
 const router = Router();
 
@@ -7,6 +8,7 @@ router.get("/", (req, res) => {
     success: true,
     message: "API funcionando correctamente",
     timestamp: new Date(),
+    database: getDatabaseState(),
   });
 });
 

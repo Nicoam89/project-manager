@@ -46,9 +46,22 @@ const Login = () => {
         replace: true,
       });
     } catch (error) {
+      const isDatabaseUnavailable =
+        error.response?.status === 503 &&
+        error.response?.data?.code ===
+          "DATABASE_UNAVAILABLE";
+
+      const fallbackMessage =
+        "No se pudo iniciar sesión. Intenta de nuevo.";
+      const databaseUnavailableMessage =
+        "No se puede iniciar sesión porque el backend no está conectado a MongoDB. " +
+        "Revisa MONGODB_URI, credenciales y la IP permitida en MongoDB Atlas Network Access.";
+
       setErrorMessage(
-        error.response?.data?.message ||
-          "No se pudo iniciar sesión. Intenta de nuevo."
+        isDatabaseUnavailable
+          ? databaseUnavailableMessage
+          : error.response?.data?.message ||
+              fallbackMessage
       );
     }
   };
