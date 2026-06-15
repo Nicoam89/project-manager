@@ -9,7 +9,7 @@ const KanbanColumn = ({
   status,
   activities,
 }) => {
-  const { setNodeRef } =
+  const { setNodeRef, isOver } =
     useDroppable({
       id: status,
     });
@@ -17,21 +17,33 @@ const KanbanColumn = ({
   return (
     <div
       ref={setNodeRef}
-      className="border rounded p-4 min-h-[500px]"
+      className={`pm-card flex min-h-[500px] flex-col p-4 transition-colors ${
+        isOver ? "border-blue-300 bg-blue-50/60" : "bg-white/95"
+      }`}
     >
-<h2 className="font-bold mb-4 flex justify-between">
-  <span>{status}</span>
-  <span>{activities.length}</span>
-</h2>
+      <h2 className="mb-4 flex items-center justify-between gap-3 text-base font-semibold text-slate-950">
+        <span className="truncate">{status}</span>
+        <span className="pm-badge bg-slate-100 text-slate-700">
+          {activities.length}
+        </span>
+      </h2>
 
-      {activities.map(
-        (activity) => (
-          <ActivityCard
-            key={activity._id}
-            activity={activity}
-          />
-        )
-      )}
+      <div className="flex flex-1 flex-col gap-3 rounded-xl bg-slate-50/70 p-2">
+        {activities.length ? (
+          activities.map(
+            (activity) => (
+              <ActivityCard
+                key={activity._id}
+                activity={activity}
+              />
+            )
+          )
+        ) : (
+          <div className="flex flex-1 items-center justify-center rounded-xl border border-dashed border-slate-200 p-6 text-center text-sm text-slate-400">
+            Arrastra actividades aquí
+          </div>
+        )}
+      </div>
     </div>
   );
 };

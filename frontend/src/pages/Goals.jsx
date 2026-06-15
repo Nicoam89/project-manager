@@ -167,7 +167,7 @@ const Goals = () => {
         onSubmit={handleSubmit}
         className="pm-card mb-8 space-y-4 p-5"
       >
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-xl font-semibold text-slate-950">
           Nueva meta
         </h2>
 
@@ -274,7 +274,7 @@ const Goals = () => {
         <button
           type="submit"
           disabled={loading}
-          className="border px-4 py-2 rounded"
+           className="pm-button"
         >
           {loading
             ? "Guardando..."
@@ -282,7 +282,7 @@ const Goals = () => {
         </button>
       </form>
 
-      <section className="mb-10 space-y-4">
+       <section className="mb-10 space-y-4">
         <div>
           <h2 className="text-2xl font-semibold text-slate-950">
             Listado de metas
@@ -294,57 +294,60 @@ const Goals = () => {
         {goals.map((goal) => (
           <div
             key={goal._id}
-            className="border rounded p-4"
+            className="pm-card pm-card-hover p-5"
           >
-            <div className="flex justify-between gap-4">
-              <div>
+            <div className="grid gap-4 md:grid-cols-[1fr_auto]">
+              <div className="min-w-0">
                 <Link
                   to={`/goals/${goal._id}`}
-                  className="text-xl font-semibold">
+                  className="text-xl font-semibold text-slate-950 hover:text-blue-700">
                   {goal.title}
                 </Link>
 
-                <p className="text-gray-500">
+                <p className="mt-2 text-sm text-slate-500">
                   {goal.description}
                 </p>
 
-                <p className="text-sm mt-2">
+                <p className="mt-4 text-sm text-slate-600">
                   Objetivo:{" "}
                   {goal.objective?.title ||
                     "Sin objetivo"}
                 </p>
 
-                <p className="text-sm">
+                <p className="text-sm text-slate-600">
                   Tipo: {goal.type}
                 </p>
-                <p className="text-sm">
+                <p className="text-sm text-slate-600">
                   Inicio: {formatDate(goal.startDate)}
                 </p>
 
-                <p className="text-sm">
+                <p className="text-sm text-slate-600">
                   Fin: {formatDate(goal.endDate)}
                 </p>
 
                 {goal.comments && (
-                  <p className="text-sm">
+                  <p className="text-sm text-slate-600">
                     Comentarios: {goal.comments}
                   </p>
                 )}
 
-                <p className="text-sm">
-                  Progreso: {goal.progress}%
-                </p>
               </div>
 
-              <button
-                type="button"
-                onClick={() =>
-                  handleDelete(goal._id)
-                }
-                className="border px-3 py-1 rounded h-fit"
-              >
-                Eliminar
-              </button>
+              <div className="md:text-right">
+                <p className="pm-badge">
+                  Progreso: {goal.progress}%
+                </p>
+
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleDelete(goal._id)
+                  }
+                  className="pm-button pm-button-secondary mt-3 h-fit px-3 py-1 text-sm"
+                >
+                  Eliminar
+                </button>
+              </div>
             </div>
           </div>
         ))}

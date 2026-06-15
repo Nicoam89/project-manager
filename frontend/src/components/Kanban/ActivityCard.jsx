@@ -12,6 +12,7 @@ const ActivityCard = ({
     listeners,
     setNodeRef,
     transform,
+    isDragging,
   } = useDraggable({
     id: activity._id,
   });
@@ -25,6 +26,9 @@ const ActivityCard = ({
         )`
       : undefined,
   };
+ const priorityClass =
+    priorityColors[activity.priority] ||
+    priorityColors.MEDIUM;
 
   return (
     <div
@@ -32,40 +36,47 @@ const ActivityCard = ({
       style={style}
       {...listeners}
       {...attributes}
-      className={`border-l-4 rounded p-3 mb-2 bg-white cursor-grab ${
-  priorityColors[activity.priority] ||
-  priorityColors.MEDIUM
-}`}
+      className={`rounded-xl border bg-white p-4 text-left shadow-sm transition hover:-translate-y-0.5 hover:shadow-md ${priorityClass} ${
+        isDragging ? "z-10 opacity-80 shadow-lg" : ""
+      }`}
     >
       <Link
         to={`/activities/${activity._id}`}
-        className="text-xl font-semibold text-blue-600"
+        className="text-base font-semibold text-slate-950 hover:text-blue-700"
       >
         {activity.title}
       </Link>
 
-      <p className="text-sm">
-        {
-          activity.priority
-        }
-      </p>
+      {activity.goal?.title && (
+        <p className="mt-2 text-xs font-medium text-slate-500">
+          {activity.goal.title}
+        </p>
+      )}
+
+      <div className="mt-3 flex items-center justify-between gap-2">
+        <span className="pm-badge bg-blue-50 text-blue-700">
+          {activity.priority || "MEDIUM"}
+        </span>
+        <span className="text-xs text-slate-400">
+          Arrastrar
+        </span>
+      </div>
     </div>
   );
 };
 
-
 const priorityColors = {
   LOW:
-    "border-gray-300",
+    "border-l-4 border-l-slate-300",
 
   MEDIUM:
-    "border-blue-400",
+    "border-l-4 border-l-blue-400",
 
   HIGH:
-    "border-orange-400",
+    "border-l-4 border-l-amber-400",
 
   URGENT:
-    "border-red-500",
+    "border-l-4 border-l-red-500",
 };
 
 export default ActivityCard;

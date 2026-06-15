@@ -135,7 +135,7 @@ const KanbanBoard = ({
   };
 
   return (
-    <section className="space-y-5">
+     <section className="pm-card space-y-5 p-5">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
           <h2 className="text-2xl font-semibold text-slate-950">
@@ -199,14 +199,14 @@ const KanbanBoard = ({
       </div>
 
       {error && (
-        <p className="text-red-500">
+         <p className="rounded-lg border border-red-200 bg-red-50 p-3 text-sm text-red-700">
           {error}
         </p>
       )}
 
       <DndContext onDragEnd={handleDragEnd}>
         <div
-          className="grid gap-4 overflow-x-auto pb-2"
+          className="grid gap-4 overflow-x-auto rounded-2xl bg-slate-100/70 p-3"
           style={{
             gridTemplateColumns:
               `repeat(${statuses.length}, minmax(16rem, 1fr))`,

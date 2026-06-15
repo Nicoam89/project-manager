@@ -136,7 +136,7 @@ const Activities = () => {
         onSubmit={handleSubmit}
         className="pm-card mb-8 space-y-4 p-5"
       >
-        <h2 className="text-xl font-semibold">
+        <h2 className="text-xl font-semibold text-slate-950">
           Nueva actividad
         </h2>
 
@@ -230,7 +230,7 @@ const Activities = () => {
         <button
           type="submit"
           disabled={loading}
-          className="border px-4 py-2 rounded"
+          className="pm-button"
         >
           {loading
             ? "Guardando..."
@@ -248,67 +248,70 @@ const Activities = () => {
         </div>
 
 
-      <div className="space-y-4">
+       <div className="space-y-4">
         {activities.map((activity) => (
           <div
             key={activity._id}
-            className="border rounded p-4"
+            className="pm-card pm-card-hover p-5"
           >
-            <div className="flex justify-between gap-4">
-              <div>
+            <div className="grid gap-4 md:grid-cols-[1fr_auto]">
+              <div className="min-w-0">
                 <Link
                   to={`/activities/${activity._id}`}
-                  className="text-xl font-semibold"
+                  className="text-xl font-semibold text-slate-950 hover:text-blue-700"
                 >
                   {activity.title}
                 </Link>
 
-                <p className="text-gray-500">
+                <p className="mt-2 text-sm text-slate-500">
                   {activity.description}
                 </p>
 
-                <p className="text-sm mt-2">
+                <p className="mt-4 text-sm text-slate-600">
                   Meta:{" "}
                   {activity.goal?.title ||
                     "Sin meta"}
                 </p>
 
-                <p className="text-sm">
+                <p className="text-sm text-slate-600">
                   Flujo: {activity.workflowType}
                 </p>
 
-                <p className="text-sm">
+                <p className="text-sm text-slate-600">
                   Estado: {activity.status}
                 </p>
               </div>
-                     <p className="text-sm">
+
+              <div className="flex flex-col gap-1 md:items-end">
+                <p className="text-sm text-slate-600">
                   Inicio: {formatDate(activity.startDate)}
                 </p>
 
-                <p className="text-sm">
+                <p className="text-sm text-slate-600">
                   Fin: {formatDate(activity.dueDate)}
                 </p>
 
                 {activity.comments?.[0]?.text && (
-                  <p className="text-sm">
+                  <p className="text-sm text-slate-600">
                     Comentarios: {activity.comments[0].text}
                   </p>
                 )}
 
-              <button
-                type="button"
-                onClick={() =>
-                  handleDelete(activity._id)
-                }
-                className="border px-3 py-1 rounded h-fit"
-              >
-                Eliminar
-              </button>
+                <button
+                  type="button"
+                  onClick={() =>
+                    handleDelete(activity._id)
+                  }
+                  className="pm-button pm-button-secondary mt-2 h-fit px-3 py-1 text-sm"
+                >
+                  Eliminar
+                </button>
+              </div>
             </div>
           </div>
         ))}
-      </div>
-            </section>
+        </div>
+      </section>
 
       <KanbanBoard
         title="Kanban de actividades"
