@@ -17,30 +17,8 @@ import KanbanColumn
 
 import {
   WORKFLOWS,
+  WORKFLOW_OPTIONS,
 } from "../constants/workflows";
-
-const workflowTypes = [
-  {
-    value: "STANDARD",
-    label: "Standard",
-  },
-  {
-    value: "SCRUM",
-    label: "Scrum",
-  },
-  {
-    value: "KANBAN",
-    label: "Kanban",
-  },
-  {
-    value: "MARKETING",
-    label: "Marketing",
-  },
-  {
-    value: "CRM",
-    label: "CRM",
-  },
-];
 
 const Kanban = () => {
   const [activities, setActivities] =
@@ -147,7 +125,7 @@ const loadActivities = useCallback(
         }
         className="border p-2 mb-6"
       >
-        {workflowTypes.map((type) => (
+          {WORKFLOW_OPTIONS.map((type) => (
           <option
             key={type.value}
             value={type.value}

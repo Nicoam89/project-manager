@@ -9,28 +9,9 @@ import api from "../api/axios";
 
 import MainLayout from "../layouts/MainLayout";
 
-const workflowTypes = [
-  {
-    value: "STANDARD",
-    label: "Standard",
-  },
-  {
-    value: "SCRUM",
-    label: "Scrum",
-  },
-  {
-    value: "KANBAN",
-    label: "Kanban",
-  },
-  {
-    value: "MARKETING",
-    label: "Marketing",
-  },
-  {
-    value: "CRM",
-    label: "CRM",
-  },
-];
+import {
+  WORKFLOW_OPTIONS,
+} from "../constants/workflows";
 
 const initialForm = {
   goal: "",
@@ -183,7 +164,7 @@ const Activities = () => {
           onChange={handleChange}
           className="pm-input"
         >
-          {workflowTypes.map((workflowType) => (
+          {WORKFLOW_OPTIONS.map((workflowType) => (
             <option
               key={workflowType.value}
               value={workflowType.value}
