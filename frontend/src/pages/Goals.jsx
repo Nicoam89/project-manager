@@ -172,18 +172,22 @@ const Goals = () => {
         </h2>
 
         {error && (
-          <p className="text-red-500">
+         <p className="text-red-700">
             {error}
           </p>
         )}
 
-        <select
-          name="objective"
-          value={form.objective}
-          onChange={handleChange}
-          className="pm-input"
-          required
-        >
+                <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-slate-700">
+            Objetivo
+          </span>
+          <select
+            name="objective"
+            value={form.objective}
+            onChange={handleChange}
+            className="pm-input"
+            required
+          >
           <option value="">
             Selecciona un objetivo
           </option>
@@ -196,31 +200,46 @@ const Goals = () => {
               {objective.title}
             </option>
           ))}
-        </select>
+          </select>
+        </label>
 
-        <input
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          className="pm-input"
-          placeholder="Título"
-          required
-        />
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-slate-700">
+            Título
+          </span>
+          <input
+            name="title"
+            value={form.title}
+            onChange={handleChange}
+            className="pm-input"
+            placeholder="Título"
+            required
+          />
+        </label>
 
-        <textarea
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          className="pm-input"
-          placeholder="Descripción"
-        />
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-slate-700">
+            Descripción
+          </span>
+          <textarea
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            className="pm-input"
+            placeholder="Descripción"
+          />
+        </label>
 
-        <select
-          name="type"
-          value={form.type}
-          onChange={handleChange}
-          className="pm-input"
-        >
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-slate-700">
+            Tipo
+          </span>
+          <select
+            name="type"
+            value={form.type}
+            onChange={handleChange}
+            className="pm-input"
+          >
           {goalTypes.map((type) => (
             <option
               key={type.value}
@@ -229,39 +248,66 @@ const Goals = () => {
               {type.label}
             </option>
           ))}
-        </select>
+          </select>
+        </label>
 
          {!goalTypesWithoutTarget.includes(
           form.type
         ) && (
-          <input
-            name="targetValue"
-            value={form.targetValue}
-            onChange={handleChange}
-            className="pm-input"
-            placeholder="Valor objetivo"
-            required
-          />
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold text-slate-700">
+              Valor objetivo
+            </span>
+            <input
+              name="targetValue"
+              value={form.targetValue}
+              onChange={handleChange}
+              className="pm-input"
+              placeholder="Valor objetivo"
+              required
+            />
+          </label>
         )}
         <div className="grid gap-4 md:grid-cols-2">
-          <input
-            name="startDate"
-            type="date"
-            value={form.startDate}
-            onChange={handleChange}
-            className="pm-input"
-            aria-label="Fecha de inicio"
-          />
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold text-slate-700">
+              Fecha de inicio
+            </span>
+            <input
+              name="startDate"
+              type="date"
+              value={form.startDate}
+              onChange={handleChange}
+              className="pm-input"
+            />
+          </label>
 
-          <input
-            name="endDate"
-            type="date"
-            value={form.endDate}
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold text-slate-700">
+              Fecha de fin
+            </span>
+            <input
+              name="endDate"
+              type="date"
+              value={form.endDate}
+              onChange={handleChange}
+              className="pm-input"
+            />
+          </label>
+        </div>
+
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-slate-700">
+            Comentarios
+          </span>
+          <textarea
+            name="comments"
+            value={form.comments}
             onChange={handleChange}
             className="pm-input"
-            aria-label="Fecha de fin"
+            placeholder="Comentarios"
           />
-        </div>
+        </label>
 
         <textarea
           name="comments"

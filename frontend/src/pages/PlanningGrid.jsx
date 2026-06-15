@@ -60,12 +60,23 @@ const ProgressBadge = ({ value }) => {
   const progress = clampProgress(value);
 
   return (
-    <div className="min-w-32">
+ <div
+      className="min-w-32"
+      role="group"
+      aria-label={`Avance ${progress}%`}
+    >
       <div className="flex items-center justify-between text-xs font-semibold text-slate-600">
         <span>{progress}%</span>
       </div>
 
-      <div className="mt-1 h-2 rounded-full bg-slate-200">
+      <div
+        className="mt-1 h-2 rounded-full bg-slate-200"
+        role="progressbar"
+        aria-label="Porcentaje de avance"
+        aria-valuemin="0"
+        aria-valuemax="100"
+        aria-valuenow={progress}
+      >
         <div
           className="h-2 rounded-full bg-blue-600"
           style={{ width: `${progress}%` }}
@@ -183,13 +194,16 @@ export const PlanningGridView = ({
 
                       <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200 [-webkit-overflow-scrolling:touch]">
                       <table className="min-w-[48rem] divide-y divide-slate-200 text-sm">
+                          <caption className="sr-only">
+                            Actividades de la meta {goal.title}
+                          </caption>
                           <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                             <tr>
-                              <th className="px-4 py-3">Actividad</th>
-                              <th className="px-4 py-3">Estado</th>
-                              <th className="px-4 py-3">Fecha fin</th>
-                              <th className="px-4 py-3">Avance</th>
-                              <th className="px-4 py-3">Subactividades</th>
+                              <th scope="col" className="px-4 py-3">Actividad</th>
+                              <th scope="col" className="px-4 py-3">Estado</th>
+                              <th scope="col" className="px-4 py-3">Fecha fin</th>
+                              <th scope="col" className="px-4 py-3">Avance</th>
+                              <th scope="col" className="px-4 py-3">Subactividades</th>
                             </tr>
                           </thead>
                           <tbody className="divide-y divide-slate-100 bg-white">

@@ -25,16 +25,13 @@ const Login = () => {
   const onSubmit = async (data) => {
     setErrorMessage("");
 
-    try {
-      const user = await login(data);
+ try {
+      const { user, token } = await login(data);
 
       loginStore(
-        {
-          id: user._id,
-          name: user.name,
-          email: user.email,
-        },
-        user.token
+        user,
+        token
+
       );
 
       navigate("/", {
@@ -64,43 +61,69 @@ const Login = () => {
   return (
 
     <form
+      aria-labelledby="login-title"
       onSubmit={handleSubmit(
         onSubmit
       )}
       className="pm-card mb-8 space-y-4 p-5 login"
     >
+      <h1
+        id="login-title"
+        className="pm-page-title"
+      >
+        Iniciar sesión
+      </h1>
+
       {errorMessage ? (
         <p role="alert">
           {errorMessage}
         </p>
       ) : null}
 
-      <input
-        type="email"
-        placeholder="Email"
-        autoComplete="email"
+      <div className="w-full">
+        <label
+          className="mb-1 block text-sm font-semibold text-slate-700"
+          htmlFor="login-email"
+        >
+          Email
+        </label>
+        <input
+          id="login-email"
+          type="email"
+          placeholder="Email"
+          autoComplete="email"
         {...register("email", {
           required:
             "El email es obligatorio",
         })}
         className="pm-input"
-      />
+        />
+      </div>
 
-      <input
-        type="password"
-        placeholder="Password"
-        autoComplete="current-password"
+      <div className="w-full">
+        <label
+          className="mb-1 block text-sm font-semibold text-slate-700"
+          htmlFor="login-password"
+        >
+          Contraseña
+        </label>
+        <input
+          id="login-password"
+          type="password"
+          placeholder="Password"
+          autoComplete="current-password"
         {...register("password", {
           required:
             "La contraseña es obligatoria",
         })}
         className="pm-input"
-      />
+        />
+      </div>
 
       <button
         type="submit"
         disabled={isSubmitting}
-        className="border px-4 py-2 rounded"
+        className="pm-button"
       >
         {isSubmitting
           ? "Ingresando..."

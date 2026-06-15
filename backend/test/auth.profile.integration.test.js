@@ -43,17 +43,17 @@ const createTestServer = () => {
 const request = async (
   baseUrl,
   path,
-  { token, body } = {}
+   { method = "PUT", token, body } = {}
 ) => {
   const response = await fetch(`${baseUrl}${path}`, {
-    method: "PUT",
+    method,
     headers: {
       "Content-Type": "application/json",
       ...(token
         ? { Authorization: `Bearer ${token}` }
         : {}),
     },
-    body: JSON.stringify(body),
+    ...(body ? { body: JSON.stringify(body) } : {}),
   });
 
   return {
@@ -73,6 +73,7 @@ before(() => {
 afterEach(() => {
   User.findById = originalFindById;
   User.findOne = originalFindOne;
+  User.create = originalCreate;
 });
 
 test("PUT /api/auth/profile rejects duplicate email updates", async () => {
@@ -164,16 +165,109 @@ test("PUT /api/auth/profile clears optional fields when empty values are submitt
 
     assert.equal(response.status, 200);
     assert.deepEqual(response.body, {
-      _id: authUser._id,
-      name: "Usuario Actualizado",
-      email: "actualizado@example.com",
-      age: null,
-      sex: "",
-      profession: "",
+        user: {
+        _id: authUser._id,
+        name: "Usuario Actualizado",
+        email: "actualizado@example.com",
+        age: null,
+        sex: "",
+        profession: "",
+      },
     });
     assert.equal(persistedUser.age, null);
     assert.equal(persistedUser.sex, "");
     assert.equal(persistedUser.profession, "");
+  } finally {
+    await server.close();
+  }
+});
+
+test("auth endpoints use a consistent user response shape", async () => {
+  const authUser = {
+    _id: "64b7f5f0f5f0f5f0f5f0f5f3",
+    name: "Usuario Tres",
+    email: "tres@example.com",
+    age: 31,
+    sex: "masculino",
+    profession: "Diseñador",
+  };
+  const createdUser = {
+    _id: "64b7f5f0f5f0f5f0f5f0f5f4",
+    name: "Usuario Nuevo",
+    email: "nuevo@example.com",
+    age: null,
+    sex: "",
+    profession: "",
+  };
+
+  const passwordHash = await bcrypt.hash(
+    "password123",
+    10
+  );
+  let findOneCalls = 0;
+
+  User.findById = () => createSelectableQuery(authUser);
+  User.findOne = async () => {
+    findOneCalls += 1;
+
+    if (findOneCalls === 2) {
+      return {
+        ...authUser,
+        password: passwordHash,
+      };
+    }
+
+    return null;
+  };
+  User.create = async () => createdUser;
+
+  const server = await createTestServer();
+
+  try {
+    const registerResponse = await request(
+      server.baseUrl,
+      "/api/auth/register",
+      {
+        method: "POST",
+        body: {
+          name: createdUser.name,
+          email: createdUser.email,
+          password: "password123",
+        },
+      }
+    );
+    const loginResponse = await request(
+      server.baseUrl,
+      "/api/auth/login",
+      {
+        method: "POST",
+        body: {
+          email: authUser.email,
+          password: "password123",
+        },
+      }
+    );
+    const meResponse = await request(
+      server.baseUrl,
+      "/api/auth/me",
+      {
+        method: "GET",
+        token: generateToken(authUser._id),
+      }
+    );
+
+    assert.equal(registerResponse.status, 201);
+    assert.equal(typeof registerResponse.body.token, "string");
+    assert.deepEqual(registerResponse.body.user, createdUser);
+
+    assert.equal(loginResponse.status, 200);
+    assert.equal(typeof loginResponse.body.token, "string");
+    assert.deepEqual(loginResponse.body.user, authUser);
+
+    assert.equal(meResponse.status, 200);
+    assert.deepEqual(meResponse.body, {
+      user: authUser,
+    });
   } finally {
     await server.close();
   }

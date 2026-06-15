@@ -50,7 +50,7 @@ const ProfileSettings = () => {
     setErrorMessage("");
 
     try {
-      const updatedUser = await updateProfile(data);
+       const { user: updatedUser } = await updateProfile(data);
 
       setUser(updatedUser);
       setSuccessMessage("Perfil actualizado correctamente.");

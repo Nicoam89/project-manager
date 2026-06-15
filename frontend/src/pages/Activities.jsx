@@ -142,18 +142,22 @@ const Activities = () => {
         </h2>
 
         {error && (
-          <p className="text-red-500">
+        <p className="text-red-700">
             {error}
           </p>
         )}
 
-        <select
-          name="goal"
-          value={form.goal}
-          onChange={handleChange}
-          className="pm-input"
-          required
-        >
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-slate-700">
+            Meta
+          </span>
+          <select
+            name="goal"
+            value={form.goal}
+            onChange={handleChange}
+            className="pm-input"
+            required
+          >
           <option value="">
             Selecciona una meta
           </option>
@@ -166,31 +170,46 @@ const Activities = () => {
               {goal.title}
             </option>
           ))}
-        </select>
+          </select>
+        </label>
 
-        <input
-          name="title"
-          value={form.title}
-          onChange={handleChange}
-          className="pm-input"
-          placeholder="Título"
-          required
-        />
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-slate-700">
+            Título
+          </span>
+          <input
+            name="title"
+            value={form.title}
+            onChange={handleChange}
+            className="pm-input"
+            placeholder="Título"
+            required
+          />
+        </label>
 
-        <textarea
-          name="description"
-          value={form.description}
-          onChange={handleChange}
-          className="pm-input"
-          placeholder="Descripción"
-        />
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-slate-700">
+            Descripción
+          </span>
+          <textarea
+            name="description"
+            value={form.description}
+            onChange={handleChange}
+            className="pm-input"
+            placeholder="Descripción"
+          />
+        </label>
 
-        <select
-          name="workflowType"
-          value={form.workflowType}
-          onChange={handleChange}
-          className="pm-input"
-        >
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-slate-700">
+            Flujo
+          </span>
+          <select
+            name="workflowType"
+            value={form.workflowType}
+            onChange={handleChange}
+            className="pm-input"
+          >
           {WORKFLOW_OPTIONS.map((workflowType) => (
             <option
               key={workflowType.value}
@@ -199,34 +218,48 @@ const Activities = () => {
               {workflowType.label}
             </option>
           ))}
-        </select>
- <div className="grid gap-4 md:grid-cols-2">
-          <input
-            name="startDate"
-            type="date"
-            value={form.startDate}
-            onChange={handleChange}
-            className="pm-input"
-            aria-label="Fecha de inicio"
-          />
+          </select>
+        </label>
+         <div className="grid gap-4 md:grid-cols-2">
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold text-slate-700">
+              Fecha de inicio
+            </span>
+            <input
+              name="startDate"
+              type="date"
+              value={form.startDate}
+              onChange={handleChange}
+              className="pm-input"
+            />
+          </label>
 
-          <input
-            name="dueDate"
-            type="date"
-            value={form.dueDate}
-            onChange={handleChange}
-            className="pm-input"
-            aria-label="Fecha de fin"
-          />
+          <label className="block">
+            <span className="mb-1 block text-sm font-semibold text-slate-700">
+              Fecha de fin
+            </span>
+            <input
+              name="dueDate"
+              type="date"
+              value={form.dueDate}
+              onChange={handleChange}
+              className="pm-input"
+            />
+          </label>
         </div>
 
-        <textarea
-          name="comments"
-          value={form.comments}
-          onChange={handleChange}
-          className="pm-input"
-          placeholder="Comentarios"
-        />
+        <label className="block">
+          <span className="mb-1 block text-sm font-semibold text-slate-700">
+            Comentarios
+          </span>
+          <textarea
+            name="comments"
+            value={form.comments}
+            onChange={handleChange}
+            className="pm-input"
+            placeholder="Comentarios"
+          />
+        </label>
 
         <button
           type="submit"

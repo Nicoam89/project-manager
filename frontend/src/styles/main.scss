@@ -48,6 +48,16 @@ a {
   text-decoration: none;
 }
 
+a:focus-visible,
+button:focus-visible,
+input:focus-visible,
+textarea:focus-visible,
+select:focus-visible,
+[tabindex]:focus-visible {
+  outline: 3px solid #f59e0b;
+  outline-offset: 3px;
+}
+
 .pm-page-title {
   color: #111827;
   font-size: 1.875rem;
@@ -130,7 +140,7 @@ a {
 .pm-button-secondary {
   background: #ffffff;
   border-color: #d1d5db;
-  color: #374151;
+ color: #1f2937;
 
   &:hover {
     background: #f9fafb;

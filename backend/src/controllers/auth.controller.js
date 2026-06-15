@@ -2,6 +2,20 @@ import bcrypt from "bcryptjs";
 import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
 
+const buildUserResponse = (user) => ({
+  _id: user._id,
+  name: user.name,
+  email: user.email,
+  age: user.age ?? null,
+  sex: user.sex || "",
+  profession: user.profession || "",
+});
+
+const buildAuthResponse = (user, token) => ({
+  user: buildUserResponse(user),
+  token,
+});
+
 export const register = async (req, res) => {
   try {
     const { name, email, password } = req.body;
@@ -25,12 +39,12 @@ export const register = async (req, res) => {
       password: hashedPassword,
     });
 
-    res.status(201).json({
-      _id: user._id,
-      name: user.name,
-      email: user.email,
-      token: generateToken(user._id),
-    });
+    res.status(201).json(
+      buildAuthResponse(
+        user,
+        generateToken(user._id)
+      )
+    );
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -53,12 +67,12 @@ export const login = async (req, res) => {
         user.password
       ))
     ) {
-      return res.json({
-        _id: user._id,
-        name: user.name,
-        email: user.email,
-        token: generateToken(user._id),
-      });
+      return res.json(
+        buildAuthResponse(
+          user,
+          generateToken(user._id)
+        )
+      );
     }
 
     return res.status(401).json({
@@ -72,7 +86,9 @@ export const login = async (req, res) => {
 };
 
 export const getMe = async (req, res) => {
-  res.status(200).json(req.user);
+  res.status(200).json({
+    user: buildUserResponse(req.user),
+  });
 };
 
 export const updateProfile = async (req, res) => {
@@ -109,13 +125,7 @@ export const updateProfile = async (req, res) => {
     const updatedUser = await user.save();
 
     res.status(200).json({
-      _id: updatedUser._id,
-      name: updatedUser.name,
-      email: updatedUser.email,
-      age: updatedUser.age,
-      sex: updatedUser.sex,
-      profession: updatedUser.profession,
-
+      user: buildUserResponse(updatedUser),
     });
   } catch (error) {
     res.status(500).json({

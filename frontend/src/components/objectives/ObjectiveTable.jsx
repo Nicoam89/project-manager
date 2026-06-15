@@ -4,12 +4,15 @@ const ObjectiveTable = ({
 }) => {
   return (
     <table className="w-full border">
+      <caption className="sr-only">
+        Listado de objetivos
+      </caption>
       <thead>
         <tr>
-          <th>Título</th>
-          <th>Estado</th>
-          <th>Progreso</th>
-          <th>Acciones</th>
+          <th scope="col">Título</th>
+          <th scope="col">Estado</th>
+          <th scope="col">Progreso</th>
+          <th scope="col">Acciones</th>
         </tr>
       </thead>
 

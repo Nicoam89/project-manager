@@ -42,7 +42,10 @@ const links = [
 ];
 
 const MobileNav = () => (
-<nav className="fixed inset-x-0 top-0 z-30 border-b border-slate-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur sm:py-3 lg:hidden">
+<nav
+  aria-label="Navegación principal móvil"
+  className="fixed inset-x-0 top-0 z-30 border-b border-slate-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur sm:py-3 lg:hidden"
+>
     <div className="mb-2 flex items-center gap-3 px-1 sm:mb-3">
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/20">
         <img src="/1.png" alt="Logo" className="h-9 w-9 rounded-xl object-contain" />
@@ -73,7 +76,7 @@ const MobileNav = () => (
               ].join(" ")
             }
           >
-            <Icon className="text-base" />
+             <Icon className="text-base" aria-hidden="true" />
 
             <span>
               {link.label}
@@ -107,7 +110,10 @@ const Sidebar = () => {
           </div>
         </div>
 
-        <nav className="space-y-1">
+         <nav
+          aria-label="Navegación principal"
+          className="space-y-1"
+        >
           {links.map((link) => {
             const Icon = link.icon;
 
@@ -125,7 +131,7 @@ const Sidebar = () => {
                   ].join(" ")
                 }
               >
-                <Icon className="text-base" />
+                 <Icon className="text-base" aria-hidden="true" />
 
                 <span>
                   {link.label}
