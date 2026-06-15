@@ -2,7 +2,6 @@ import {
   FaHome,
   FaBullseye,
   FaTasks,
-  FaColumns,
   FaCog,
 } from "react-icons/fa";
 
@@ -28,11 +27,6 @@ const links = [
     to: "/activities",
     label: "Actividades",
     icon: FaTasks,
-  },
-  {
-    to: "/kanban",
-    label: "Kanban",
-    icon: FaColumns,
   },
   {
     to: "/settings",

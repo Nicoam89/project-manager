@@ -14,6 +14,8 @@ import {
 
 import MainLayout from "../layouts/MainLayout";
 
+import KanbanBoard from "../components/Kanban/KanbanBoard";
+
 import useObjectiveStore from "../store/objectiveStore";
 
 const goalTypes = [
@@ -241,7 +243,7 @@ const Goals = () => {
             required
           />
         )}
-<div className="grid gap-4 md:grid-cols-2">
+        <div className="grid gap-4 md:grid-cols-2">
           <input
             name="startDate"
             type="date"
@@ -280,7 +282,15 @@ const Goals = () => {
         </button>
       </form>
 
-      <div className="space-y-4">
+      <section className="mb-10 space-y-4">
+        <div>
+          <h2 className="text-2xl font-semibold text-slate-950">
+            Listado de metas
+          </h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Cada meta se conecta con sus actividades y también puede revisarse en Kanban.
+          </p>
+        </div>
         {goals.map((goal) => (
           <div
             key={goal._id}
@@ -338,7 +348,12 @@ const Goals = () => {
             </div>
           </div>
         ))}
-      </div>
+      </section>
+
+      <KanbanBoard
+        title="Kanban de metas"
+        description="Visualiza las actividades asociadas a tus metas por estado, sin salir de la sección Metas."
+      />
     </MainLayout>
   );
 };

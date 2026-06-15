@@ -14,6 +14,9 @@ import { getGoals } from "../api/goals";
 
 import MainLayout from "../layouts/MainLayout";
 
+import KanbanBoard from "../components/Kanban/KanbanBoard";
+
+
 import {
   WORKFLOW_OPTIONS,
 } from "../constants/workflows";
@@ -234,6 +237,16 @@ const Activities = () => {
             : "Guardar"}
         </button>
       </form>
+      <section className="mb-10 space-y-4">
+        <div>
+          <h2 className="text-2xl font-semibold text-slate-950">
+            Listado de actividades
+          </h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Gestiona las actividades en lista o arrástralas en la vista Kanban.
+          </p>
+        </div>
+
 
       <div className="space-y-4">
         {activities.map((activity) => (
@@ -295,6 +308,12 @@ const Activities = () => {
           </div>
         ))}
       </div>
+            </section>
+
+      <KanbanBoard
+        title="Kanban de actividades"
+        description="Mueve actividades por estado y filtra por meta desde esta misma sección."
+      />
     </MainLayout>
   );
 };

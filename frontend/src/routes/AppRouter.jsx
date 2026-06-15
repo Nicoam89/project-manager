@@ -2,6 +2,7 @@ import {
   BrowserRouter,
   Routes,
   Route,
+  Navigate,
 } from "react-router-dom";
 
 import Login from "../pages/Login";
@@ -72,7 +73,7 @@ const AppRouter = () => {
 
         <Route
           path="/kanban"
-          element={protectedPage(<Kanban />)}
+          element={protectedPage(<Navigate to="/goals" replace />)}
         />
 
                 <Route
