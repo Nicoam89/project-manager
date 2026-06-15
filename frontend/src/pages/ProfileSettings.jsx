@@ -73,10 +73,7 @@ const ProfileSettings = () => {
           Perfil de usuario
         </h1>
 
-        <p className="mt-2 max-w-3xl text-slate-500">
-          Administra la información asociada a tu cuenta y suma datos demográficos para entender mejor el público objetivo.
-        </p>
-      </div>
+     </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
         <section className="rounded-xl border bg-white p-5 shadow-sm lg:col-span-1">
