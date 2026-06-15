@@ -5,7 +5,12 @@ import {
 
 import { Link } from "react-router-dom";
 
-import api from "../api/axios";
+import {
+  createActivity,
+  deleteActivity,
+  getActivities,
+} from "../api/activities";
+import { getGoals } from "../api/goals";
 
 import MainLayout from "../layouts/MainLayout";
 
@@ -37,17 +42,17 @@ const Activities = () => {
     useState("");
 
   const loadActivities = async () => {
-    const response =
-      await api.get("/activities");
+    const activitiesData =
+      await getActivities();
 
-    setActivities(response.data);
+    setActivities(activitiesData);
   };
 
   const loadGoals = async () => {
-    const response =
-      await api.get("/goals");
+    const goalsData =
+      await getGoals();
 
-    setGoals(response.data);
+    setGoals(goalsData);
   };
 
   useEffect(() => {
@@ -74,10 +79,7 @@ const Activities = () => {
     setLoading(true);
 
     try {
-      await api.post(
-        "/activities",
-        form
-      );
+      await createActivity(form);
 
       setForm(initialForm);
 
@@ -93,9 +95,7 @@ const Activities = () => {
   };
 
   const handleDelete = async (id) => {
-    await api.delete(
-      `/activities/${id}`
-    );
+    await deleteActivity(id)
 
     await loadActivities();
   };

@@ -1,7 +1,7 @@
 import { useState } from "react";
 import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
-import api from "../api/axios";
+import { login } from "../api/auth";
 
 import useAuthStore from "../store/authStore";
 
@@ -26,20 +26,15 @@ const Login = () => {
     setErrorMessage("");
 
     try {
-      const response =
-        await api.post(
-          "/auth/login",
-          data
-        );
+      const user = await login(data);
 
       loginStore(
         {
-          id: response.data._id,
-          name: response.data.name,
-          email:
-            response.data.email,
+          id: user._id,
+          name: user.name,
+          email: user.email,
         },
-        response.data.token
+        user.token
       );
 
       navigate("/", {

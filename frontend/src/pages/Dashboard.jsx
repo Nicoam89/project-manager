@@ -1,6 +1,6 @@
 import { useEffect, useMemo, useState } from "react";
 
-import api from "../api/axios";
+import { getDashboardSummary } from "../api/dashboard";
 
 import MainLayout from "../layouts/MainLayout";
 
@@ -56,11 +56,9 @@ const Dashboard = () => {
   useEffect(() => {
     const loadSummary = async () => {
       try {
-        const response = await api.get(
-          "/dashboard/summary"
-        );
+         const summaryData = await getDashboardSummary();
 
-        setSummary(response.data);
+        setSummary(summaryData);
       } catch (requestError) {
         setError(
           requestError.response?.data?.message ||

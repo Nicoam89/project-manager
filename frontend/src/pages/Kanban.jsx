@@ -6,7 +6,10 @@ import {
 
 import MainLayout from "../layouts/MainLayout";
 
-import api from "../api/axios";
+import {
+  getActivities,
+  updateActivityStatus,
+} from "../api/activities";
 
 import {
   DndContext,
@@ -40,13 +43,14 @@ const loadActivities = useCallback(
     try {
       setError("");
 
-      const response =
-        await api.get(
-          `/activities?workflowType=${workflowType}`
-        );
+        const activitiesData =
+        await getActivities({
+          workflowType,
+        });
 
       setActivities(
-        response.data
+        activitiesData
+
       );
     } catch (err) {
       setError(
@@ -89,11 +93,9 @@ const loadActivities = useCallback(
     try {
       setError("");
 
-      await api.patch(
-        `/activities/${activityId}/status`,
-        {
-          status: newStatus,
-        }
+      await updateActivityStatus(
+        activityId,
+        newStatus
       );
 
       await loadActivities();

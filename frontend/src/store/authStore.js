@@ -1,6 +1,6 @@
 import { create } from "zustand";
 
-import api from "../api/axios";
+import { getCurrentUser } from "../api/auth";
 
 const getStoredToken = () =>
   localStorage.getItem("token") || null;
@@ -64,12 +64,10 @@ const useAuthStore = create((set, get) => ({
     });
 
     try {
-      const response = await api.get(
-        "/auth/me"
-      );
+      const currentUser = await getCurrentUser();
 
       const user = normalizeUser(
-        response.data
+        currentUser
       );
 
       set({

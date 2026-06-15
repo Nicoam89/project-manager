@@ -5,7 +5,12 @@ import {
 
 import { Link } from "react-router-dom";
 
-import api from "../api/axios";
+import {
+  createGoal,
+  deleteGoal,
+  getGoals,
+} from "../api/goals";
+
 
 import MainLayout from "../layouts/MainLayout";
 
@@ -61,10 +66,11 @@ const Goals = () => {
   } = useObjectiveStore();
 
   const loadGoals = async () => {
-    const response =
-      await api.get("/goals");
+      const goalsData =
+      await getGoals();
 
-    setGoals(response.data);
+    setGoals(goalsData);
+
   };
 
   useEffect(() => {
@@ -91,7 +97,7 @@ const Goals = () => {
     setLoading(true);
 
     try {
-      await api.post("/goals", {
+      await createGoal({
         ...form,
         targetValue:
           form.type === "BOOLEAN"
@@ -113,7 +119,7 @@ const Goals = () => {
   };
 
   const handleDelete = async (id) => {
-    await api.delete(`/goals/${id}`);
+    await deleteGoal(id);
 
     await loadGoals();
   };

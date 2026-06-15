@@ -1,5 +1,10 @@
 import { create } from "zustand";
-import api from "../api/axios";
+import {
+  createObjective,
+  deleteObjective,
+  getObjectives,
+  updateObjective,
+} from "../api/objectives";
 
 const useObjectiveStore = create((set) => ({
   objectives: [],
@@ -9,12 +14,10 @@ const useObjectiveStore = create((set) => ({
     set({ loading: true });
 
     try {
-      const response = await api.get(
-        "/objectives"
-      );
+      const objectives = await getObjectives();
 
       set({
-        objectives: response.data,
+        objectives,
         loading: false,
       });
     } catch (error) {
@@ -27,26 +30,18 @@ const useObjectiveStore = create((set) => ({
   },
 
   createObjective: async (data) => {
-    await api.post(
-      "/objectives",
-      data
-    );
+    await createObjective(data);
   },
 
   updateObjective: async (
     id,
     data
   ) => {
-    await api.put(
-      `/objectives/${id}`,
-      data
-    );
+    await updateObjective(id, data);
   },
 
   deleteObjective: async (id) => {
-    await api.delete(
-      `/objectives/${id}`
-    );
+    await deleteObjective(id);
   },
 }));
 

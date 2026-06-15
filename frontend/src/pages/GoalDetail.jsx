@@ -5,7 +5,7 @@ import {
   useParams,
 } from "react-router-dom";
 
-import api from "../api/axios";
+import { getGoalDetails } from "../api/goals";
 
 import MainLayout from "../layouts/MainLayout";
 
@@ -18,12 +18,10 @@ const GoalDetail = () => {
   useEffect(() => {
     const loadGoal =
       async () => {
-        const response =
-          await api.get(
-            `/goals/${id}/details`
-          );
+        const goalData =
+          await getGoalDetails(id);
 
-        setData(response.data);
+        setData(goalData);
       };
 
     loadGoal();

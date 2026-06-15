@@ -10,7 +10,12 @@ import {
   useParams,
 } from "react-router-dom";
 
-import api from "../api/axios";
+import {
+  addActivityTime,
+  getActivities,
+  getActivityDetails,
+  updateActivity,
+} from "../api/activities";
 
 import MainLayout from "../layouts/MainLayout";
 
@@ -323,11 +328,9 @@ const ActivityDetail = () => {
     try {
       setError("");
 
-      const response = await api.get(
-        `/activities/${id}/details`
-      );
+ const activityData = await getActivityDetails(id);
 
-      setData(response.data);
+      setData(activityData);
     } catch (err) {
       setError(
         err.response?.data?.message ||
@@ -337,11 +340,9 @@ const ActivityDetail = () => {
   }, [id]);
 
    const loadActivities = useCallback(async () => {
-    const response = await api.get(
-      "/activities"
-    );
+    const activitiesData = await getActivities();
 
-    setActivities(response.data);
+    setActivities(activitiesData);
   }, []);
 
   useEffect(() => {
@@ -350,19 +351,13 @@ const ActivityDetail = () => {
   }, [loadActivity, loadActivities]);
 
   const updateActivityCollections = async (payload) => {
-    await api.put(
-      `/activities/${id}`,
-      payload
-    );
+    await updateActivity(id, payload);
 
     await loadActivity();
   };
 
   const addTime = async (payload) => {
-    await api.post(
-      `/activities/${id}/time`,
-      payload
-    );
+    await addActivityTime(id, payload);
 
     await loadActivity();
   };

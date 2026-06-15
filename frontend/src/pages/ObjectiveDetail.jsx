@@ -5,7 +5,7 @@ import {
   useParams,
 } from "react-router-dom";
 
-import api from "../api/axios";
+import { getObjectiveDetails } from "../api/objectives";
 
 import MainLayout from "../layouts/MainLayout";
 
@@ -18,12 +18,10 @@ const ObjectiveDetail = () => {
   useEffect(() => {
     const loadObjective =
       async () => {
-        const response =
-          await api.get(
-            `/objectives/${id}/details`
-          );
+        const objectiveData =
+          await getObjectiveDetails(id);
 
-        setData(response.data);
+        setData(objectiveData);
       };
 
     loadObjective();
