@@ -6,6 +6,7 @@ import {
 } from "react-router-dom";
 
 import Login from "../pages/Login";
+import Landing from "../pages/Landing";
 import Dashboard from "../pages/Dashboard";
 import PlanningGrid from "../pages/PlanningGrid";
 
@@ -31,13 +32,23 @@ const AppRouter = () => {
   return (
     <BrowserRouter>
       <Routes>
+         <Route
+          path="/"
+          element={<Landing />}
+        />
+
+        <Route
+          path="/landing"
+          element={<Navigate to="/" replace />}
+        />
+
         <Route
           path="/login"
           element={<Login />}
         />
 
         <Route
-          path="/"
+          path="/dashboard"
           element={protectedPage(<Dashboard />)}
         />
 

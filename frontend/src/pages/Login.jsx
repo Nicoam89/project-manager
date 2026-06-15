@@ -34,7 +34,7 @@ const Login = () => {
 
       );
 
-      navigate("/", {
+      navigate("/dashboard", {
         replace: true,
       });
     } catch (error) {

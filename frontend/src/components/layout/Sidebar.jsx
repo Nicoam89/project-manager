@@ -10,7 +10,7 @@ import { NavLink } from "react-router-dom";
 
 const links = [
   {
-    to: "/",
+    to: "/dashboard",
     label: "Dashboard",
     icon: FaHome,
   },
@@ -66,7 +66,7 @@ const MobileNav = () => (
           <NavLink
             key={link.to}
             to={link.to}
-            end={link.to === "/"}
+            end={link.to === "/dashboard"}
             className={({ isActive }) =>
               [
                "flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium transition sm:text-sm",
@@ -121,7 +121,7 @@ const Sidebar = () => {
               <NavLink
                 key={link.to}
                 to={link.to}
-                end={link.to === "/"}
+                end={link.to === "/dashboard"}
                 className={({ isActive }) =>
                   [
                     "flex items-center gap-3 rounded-xl px-3 py-2.5 text-sm font-medium transition",
