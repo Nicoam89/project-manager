@@ -313,6 +313,11 @@ const ActivityDetail = () => {
 
   const [data, setData] = useState(null);
   const [error, setError] = useState("");
+  const [activities, setActivities] = useState([]);
+  const [commentText, setCommentText] = useState("");
+  const [dependencyId, setDependencyId] = useState("");
+  const [subtaskTitle, setSubtaskTitle] = useState("");
+
 
   const loadActivity = useCallback(async () => {
     try {
@@ -331,9 +336,27 @@ const ActivityDetail = () => {
     }
   }, [id]);
 
+   const loadActivities = useCallback(async () => {
+    const response = await api.get(
+      "/activities"
+    );
+
+    setActivities(response.data);
+  }, []);
+
   useEffect(() => {
     loadActivity();
-  }, [loadActivity]);
+    loadActivities();
+  }, [loadActivity, loadActivities]);
+
+  const updateActivityCollections = async (payload) => {
+    await api.put(
+      `/activities/${id}`,
+      payload
+    );
+
+    await loadActivity();
+  };
 
   const addTime = async (payload) => {
     await api.post(
@@ -342,6 +365,86 @@ const ActivityDetail = () => {
     );
 
     await loadActivity();
+  };
+
+  const addComment = async (event) => {
+    event.preventDefault();
+
+    const text = commentText.trim();
+
+    if (!text) {
+      return;
+    }
+
+    await updateActivityCollections({
+      comments: [
+        ...comments.map((comment) => ({
+          _id: comment._id,
+          author: comment.author,
+          createdAt: comment.createdAt,
+          text: comment.text,
+        })),
+        { text },
+      ],
+    });
+
+    setCommentText("");
+  };
+
+  const addDependency = async (event) => {
+    event.preventDefault();
+
+    if (!dependencyId) {
+      return;
+    }
+
+    await updateActivityCollections({
+      dependencies: [
+        ...dependencies.map((dependency) => dependency._id || dependency),
+        dependencyId,
+      ],
+    });
+
+    setDependencyId("");
+  };
+
+  const addSubtask = async (event) => {
+    event.preventDefault();
+
+    const title = subtaskTitle.trim();
+
+    if (!title) {
+      return;
+    }
+
+    await updateActivityCollections({
+      subtasks: [
+        ...subtasks.map((subtask) => ({
+          _id: subtask._id,
+          title: subtask.title,
+          completed: Boolean(subtask.completed),
+        })),
+        {
+          title,
+          completed: false,
+        },
+      ],
+    });
+
+    setSubtaskTitle("");
+  };
+
+  const toggleSubtask = async (targetSubtask) => {
+    await updateActivityCollections({
+      subtasks: subtasks.map((subtask) => ({
+        _id: subtask._id,
+        title: subtask.title,
+        completed:
+          subtask._id === targetSubtask._id
+            ? !subtask.completed
+            : Boolean(subtask.completed),
+      })),
+    });
   };
 
   const collections = useMemo(
@@ -360,6 +463,16 @@ const ActivityDetail = () => {
     subtasks,
     timeEntries,
   } = collections;
+
+  const dependencyIds = dependencies.map(
+    (dependency) => dependency._id || dependency
+  );
+
+  const availableDependencies = activities.filter(
+    (candidate) =>
+      candidate._id !== activity._id &&
+      !dependencyIds.includes(candidate._id)
+  );
 
   return (
     <PageShell>
@@ -394,18 +507,51 @@ const ActivityDetail = () => {
             )}
           />
 
-          <CollectionSection
+          <SectionCard
             title="Subtareas"
             description="Checklist de trabajo asociado a la actividad."
-            emptyMessage="Todavía no hay subtareas."
-            items={subtasks}
-            renderItem={(subtask) => (
-              <SubtaskItem
-                key={subtask._id}
-                subtask={subtask}
-              />
+            action={(
+              <form
+                onSubmit={addSubtask}
+                className="flex gap-2"
+              >
+                <input
+                  value={subtaskTitle}
+                  onChange={(event) =>
+                    setSubtaskTitle(event.target.value)
+                  }
+                  className="pm-input min-w-0"
+                  placeholder="Nueva subtarea"
+                />
+
+                <button
+                  type="submit"
+                  className="pm-button whitespace-nowrap"
+                >
+                  Agregar
+                </button>
+              </form>
             )}
-          />
+          >
+            {subtasks.length > 0 ? (
+              <div className="space-y-3">
+                {subtasks.map((subtask) => (
+                  <button
+                    key={subtask._id}
+                    type="button"
+                    onClick={() => toggleSubtask(subtask)}
+                    className="w-full text-left"
+                  >
+                    <SubtaskItem subtask={subtask} />
+                  </button>
+                ))}
+              </div>
+            ) : (
+              <EmptyState>
+                Todavía no hay subtareas.
+              </EmptyState>
+            )}
+          </SectionCard>
         </div>
 
         <div className="space-y-6">
@@ -416,31 +562,101 @@ const ActivityDetail = () => {
             <TimeEntryForm onSubmit={addTime} />
           </SectionCard>
 
-          <CollectionSection
+          <SectionCard
             title="Comentarios"
             description="Notas registradas para seguimiento."
-            emptyMessage="Todavía no hay comentarios."
-            items={comments}
-            renderItem={(comment) => (
-              <CommentItem
-                key={comment._id}
-                comment={comment}
-              />
-            )}
-          />
+            action={(
+              <form
+                onSubmit={addComment}
+                className="flex gap-2"
+              >
+                <input
+                  value={commentText}
+                  onChange={(event) =>
+                    setCommentText(event.target.value)
+                  }
+                  className="pm-input min-w-0"
+                  placeholder="Nuevo comentario"
+                />
 
-          <CollectionSection
+                <button
+                  type="submit"
+                  className="pm-button whitespace-nowrap"
+                >
+                  Agregar
+                </button>
+              </form>
+            )}
+          >
+            {comments.length > 0 ? (
+              <div className="space-y-3">
+                {comments.map((comment) => (
+                  <CommentItem
+                    key={comment._id}
+                    comment={comment}
+                  />
+                ))}
+              </div>
+            ) : (
+              <EmptyState>
+                Todavía no hay comentarios.
+              </EmptyState>
+            )}
+          </SectionCard>
+
+          <SectionCard
             title="Dependencias"
             description="Actividades requeridas o relacionadas."
-            emptyMessage="Sin dependencias registradas."
-            items={dependencies}
-            renderItem={(dependency) => (
-              <DependencyItem
-                key={dependency._id}
-                dependency={dependency}
-              />
+            action={(
+              <form
+                onSubmit={addDependency}
+                className="flex gap-2"
+              >
+                <select
+                  value={dependencyId}
+                  onChange={(event) =>
+                    setDependencyId(event.target.value)
+                  }
+                  className="pm-input min-w-0"
+                >
+                  <option value="">
+                    Selecciona actividad
+                  </option>
+
+                  {availableDependencies.map((candidate) => (
+                    <option
+                      key={candidate._id}
+                      value={candidate._id}
+                    >
+                      {candidate.title}
+                    </option>
+                  ))}
+                </select>
+
+                <button
+                  type="submit"
+                  className="pm-button whitespace-nowrap"
+                >
+                  Agregar
+                </button>
+              </form>
             )}
-          />
+          >
+            {dependencies.length > 0 ? (
+              <div className="space-y-3">
+                {dependencies.map((dependency) => (
+                  <DependencyItem
+                    key={dependency._id || dependency}
+                    dependency={dependency}
+                  />
+                ))}
+              </div>
+            ) : (
+              <EmptyState>
+                Sin dependencias registradas.
+              </EmptyState>
+            )}
+          </SectionCard>
         </div>
       </div>
     </PageShell>

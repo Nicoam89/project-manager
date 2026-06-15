@@ -1,5 +1,3 @@
-import { body } from "express-validator";
-
 import {
   WORKFLOW_STATUSES,
   WORKFLOW_TYPES,
@@ -25,6 +23,7 @@ export const activityUpdateFields = [
   "completedAt",
   "estimatedHours",
   "linkedActivities",
+  "comments",
   "subtasks",
   "dependencies",
 ];
@@ -50,69 +49,6 @@ export const createActivityValidation = [
   body("workflowType")
     .optional()
     .isIn(WORKFLOW_TYPES)
-    .withMessage("Flujo de trabajo inválido"),
-
-  body("estimatedHours")
-    .optional()
-    .isFloat({ min: 0 })
-    .withMessage(
-      "Las horas estimadas deben ser mayores o iguales a 0"
-    ),
-];
-
-export const updateActivityValidation = [
-  body("goal")
-    .optional()
-    .isMongoId()
-    .withMessage(
-      "La meta debe ser válida"
-    ),
-
-  body("title")
-    .optional()
-    .trim()
-    .notEmpty()
-    .withMessage(
-      "El título no puede estar vacío"
-    ),
-
-  body("description")
-    .optional()
-    .isString()
-    .withMessage(
-      "La descripción debe ser texto"
-    ),
-
-  body("workflowType")
-    .optional()
-    .isIn(WORKFLOW_TYPES)
-    .withMessage("Flujo de trabajo inválido"),
-
-  body("status")
-    .optional()
-    .isIn(WORKFLOW_STATUSES)
-    .withMessage("Estado inválido"),
-
-  body("priorityType")
-    .optional()
-    .isIn(priorityTypes)
-    .withMessage("Tipo de prioridad inválido"),
-
-  body("priority")
-    .optional()
-    .isIn(priorities)
-    .withMessage("Prioridad inválida"),
-
-  body("startDate")
-    .optional()
-    .isISO8601()
-    .withMessage(
-      "La fecha de inicio debe ser válida"
-    ),
-
-  body("dueDate")
-    .optional()
-    .isISO8601()
     .withMessage(
       "La fecha límite debe ser válida"
     ),
@@ -138,11 +74,33 @@ export const updateActivityValidation = [
       "Las actividades vinculadas deben ser una lista"
     ),
 
+  body("comments")
+    .optional()
+    .isArray()
+    .withMessage(
+      "Los comentarios deben ser una lista"
+    ),
+
+  body("comments.*.text")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage(
+      "El comentario no puede estar vacío"
+    ),
+
   body("dependencies")
     .optional()
     .isArray()
     .withMessage(
       "Las dependencias deben ser una lista"
+    ),
+
+  body("dependencies.*")
+    .optional()
+    .isMongoId()
+    .withMessage(
+      "Cada dependencia debe ser una actividad válida"
     ),
 
   body("subtasks")
@@ -151,6 +109,21 @@ export const updateActivityValidation = [
     .withMessage(
       "Las subtareas deben ser una lista"
     ),
+
+  body("subtasks.*.title")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage(
+      "El título de la subtarea no puede estar vacío"
+    ),
+
+  body("subtasks.*.completed")
+    .optional()
+    .isBoolean()
+    .withMessage(
+      "El estado de la subtarea debe ser verdadero o falso"
+    ),
 ];
 
 export const updateActivityStatusValidation = [
@@ -158,3 +131,4 @@ export const updateActivityStatusValidation = [
     .isIn(WORKFLOW_STATUSES)
     .withMessage("Estado inválido"),
 ];
+
