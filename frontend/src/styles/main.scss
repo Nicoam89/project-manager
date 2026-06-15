@@ -159,13 +159,47 @@ select:focus-visible,
   font-weight: 700;
 }
 
-.login{
-	display: flex;
-	flex-direction: column;
-	flex-wrap: wrap;
-	justify-content: center;
-	align-items: center;
-	align-content: center;
+.login-page {
+  display: flex;
+  min-height: 100vh;
+  align-items: center;
+  justify-content: center;
+  padding: 1.5rem;
+}
+
+.login {
+  display: flex;
+  width: min(100%, 28rem);
+  flex-direction: column;
+  align-items: stretch;
+}
+
+.login-brand {
+  display: flex;
+  align-items: center;
+  gap: 0.875rem;
+}
+
+.login-brand__logo {
+  height: 3.5rem;
+  width: 3.5rem;
+  flex-shrink: 0;
+  border-radius: 1rem;
+  object-fit: contain;
+}
+
+.login-brand__subtitle {
+  margin: 0.25rem 0 0;
+  color: #64748b;
+  font-size: 0.875rem;
+}
+
+.login__heading {
+  margin: 0;
+  color: #334155;
+  font-size: 1.125rem;
+  font-weight: 700;
+
 }
 #root {
   min-width: 0;
