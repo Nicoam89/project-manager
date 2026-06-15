@@ -11,3 +11,10 @@ export const getCurrentUser = async () => {
 
   return response.data;
 };
+
+
+export const updateProfile = async (profile) => {
+  const response = await api.put("/auth/profile", profile);
+
+  return response.data;
+};

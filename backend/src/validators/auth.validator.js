@@ -38,3 +38,22 @@ export const loginValidation = [
       "La contraseña es obligatoria"
     ),
 ];
+
+export const updateProfileValidation = [
+  body("name")
+    .trim()
+    .notEmpty()
+    .withMessage(
+      "El nombre es obligatorio"
+    )
+    .isLength({ min: 2 })
+    .withMessage(
+      "El nombre debe tener al menos 2 caracteres"
+    ),
+
+  body("email")
+    .isEmail()
+    .withMessage(
+      "Email inválido"
+    ),
+];

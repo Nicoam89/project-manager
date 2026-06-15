@@ -74,3 +74,45 @@ export const login = async (req, res) => {
 export const getMe = async (req, res) => {
   res.status(200).json(req.user);
 };
+
+export const updateProfile = async (req, res) => {
+  try {
+    const { name, email } = req.body;
+
+    const existingUser = await User.findOne({
+      email,
+      _id: { $ne: req.user._id },
+    });
+
+    if (existingUser) {
+      return res.status(400).json({
+        message: "Email ya está en uso",
+      });
+    }
+
+    const user = await User.findById(
+      req.user._id
+    ).select("-password");
+
+    if (!user) {
+      return res.status(404).json({
+        message: "Usuario no encontrado",
+      });
+    }
+
+    user.name = name;
+    user.email = email;
+
+    const updatedUser = await user.save();
+
+    res.status(200).json({
+      _id: updatedUser._id,
+      name: updatedUser.name,
+      email: updatedUser.email,
+    });
+  } catch (error) {
+    res.status(500).json({
+      message: error.message,
+    });
+  }
+};

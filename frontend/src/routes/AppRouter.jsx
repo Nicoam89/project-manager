@@ -18,6 +18,7 @@ import GoalDetail from "../pages/GoalDetail";
 
 import Kanban from "../pages/Kanban";
 import ActivityDetail from "../pages/ActivityDetail";
+import ProfileSettings from "../pages/ProfileSettings";
 
 const protectedPage = (children) => (
   <ProtectedRoute>
@@ -73,6 +74,12 @@ const AppRouter = () => {
           path="/kanban"
           element={protectedPage(<Kanban />)}
         />
+
+                <Route
+          path="/settings"
+          element={protectedPage(<ProfileSettings />)}
+        />
+
       </Routes>
     </BrowserRouter>
   );
