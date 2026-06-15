@@ -19,6 +19,29 @@ const formatDate = (date) => {
   }).format(new Date(date));
 };
 
+const StatCard = ({
+  label,
+  value,
+  tone = "blue",
+}) => {
+  const toneClasses = {
+    blue: "bg-blue-50 text-blue-700",
+    green: "bg-green-50 text-green-700",
+    amber: "bg-amber-50 text-amber-700",
+  };
+
+  return (
+    <div className="pm-card p-5">
+      <p className={`pm-badge ${toneClasses[tone]}`}>
+        {label}
+      </p>
+      <p className="mt-4 text-3xl font-bold text-slate-950">
+        {value}
+      </p>
+    </div>
+  );
+};
+
 const GoalDetail = () => {
   const { id } = useParams();
 
@@ -40,152 +63,162 @@ const GoalDetail = () => {
   if (!data) {
     return (
       <MainLayout>
-        Cargando...
+        <p className="text-slate-500">
+          Cargando detalle de la meta...
+        </p>
       </MainLayout>
     );
   }
 
   return (
     <MainLayout>
-
       <Link
-          to="/goals"
-          className="text-blue-500"
-        >
-          ← Volver a metas
-        </Link>
-        <h1 className="text-3xl font-bold mt-4">
-          {data.goal.title}
-        </h1>
+        to="/goals"
+        className="text-sm font-semibold text-blue-700 hover:text-blue-800"
+      >
+        ← Volver a metas
+      </Link>
 
-      <p className="mt-2">
-        {data.goal.description}
-      </p>
+      <section className="pm-card mt-4 p-6">
+        <div className="flex flex-col justify-between gap-4 md:flex-row md:items-start">
+          <div>
+            <p className="pm-badge">
+              Detalle de meta
+            </p>
 
-      {data.goal.objective && (
-        <p className="mt-2">
-          Objetivo:{" "}
-          <Link
-            to={`/objectives/${data.goal.objective._id}`}
-            className="text-blue-600"
-          >
-            {data.goal.objective.title}
-          </Link>
-        </p>
-)}
+            <h1 className="pm-page-title mt-4">
+              {data.goal.title}
+            </h1>
 
-      <div className="grid gap-4 mt-6 md:grid-cols-3">
-        <div className="border p-4 rounded">
-          <p className="text-sm text-gray-500">
+            <p className="mt-2 max-w-3xl text-slate-500">
+              {data.goal.description || "Sin descripción"}
+            </p>
+          </div>
+
+          <div className="rounded-2xl bg-blue-50 px-5 py-4 text-center md:min-w-36">
+            <p className="text-sm font-semibold text-blue-700">
+              Progreso
+            </p>
+            <p className="mt-1 text-3xl font-bold text-blue-900">
+              {data.stats.progress}%
+            </p>
+          </div>
+        </div>
+
+        {data.goal.objective && (
+          <p className="mt-5 text-sm text-slate-600">
+            Objetivo:{" "}
+            <Link
+              to={`/objectives/${data.goal.objective._id}`}
+              className="font-semibold text-blue-700 hover:text-blue-800"
+            >
+              {data.goal.objective.title}
+            </Link>
+          </p>
+        )}
+
+        <div className="mt-6 h-3 overflow-hidden rounded-full bg-slate-200">
+          <div
+            className="h-full rounded-full bg-blue-600"
+            style={{
+              width: `${Math.min(
+                data.stats.progress || 0,
+                100
+              )}%`,
+            }}
+          />
+        </div>
+      </section>
+
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <div className="pm-card p-5">
+          <p className="text-sm font-medium text-slate-500">
             Fecha de inicio
           </p>
-          <p className="font-semibold">
+          <p className="mt-2 font-semibold text-slate-950">
             {formatDate(data.goal.startDate)}
           </p>
         </div>
 
-        <div className="border p-4 rounded">
-          <p className="text-sm text-gray-500">
+        <div className="pm-card p-5">
+          <p className="text-sm font-medium text-slate-500">
             Fecha de fin
           </p>
-          <p className="font-semibold">
+          <p className="mt-2 font-semibold text-slate-950">
             {formatDate(data.goal.endDate)}
           </p>
         </div>
 
-        <div className="border p-4 rounded">
-          <p className="text-sm text-gray-500">
+        <div className="pm-card p-5">
+          <p className="text-sm font-medium text-slate-500">
             Comentarios
           </p>
-          <p className="font-semibold">
+          <p className="mt-2 font-semibold text-slate-950">
             {data.goal.comments || "Sin comentarios"}
           </p>
         </div>
       </div>
 
-      <div className="mt-6">
-        <div className="w-full bg-gray-200 h-4 rounded">
-          <div
-            className="bg-green-500 h-4 rounded"
-            style={{
-              width:
-                `${data.stats.progress}%`,
-            }}
-          />
-        </div>
+      <div className="mt-6 grid gap-4 md:grid-cols-3">
+        <StatCard
+          label="Actividades"
+          value={data.stats.activities}
+        />
 
-        <p className="mt-2">
-          {data.stats.progress}%
-        </p>
+        <StatCard
+          label="Completadas"
+          value={data.stats.completedActivities}
+          tone="green"
+        />
+
+        <StatCard
+          label="Pendientes"
+          value={data.stats.pendingActivities}
+          tone="amber"
+        />
       </div>
 
-      <div className="grid grid-cols-3 gap-4 mt-8">
-        <div className="border p-4 rounded">
-          Actividades
-
-          <p className="text-3xl">
-            {
-              data.stats
-                .activities
-            }
+      <section className="mt-8 space-y-4">
+        <div>
+          <h2 className="text-2xl font-semibold text-slate-950">
+            Actividades
+          </h2>
+          <p className="mt-1 text-sm text-slate-500">
+            Actividades asociadas a esta meta con el mismo estilo de tarjetas.
           </p>
         </div>
 
-        <div className="border p-4 rounded">
-          Completadas
+        <div className="space-y-4">
+          {data.activities.map(
+            (activity) => (
+              <div
+                key={activity._id}
+                className="pm-card pm-card-hover p-5"
+              >
+                <div className="flex flex-col justify-between gap-4 md:flex-row md:items-center">
+                  <div>
+                    <Link
+                      to={`/activities/${activity._id}`}
+                      className="text-xl font-semibold text-slate-950 hover:text-blue-700"
+                    >
+                      {activity.title}
+                    </Link>
 
-          <p className="text-3xl">
-            {
-              data.stats
-                .completedActivities
-            }
-          </p>
+                    <div className="mt-3 flex flex-wrap gap-2">
+                      <span className="pm-badge bg-slate-100 text-slate-700">
+                        {activity.status}
+                      </span>
+                      <span className="pm-badge bg-blue-50 text-blue-700">
+                        {activity.priority || "MEDIUM"}
+                      </span>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            )
+          )}
         </div>
-
-        <div className="border p-4 rounded">
-          Pendientes
-
-          <p className="text-3xl">
-            {
-              data.stats
-                .pendingActivities
-            }
-          </p>
-        </div>
-      </div>
-
-      <h2 className="text-2xl mt-8">
-        Actividades
-      </h2>
-
-      <div className="space-y-3 mt-4">
-        {data.activities.map(
-          (activity) => (
-            <div
-              key={activity._id}
-              className="border rounded p-4"
-            >
-            <Link
-              to={`/activities/${activity._id}`}
-              className="text-xl font-semibold text-blue-600"
-            >
-              {activity.title}
-            </Link>
-              <p>
-                {
-                  activity.status
-                }
-              </p>
-
-              <p>
-                {
-                  activity.priority
-                }
-              </p>
-            </div>
-          )
-        )}
-      </div>
+      </section>
     </MainLayout>
   );
 };
