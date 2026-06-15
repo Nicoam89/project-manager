@@ -7,6 +7,7 @@ import {
 
 import Login from "../pages/Login";
 import Dashboard from "../pages/Dashboard";
+import PlanningGrid from "../pages/PlanningGrid";
 
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -17,7 +18,6 @@ import Activities from "../pages/Activities";
 import ObjectiveDetail from "../pages/ObjectiveDetail";
 import GoalDetail from "../pages/GoalDetail";
 
-import Kanban from "../pages/Kanban";
 import ActivityDetail from "../pages/ActivityDetail";
 import ProfileSettings from "../pages/ProfileSettings";
 
@@ -64,6 +64,11 @@ const AppRouter = () => {
         <Route
           path="/activities"
           element={protectedPage(<Activities />)}
+        />
+
+        <Route
+          path="/planning-grid"
+          element={protectedPage(<PlanningGrid />)}
         />
 
         <Route

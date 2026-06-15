@@ -3,6 +3,7 @@ import {
   FaBullseye,
   FaTasks,
   FaCog,
+  FaTable,
 } from "react-icons/fa";
 
 import { NavLink } from "react-router-dom";
@@ -17,6 +18,11 @@ const links = [
     to: "/objectives",
     label: "Objetivos",
     icon: FaBullseye,
+  },
+  {
+    to: "/planning-grid",
+    label: "Grilla",
+    icon: FaTable,
   },
   {
     to: "/goals",
