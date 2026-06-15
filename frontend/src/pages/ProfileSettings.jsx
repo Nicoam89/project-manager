@@ -1,6 +1,13 @@
 import { useEffect, useState } from "react";
 import { useForm } from "react-hook-form";
-import { FaEnvelope, FaIdBadge, FaUserCog } from "react-icons/fa";
+import {
+  FaBirthdayCake,
+  FaBriefcase,
+  FaEnvelope,
+  FaIdBadge,
+  FaUserCog,
+  FaVenusMars,
+} from "react-icons/fa";
 
 import { updateProfile } from "../api/auth";
 import MainLayout from "../layouts/MainLayout";
@@ -22,6 +29,9 @@ const ProfileSettings = () => {
     defaultValues: {
       name: user?.name || "",
       email: user?.email || "",
+      age: user?.age || "",
+      sex: user?.sex || "",
+      profession: user?.profession || "",
     },
   });
 
@@ -29,6 +39,9 @@ const ProfileSettings = () => {
     reset({
       name: user?.name || "",
       email: user?.email || "",
+      age: user?.age || "",
+      sex: user?.sex || "",
+      profession: user?.profession || "",
     });
   }, [reset, user]);
 
@@ -61,7 +74,7 @@ const ProfileSettings = () => {
         </h1>
 
         <p className="mt-2 max-w-3xl text-slate-500">
-          Administra la información básica asociada a tu cuenta y mantén tus datos de contacto actualizados.
+          Administra la información asociada a tu cuenta y suma datos demográficos para entender mejor el público objetivo.
         </p>
       </div>
 
@@ -95,8 +108,39 @@ const ProfileSettings = () => {
                 {user?.email || "Sin email"}
               </dd>
             </div>
+
+            <div className="rounded-lg border border-slate-100 bg-slate-50 p-4">
+              <dt className="flex items-center gap-2 text-sm font-medium text-slate-500">
+                <FaBirthdayCake />
+                Edad
+              </dt>
+              <dd className="mt-2 font-semibold text-slate-900">
+                {user?.age ? `${user.age} años` : "Sin edad"}
+              </dd>
+            </div>
+
+            <div className="rounded-lg border border-slate-100 bg-slate-50 p-4">
+              <dt className="flex items-center gap-2 text-sm font-medium text-slate-500">
+                <FaVenusMars />
+                Sexo
+              </dt>
+              <dd className="mt-2 font-semibold capitalize text-slate-900">
+                {user?.sex ? user.sex.replaceAll("-", " ") : "Sin sexo"}
+              </dd>
+            </div>
+
+            <div className="rounded-lg border border-slate-100 bg-slate-50 p-4">
+              <dt className="flex items-center gap-2 text-sm font-medium text-slate-500">
+                <FaBriefcase />
+                Profesión
+              </dt>
+              <dd className="mt-2 font-semibold text-slate-900">
+                {user?.profession || "Sin profesión"}
+              </dd>
+            </div>
           </dl>
         </section>
+
 
         <section className="rounded-xl border bg-white p-5 shadow-sm lg:col-span-2">
           <h2 className="text-lg font-semibold text-slate-900">
@@ -104,7 +148,7 @@ const ProfileSettings = () => {
           </h2>
 
           <p className="mt-2 text-sm text-slate-500">
-            Estos datos se usarán para identificar tu sesión dentro de A.M.O. iQ.
+            Estos datos ayudan a segmentar usuarios y comprender mejor el público objetivo dentro de A.M.O. iQ.
           </p>
 
           <form
@@ -171,6 +215,78 @@ const ProfileSettings = () => {
               ) : null}
             </div>
 
+             <div className="grid gap-5 md:grid-cols-2">
+              <div>
+                <label className="text-sm font-semibold text-slate-700" htmlFor="profile-age">
+                  Edad
+                </label>
+                <input
+                  id="profile-age"
+                  type="number"
+                  min="13"
+                  max="120"
+                  className="pm-input mt-2"
+                  placeholder="Ej. 32"
+                  {...register("age", {
+                    min: {
+                      value: 13,
+                      message: "La edad mínima es 13 años",
+                    },
+                    max: {
+                      value: 120,
+                      message: "La edad máxima es 120 años",
+                    },
+                  })}
+                />
+                {errors.age ? (
+                  <p className="mt-2 text-sm text-red-600">
+                    {errors.age.message}
+                  </p>
+                ) : null}
+              </div>
+
+              <div>
+                <label className="text-sm font-semibold text-slate-700" htmlFor="profile-sex">
+                  Sexo
+                </label>
+                <select
+                  id="profile-sex"
+                  className="pm-input mt-2"
+                  {...register("sex")}
+                >
+                  <option value="">Seleccionar</option>
+                  <option value="femenino">Femenino</option>
+                  <option value="masculino">Masculino</option>
+                  <option value="no-binario">No binario</option>
+                  <option value="prefiero-no-decir">Prefiero no decir</option>
+                  <option value="otro">Otro</option>
+                </select>
+              </div>
+            </div>
+
+            <div>
+              <label className="text-sm font-semibold text-slate-700" htmlFor="profile-profession">
+                Profesión
+              </label>
+              <input
+                id="profile-profession"
+                type="text"
+                className="pm-input mt-2"
+                placeholder="Ej. Diseñadora UX"
+                {...register("profession", {
+                  maxLength: {
+                    value: 80,
+                    message: "La profesión no puede superar 80 caracteres",
+                  },
+                })}
+              />
+              {errors.profession ? (
+                <p className="mt-2 text-sm text-red-600">
+                  {errors.profession.message}
+                </p>
+              ) : null}
+            </div>
+
             <div className="flex justify-end border-t border-slate-100 pt-5">
               <button
                 type="submit"
@@ -188,3 +304,4 @@ const ProfileSettings = () => {
 };
 
 export default ProfileSettings;
+

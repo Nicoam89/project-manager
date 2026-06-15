@@ -20,6 +20,34 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
+
+     age: {
+      type: Number,
+      min: 13,
+      max: 120,
+      default: null,
+    },
+
+    sex: {
+      type: String,
+      enum: [
+        "",
+        "femenino",
+        "masculino",
+        "no-binario",
+        "prefiero-no-decir",
+        "otro",
+      ],
+      default: "",
+      trim: true,
+    },
+
+    profession: {
+      type: String,
+      trim: true,
+      maxlength: 80,
+      default: "",
+   },
   },
   {
     timestamps: true,

@@ -77,7 +77,7 @@ export const getMe = async (req, res) => {
 
 export const updateProfile = async (req, res) => {
   try {
-    const { name, email } = req.body;
+    const { name, email, age, sex, profession } = req.body;
 
     const existingUser = await User.findOne({
       email,
@@ -102,6 +102,9 @@ export const updateProfile = async (req, res) => {
 
     user.name = name;
     user.email = email;
+    user.age = age || null;
+    user.sex = sex || "";
+    user.profession = profession || "";
 
     const updatedUser = await user.save();
 
@@ -109,6 +112,10 @@ export const updateProfile = async (req, res) => {
       _id: updatedUser._id,
       name: updatedUser.name,
       email: updatedUser.email,
+      age: updatedUser.age,
+      sex: updatedUser.sex,
+      profession: updatedUser.profession,
+
     });
   } catch (error) {
     res.status(500).json({

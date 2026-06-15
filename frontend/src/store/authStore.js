@@ -9,6 +9,9 @@ const normalizeUser = (user) => ({
   id: user._id || user.id,
   name: user.name,
   email: user.email,
+  age: user.age || "",
+  sex: user.sex || "",
+  profession: user.profession || "",
 });
 
 const useAuthStore = create((set, get) => ({
@@ -27,7 +30,7 @@ const useAuthStore = create((set, get) => ({
     );
 
     set({
-      user,
+      user: normalizeUser(user),
       token,
       initialized: true,
     });

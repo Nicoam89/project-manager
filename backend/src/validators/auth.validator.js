@@ -56,4 +56,42 @@ export const updateProfileValidation = [
     .withMessage(
       "Email inválido"
     ),
+body("age")
+    .optional({
+      checkFalsy: true,
+      nullable: true,
+    })
+    .isInt({
+      min: 13,
+      max: 120,
+    })
+    .withMessage(
+      "La edad debe estar entre 13 y 120 años"
+    )
+    .toInt(),
+
+  body("sex")
+    .optional({
+      checkFalsy: true,
+    })
+    .isIn([
+      "femenino",
+      "masculino",
+      "no-binario",
+      "prefiero-no-decir",
+      "otro",
+    ])
+    .withMessage(
+      "Selecciona una opción de sexo válida"
+    ),
+
+  body("profession")
+    .optional({
+      checkFalsy: true,
+    })
+    .trim()
+    .isLength({ max: 80 })
+    .withMessage(
+      "La profesión no puede superar 80 caracteres"
+    ),
 ];
