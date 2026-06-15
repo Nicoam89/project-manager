@@ -23,6 +23,20 @@ const initialForm = {
   title: "",
   description: "",
   workflowType: "STANDARD",
+  startDate: "",
+  dueDate: "",
+  comments: "",
+};
+
+const formatDate = (date) => {
+  if (!date) {
+    return "Sin fecha";
+  }
+
+  return new Intl.DateTimeFormat("es", {
+    dateStyle: "medium",
+  }).format(new Date(date));
+
 };
 
 const Activities = () => {
@@ -79,7 +93,16 @@ const Activities = () => {
     setLoading(true);
 
     try {
-      await createActivity(form);
+ await createActivity({
+        ...form,
+        comments: form.comments
+          ? [
+              {
+                text: form.comments,
+              },
+            ]
+          : [],
+      });
 
       setForm(initialForm);
 
@@ -173,6 +196,33 @@ const Activities = () => {
             </option>
           ))}
         </select>
+ <div className="grid gap-4 md:grid-cols-2">
+          <input
+            name="startDate"
+            type="date"
+            value={form.startDate}
+            onChange={handleChange}
+            className="pm-input"
+            aria-label="Fecha de inicio"
+          />
+
+          <input
+            name="dueDate"
+            type="date"
+            value={form.dueDate}
+            onChange={handleChange}
+            className="pm-input"
+            aria-label="Fecha de fin"
+          />
+        </div>
+
+        <textarea
+          name="comments"
+          value={form.comments}
+          onChange={handleChange}
+          className="pm-input"
+          placeholder="Comentarios"
+        />
 
         <button
           type="submit"
@@ -218,6 +268,19 @@ const Activities = () => {
                   Estado: {activity.status}
                 </p>
               </div>
+                     <p className="text-sm">
+                  Inicio: {formatDate(activity.startDate)}
+                </p>
+
+                <p className="text-sm">
+                  Fin: {formatDate(activity.dueDate)}
+                </p>
+
+                {activity.comments?.[0]?.text && (
+                  <p className="text-sm">
+                    Comentarios: {activity.comments[0].text}
+                  </p>
+                )}
 
               <button
                 type="button"

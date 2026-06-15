@@ -52,7 +52,21 @@ export const createActivityValidation = [
     .optional()
     .isIn(WORKFLOW_TYPES)
     .withMessage(
-      "La fecha límite debe ser válida"
+       "Flujo de trabajo inválido"
+    ),
+
+  body("startDate")
+    .optional({ nullable: true })
+    .isISO8601()
+    .withMessage(
+      "La fecha de inicio debe ser válida"
+    ),
+
+  body("dueDate")
+    .optional({ nullable: true })
+    .isISO8601()
+    .withMessage(
+      "La fecha de fin debe ser válida"
     ),
 
   body("completedAt")

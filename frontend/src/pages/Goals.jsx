@@ -45,7 +45,27 @@ const initialForm = {
   description: "",
   type: "ACTIVITIES",
   targetValue: "",
+startDate: "",
+  endDate: "",
+  comments: "",
 };
+
+const goalTypesWithoutTarget = [
+  "BOOLEAN",
+  "ACTIVITIES",
+  "QUALITATIVE",
+];
+
+const formatDate = (date) => {
+  if (!date) {
+    return "Sin fecha";
+  }
+
+  return new Intl.DateTimeFormat("es", {
+    dateStyle: "medium",
+  }).format(new Date(date));
+};
+
 
 const Goals = () => {
   const [goals, setGoals] =
@@ -97,13 +117,24 @@ const Goals = () => {
     setLoading(true);
 
     try {
-      await createGoal({
+      const payload = {
         ...form,
         targetValue:
           form.type === "BOOLEAN"
             ? true
             : form.targetValue,
-      });
+        };
+
+      if (
+        goalTypesWithoutTarget.includes(
+          form.type
+        ) &&
+        form.type !== "BOOLEAN"
+      ) {
+        delete payload.targetValue;
+      }
+
+      await createGoal(payload);
 
       setForm(initialForm);
 
@@ -198,7 +229,9 @@ const Goals = () => {
           ))}
         </select>
 
-        {form.type !== "BOOLEAN" && (
+         {!goalTypesWithoutTarget.includes(
+          form.type
+        ) && (
           <input
             name="targetValue"
             value={form.targetValue}
@@ -208,6 +241,33 @@ const Goals = () => {
             required
           />
         )}
+<div className="grid gap-4 md:grid-cols-2">
+          <input
+            name="startDate"
+            type="date"
+            value={form.startDate}
+            onChange={handleChange}
+            className="pm-input"
+            aria-label="Fecha de inicio"
+          />
+
+          <input
+            name="endDate"
+            type="date"
+            value={form.endDate}
+            onChange={handleChange}
+            className="pm-input"
+            aria-label="Fecha de fin"
+          />
+        </div>
+
+        <textarea
+          name="comments"
+          value={form.comments}
+          onChange={handleChange}
+          className="pm-input"
+          placeholder="Comentarios"
+        />
 
         <button
           type="submit"
@@ -247,6 +307,19 @@ const Goals = () => {
                 <p className="text-sm">
                   Tipo: {goal.type}
                 </p>
+                <p className="text-sm">
+                  Inicio: {formatDate(goal.startDate)}
+                </p>
+
+                <p className="text-sm">
+                  Fin: {formatDate(goal.endDate)}
+                </p>
+
+                {goal.comments && (
+                  <p className="text-sm">
+                    Comentarios: {goal.comments}
+                  </p>
+                )}
 
                 <p className="text-sm">
                   Progreso: {goal.progress}%

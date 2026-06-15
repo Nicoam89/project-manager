@@ -9,6 +9,16 @@ import { getGoalDetails } from "../api/goals";
 
 import MainLayout from "../layouts/MainLayout";
 
+const formatDate = (date) => {
+  if (!date) {
+    return "Sin fecha";
+  }
+
+  return new Intl.DateTimeFormat("es", {
+    dateStyle: "medium",
+  }).format(new Date(date));
+};
+
 const GoalDetail = () => {
   const { id } = useParams();
 
@@ -63,6 +73,36 @@ const GoalDetail = () => {
           </Link>
         </p>
 )}
+
+      <div className="grid gap-4 mt-6 md:grid-cols-3">
+        <div className="border p-4 rounded">
+          <p className="text-sm text-gray-500">
+            Fecha de inicio
+          </p>
+          <p className="font-semibold">
+            {formatDate(data.goal.startDate)}
+          </p>
+        </div>
+
+        <div className="border p-4 rounded">
+          <p className="text-sm text-gray-500">
+            Fecha de fin
+          </p>
+          <p className="font-semibold">
+            {formatDate(data.goal.endDate)}
+          </p>
+        </div>
+
+        <div className="border p-4 rounded">
+          <p className="text-sm text-gray-500">
+            Comentarios
+          </p>
+          <p className="font-semibold">
+            {data.goal.comments || "Sin comentarios"}
+          </p>
+        </div>
+      </div>
+
       <div className="mt-6">
         <div className="w-full bg-gray-200 h-4 rounded">
           <div

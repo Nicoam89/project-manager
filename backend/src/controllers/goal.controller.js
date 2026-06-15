@@ -5,6 +5,22 @@ import { isCompletedActivityStatus } from "../utils/activityStatus.js";
 import { pickAllowedFields } from "../utils/payload.js";
 import { goalUpdateFields } from "../validators/goal.validator.js";
 
+const goalTypesWithoutTarget = [
+  "ACTIVITIES",
+  "QUALITATIVE",
+];
+
+const removeTargetValueWhenNotNeeded = (payload) => {
+  if (
+    goalTypesWithoutTarget.includes(
+      payload.type
+    )
+  ) {
+    delete payload.targetValue;
+  }
+
+  return payload;
+};
 
 export const createGoal = async (
   req,
@@ -24,10 +40,15 @@ export const createGoal = async (
       });
     }
 
-    const goal = await Goal.create({
-      ...req.body,
-      owner: req.user._id,
-    });
+     const goalPayload =
+      removeTargetValueWhenNotNeeded({
+        ...req.body,
+        owner: req.user._id,
+      });
+
+    const goal = await Goal.create(
+      goalPayload
+    );
 
     res.status(201).json(goal);
   } catch (error) {
@@ -105,16 +126,21 @@ export const updateGoal = async (
         });
       }
     }
+    const updatePayload =
+      removeTargetValueWhenNotNeeded(
+        pickAllowedFields(
+          req.body,
+          goalUpdateFields
+        )
+      );
+
     const goal =
       await Goal.findOneAndUpdate(
         {
           _id: req.params.id,
           owner: req.user._id,
         },
-pickAllowedFields(
-          req.body,
-          goalUpdateFields
-        ),
+        updatePayload,
         {
           new: true,
           runValidators: true,

@@ -39,7 +39,21 @@ const goalSchema = new mongoose.Schema(
 
     targetValue: {
       type: mongoose.Schema.Types.Mixed,
-      required: true,
+         required() {
+        return ![
+          "ACTIVITIES",
+          "QUALITATIVE",
+        ].includes(this.type);
+      },
+    },
+
+    startDate: Date,
+
+    endDate: Date,
+
+    comments: {
+      type: String,
+      default: "",
     },
 
     currentValue: {

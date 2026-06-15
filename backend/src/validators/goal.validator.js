@@ -20,6 +20,9 @@ export const goalUpdateFields = [
   "description",
   "type",
   "targetValue",
+    "startDate",
+  "endDate",
+  "comments",
   "currentValue",
   "progress",
   "status",
@@ -49,10 +52,37 @@ export const createGoalValidation = [
       "Tipo inválido"
     ),
 
-  body("targetValue")
+body("targetValue")
+    .if(
+      body("type").not().isIn([
+        "ACTIVITIES",
+        "QUALITATIVE",
+      ])
+    )
     .notEmpty()
     .withMessage(
       "El valor objetivo es obligatorio"
+    ),
+
+  body("startDate")
+    .optional({ nullable: true })
+    .isISO8601()
+    .withMessage(
+      "La fecha de inicio debe ser válida"
+    ),
+
+  body("endDate")
+    .optional({ nullable: true })
+    .isISO8601()
+    .withMessage(
+      "La fecha de fin debe ser válida"
+    ),
+
+  body("comments")
+    .optional()
+    .isString()
+    .withMessage(
+      "Los comentarios deben ser texto"
     ),
 ];
 
@@ -84,6 +114,34 @@ export const updateGoalValidation = [
     .isIn(goalTypes)
     .withMessage(
       "Tipo inválido"
+    ),
+    
+body("targetValue")
+    .optional()
+    .notEmpty()
+    .withMessage(
+      "El valor objetivo no puede estar vacío"
+    ),
+
+  body("startDate")
+    .optional({ nullable: true })
+    .isISO8601()
+    .withMessage(
+      "La fecha de inicio debe ser válida"
+    ),
+
+  body("endDate")
+    .optional({ nullable: true })
+    .isISO8601()
+    .withMessage(
+      "La fecha de fin debe ser válida"
+    ),
+
+  body("comments")
+    .optional()
+    .isString()
+    .withMessage(
+      "Los comentarios deben ser texto"
     ),
 
   body("progress")

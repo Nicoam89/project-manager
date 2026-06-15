@@ -192,6 +192,16 @@ const DetailHeader = ({ activity }) => (
             label="Flujo"
             value={activity.workflowType}
           />
+          <DetailBadge
+            label="Fecha de inicio"
+            value={formatDate(activity.startDate)}
+          />
+
+          <DetailBadge
+            label="Fecha de fin"
+            value={formatDate(activity.dueDate)}
+          />
+
         </div>
       </div>
     </div>
