@@ -36,11 +36,11 @@ const Objectives = () => {
 
   return (
     <MainLayout>
-      <h1 className="pm-page-title mb-6">
+      <h1 className="pm-page-title mb-5 sm:mb-6">
         Objetivos
       </h1>
 
-      <div className="mb-8">
+      <div className="mb-6 sm:mb-8">
         <ObjectiveForm
           onSubmit={handleCreate}
         />

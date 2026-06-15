@@ -76,7 +76,7 @@ const ProfileSettings = () => {
      </div>
 
       <div className="grid gap-6 lg:grid-cols-3">
-        <section className="rounded-xl border bg-white p-5 shadow-sm lg:col-span-1">
+         <section className="rounded-xl border bg-white p-4 shadow-sm sm:p-5 lg:col-span-1">
           <div className="flex h-16 w-16 items-center justify-center rounded-2xl bg-blue-50 text-2xl text-blue-700">
             <FaUserCog />
           </div>
@@ -139,7 +139,7 @@ const ProfileSettings = () => {
         </section>
 
 
-        <section className="rounded-xl border bg-white p-5 shadow-sm lg:col-span-2">
+        <section className="rounded-xl border bg-white p-4 shadow-sm sm:p-5 lg:col-span-2">
           <h2 className="text-lg font-semibold text-slate-900">
             Datos personales
           </h2>
@@ -284,11 +284,11 @@ const ProfileSettings = () => {
               ) : null}
             </div>
 
-            <div className="flex justify-end border-t border-slate-100 pt-5">
+            <div className="flex justify-stretch border-t border-slate-100 pt-5 sm:justify-end">
               <button
                 type="submit"
                 disabled={isSubmitting}
-                className="pm-button pm-button-primary"
+                className="pm-button pm-button-primary w-full sm:w-auto"
               >
                 {isSubmitting ? "Guardando..." : "Guardar cambios"}
               </button>

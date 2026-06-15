@@ -126,7 +126,7 @@ export const PlanningGridView = ({
               key={objective._id}
               className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
             >
-              <header className="border-b border-slate-200 bg-slate-50 px-5 py-4">
+              <header className="border-b border-slate-200 bg-slate-50 px-4 py-4 sm:px-5">
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">
@@ -156,7 +156,7 @@ export const PlanningGridView = ({
                   objective.goals.map((goal) => (
                     <div
                       key={goal._id}
-                      className="p-5"
+                      className="p-4 sm:p-5"
                     >
                       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_8rem_9rem_8rem] lg:items-center">
                         <div>
@@ -181,8 +181,8 @@ export const PlanningGridView = ({
                         />
                       </div>
 
-                      <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200">
-                        <table className="min-w-full divide-y divide-slate-200 text-sm">
+                      <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200 [-webkit-overflow-scrolling:touch]">
+                      <table className="min-w-[48rem] divide-y divide-slate-200 text-sm">
                           <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                             <tr>
                               <th className="px-4 py-3">Actividad</th>
@@ -261,7 +261,7 @@ export const PlanningGridView = ({
                     </div>
                   ))
                 ) : (
-                  <div className="p-5">
+                  <div className="p-4 sm:p-5">
                     <EmptyRow>
                       Este objetivo aún no tiene metas asociadas.
                     </EmptyRow>

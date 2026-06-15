@@ -5,7 +5,7 @@ const ObjectiveCard = ({
   onDelete,
 }) => {
   return (
-    <div className="pm-card pm-card-hover p-5">
+    <div className="pm-card pm-card-hover p-4 sm:p-5">
       <h3 className="text-xl font-semibold">
         {objective.title}
       </h3>
@@ -35,8 +35,8 @@ const ObjectiveCard = ({
         </span>
       </div>
 
-      <div className="mt-4 flex gap-2">
-        <button className="pm-button pm-button-secondary">
+      <div className="mt-4 flex flex-col gap-2 sm:flex-row">
+        <button className="pm-button pm-button-secondary w-full sm:w-auto">
           Editar
         </button>
 
@@ -44,7 +44,7 @@ const ObjectiveCard = ({
           onClick={() =>
             onDelete(objective._id)
           }
-          className="pm-button pm-button-secondary"
+          className="pm-button pm-button-secondary w-full sm:w-auto"
         >
           Eliminar
         </button>

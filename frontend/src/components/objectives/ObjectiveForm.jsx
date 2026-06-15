@@ -16,7 +16,7 @@ const ObjectiveForm = ({
       onSubmit={handleSubmit(
         onSubmit
       )}
-      className="pm-card space-y-4 p-5"
+      className="pm-card space-y-4 p-4 sm:p-5"
     >
       <input
         className="pm-input"
@@ -33,7 +33,7 @@ const ObjectiveForm = ({
       />
 
       <button
-        className="pm-button"
+        className="pm-button w-full sm:w-auto"
         type="submit"
       >
         Guardar

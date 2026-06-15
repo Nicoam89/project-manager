@@ -28,7 +28,7 @@ const MetricCard = ({ title, value, detail, tone = "blue" }) => {
   };
 
   return (
-    <div className="rounded-xl border bg-white p-5 shadow-sm">
+     <div className="rounded-xl border bg-white p-4 shadow-sm sm:p-5">
       <div
         className={`inline-flex rounded-full border px-3 py-1 text-xs font-semibold ${toneClasses[tone]}`}
       >
@@ -148,7 +148,7 @@ const Dashboard = () => {
 
           <div className="mt-5 space-y-5">
             <div>
-              <div className="flex justify-between text-sm">
+               <div className="flex items-center justify-between gap-3 text-sm">
                 <span className="font-medium text-slate-700">
                   Objetivos
                 </span>
@@ -162,7 +162,7 @@ const Dashboard = () => {
             </div>
 
             <div>
-              <div className="flex justify-between text-sm">
+               <div className="flex items-center justify-between gap-3 text-sm">
                 <span className="font-medium text-slate-700">
                   Metas
                 </span>
@@ -176,7 +176,7 @@ const Dashboard = () => {
             </div>
 
             <div>
-              <div className="flex justify-between text-sm">
+               <div className="flex items-center justify-between gap-3 text-sm">
                 <span className="font-medium text-slate-700">
                   Actividades
                 </span>
@@ -191,25 +191,25 @@ const Dashboard = () => {
           </div>
         </section>
 
-        <section className="rounded-xl border bg-white p-5 shadow-sm">
+        <section className="rounded-xl border bg-white p-4 shadow-sm sm:p-5">
           <h2 className="text-lg font-semibold text-slate-900">
             Horas
           </h2>
 
           <dl className="mt-5 space-y-4">
-            <div className="flex justify-between">
+              <div className="flex items-center justify-between gap-3">
               <dt className="text-slate-500">Registradas</dt>
               <dd className="font-semibold text-slate-900">
                 {formatNumber(summary?.totalLoggedHours)} h
               </dd>
             </div>
-            <div className="flex justify-between">
+              <div className="flex items-center justify-between gap-3">
               <dt className="text-slate-500">Estimadas</dt>
               <dd className="font-semibold text-slate-900">
                 {formatNumber(summary?.totalEstimatedHours)} h
               </dd>
             </div>
-            <div className="flex justify-between">
+              <div className="flex items-center justify-between gap-3">
               <dt className="text-slate-500">Restantes</dt>
               <dd className="font-semibold text-slate-900">
                 {formatNumber(summary?.remainingEstimatedHours)} h

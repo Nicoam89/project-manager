@@ -17,7 +17,7 @@ const KanbanColumn = ({
   return (
     <div
       ref={setNodeRef}
-      className={`pm-card flex min-h-[500px] flex-col p-4 transition-colors ${
+       className={`pm-card flex min-h-[22rem] flex-col p-3 transition-colors sm:min-h-[500px] sm:p-4 ${
         isOver ? "border-blue-300 bg-blue-50/60" : "bg-white/95"
       }`}
     >

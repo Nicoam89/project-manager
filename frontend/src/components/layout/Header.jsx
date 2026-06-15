@@ -22,8 +22,8 @@ const Header = () => {
   };
 
   return (
-     <header className="sticky top-[6.75rem] z-20 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur sm:px-6 sm:py-4 lg:top-0">
-      <div className="flex items-center justify-between gap-4">
+ <header className="sticky top-[5.75rem] z-20 border-b border-slate-200 bg-white/80 px-4 py-3 backdrop-blur sm:top-[6.75rem] sm:px-6 sm:py-4 lg:top-0">
+      <div className="flex items-center justify-between gap-3">
         <div>
           <h2 className="text-sm font-medium text-slate-500">
             Bienvenido

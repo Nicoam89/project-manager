@@ -165,9 +165,9 @@ const Goals = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="pm-card mb-8 space-y-4 p-5"
+        className="pm-card mb-6 space-y-4 p-4 sm:mb-8 sm:p-5"
       >
-        <h2 className="text-xl font-semibold text-slate-950">
+        <h2 className="text-lg font-semibold text-slate-950 sm:text-xl">
           Nueva meta
         </h2>
 
@@ -294,9 +294,9 @@ const Goals = () => {
         {goals.map((goal) => (
           <div
             key={goal._id}
-            className="pm-card pm-card-hover p-5"
+            className="pm-card pm-card-hover p-4 sm:p-5"
           >
-            <div className="grid gap-4 md:grid-cols-[1fr_auto]">
+            <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
               <div className="min-w-0">
                 <Link
                   to={`/goals/${goal._id}`}
@@ -333,7 +333,7 @@ const Goals = () => {
 
               </div>
 
-              <div className="md:text-right">
+              <div className="flex flex-wrap items-center gap-3 sm:block sm:text-right">
                 <p className="pm-badge">
                   Progreso: {goal.progress}%
                 </p>
@@ -343,7 +343,7 @@ const Goals = () => {
                   onClick={() =>
                     handleDelete(goal._id)
                   }
-                  className="pm-button pm-button-secondary mt-3 h-fit px-3 py-1 text-sm"
+                  className="pm-button pm-button-secondary h-fit px-3 py-1 text-sm sm:mt-3"
                 >
                   Eliminar
                 </button>

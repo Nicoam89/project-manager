@@ -134,9 +134,10 @@ const Activities = () => {
 
       <form
         onSubmit={handleSubmit}
-        className="pm-card mb-8 space-y-4 p-5"
+        className="pm-card mb-6 space-y-4 p-4 sm:mb-8 sm:p-5"
       >
-        <h2 className="text-xl font-semibold text-slate-950">
+        <h2 className="text-lg font-semibold text-slate-950 sm:text-xl">
+
           Nueva actividad
         </h2>
 
@@ -252,9 +253,9 @@ const Activities = () => {
         {activities.map((activity) => (
           <div
             key={activity._id}
-            className="pm-card pm-card-hover p-5"
+              className="pm-card pm-card-hover p-4 sm:p-5"
           >
-            <div className="grid gap-4 md:grid-cols-[1fr_auto]">
+            <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
               <div className="min-w-0">
                 <Link
                   to={`/activities/${activity._id}`}
@@ -282,7 +283,7 @@ const Activities = () => {
                 </p>
               </div>
 
-              <div className="flex flex-col gap-1 md:items-end">
+              <div className="flex flex-col gap-1 sm:items-end">
                 <p className="text-sm text-slate-600">
                   Inicio: {formatDate(activity.startDate)}
                 </p>

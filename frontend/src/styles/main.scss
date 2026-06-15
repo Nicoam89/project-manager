@@ -157,3 +157,27 @@ a {
 	align-items: center;
 	align-content: center;
 }
+#root {
+  min-width: 0;
+  width: 100%;
+}
+
+@media (max-width: 640px) {
+  .pm-page-title {
+    font-size: 1.5rem;
+    line-height: 1.2;
+  }
+
+  .pm-card {
+    border-radius: 0.875rem;
+  }
+
+  .pm-button {
+    width: 100%;
+  }
+
+  .pm-badge {
+    white-space: normal;
+    text-align: left;
+  }
+}

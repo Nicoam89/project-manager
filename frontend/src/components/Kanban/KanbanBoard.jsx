@@ -135,7 +135,7 @@ const KanbanBoard = ({
   };
 
   return (
-     <section className="pm-card space-y-5 p-5">
+          <section className="pm-card min-w-0 space-y-5 p-4 sm:p-5">
       <div className="flex flex-col justify-between gap-4 md:flex-row md:items-end">
         <div>
           <h2 className="text-2xl font-semibold text-slate-950">
@@ -206,10 +206,10 @@ const KanbanBoard = ({
 
       <DndContext onDragEnd={handleDragEnd}>
         <div
-          className="grid gap-4 overflow-x-auto rounded-2xl bg-slate-100/70 p-3"
+         className="grid gap-4 overflow-x-auto rounded-2xl bg-slate-100/70 p-3 [-webkit-overflow-scrolling:touch]"
           style={{
             gridTemplateColumns:
-              `repeat(${statuses.length}, minmax(16rem, 1fr))`,
+              `repeat(${statuses.length}, minmax(min(16rem, 78vw), 1fr))`,
           }}
         >
           {statuses.map((status) => (

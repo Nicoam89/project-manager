@@ -42,8 +42,8 @@ const links = [
 ];
 
 const MobileNav = () => (
-  <nav className="fixed inset-x-0 top-0 z-30 border-b border-slate-200 bg-white/95 px-3 py-3 shadow-sm backdrop-blur lg:hidden">
-    <div className="mb-3 flex items-center gap-3 px-1">
+<nav className="fixed inset-x-0 top-0 z-30 border-b border-slate-200 bg-white/95 px-3 py-2 shadow-sm backdrop-blur sm:py-3 lg:hidden">
+    <div className="mb-2 flex items-center gap-3 px-1 sm:mb-3">
       <div className="flex h-9 w-9 shrink-0 items-center justify-center rounded-xl bg-blue-600 text-white shadow-lg shadow-blue-600/20">
         <img src="/1.png" alt="Logo" className="h-9 w-9 rounded-xl object-contain" />
       </div>
@@ -55,7 +55,7 @@ const MobileNav = () => (
       </div>
     </div>
 
-    <div className="flex gap-2 overflow-x-auto pb-1">
+    <div className="flex gap-2 overflow-x-auto pb-1 [-webkit-overflow-scrolling:touch]">
       {links.map((link) => {
         const Icon = link.icon;
 
@@ -66,7 +66,7 @@ const MobileNav = () => (
             end={link.to === "/"}
             className={({ isActive }) =>
               [
-                "flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-sm font-medium transition",
+               "flex shrink-0 items-center gap-2 rounded-xl px-3 py-2 text-xs font-medium transition sm:text-sm",
                 isActive
                   ? "bg-blue-50 text-blue-700"
                   : "text-slate-600 hover:bg-slate-100 hover:text-slate-950",
