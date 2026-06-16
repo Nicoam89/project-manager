@@ -9,6 +9,7 @@ import Login from "../pages/Login";
 import Landing from "../pages/Landing";
 import Dashboard from "../pages/Dashboard";
 import PlanningGrid from "../pages/PlanningGrid";
+import Agenda from "../pages/Agenda";
 
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -81,8 +82,12 @@ const AppRouter = () => {
           path="/planning-grid"
           element={protectedPage(<PlanningGrid />)}
         />
+         <Route
+          path="/agenda"
+          element={protectedPage(<Agenda />)}
+        />
 
-        <Route
+       <Route
           path="/activities/:id"
           element={protectedPage(<ActivityDetail />)}
         />

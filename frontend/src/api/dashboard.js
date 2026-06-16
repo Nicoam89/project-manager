@@ -5,3 +5,10 @@ export const getDashboardSummary = async () => {
 
   return response.data;
 };
+
+
+export const getAgenda = async () => {
+  const response = await api.get("/dashboard/agenda");
+
+  return response.data;
+};
