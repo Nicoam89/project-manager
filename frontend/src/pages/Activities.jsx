@@ -12,6 +12,7 @@ import {
 } from "../api/activities";
 import { getGoals } from "../api/goals";
 
+import FormField from "../components/forms/FormField";
 import MainLayout from "../layouts/MainLayout";
 
 import KanbanBoard from "../components/Kanban/KanbanBoard";
@@ -147,58 +148,55 @@ const Activities = () => {
           </p>
         )}
 
-        <label className="block">
-          <span className="mb-1 block text-sm font-semibold text-slate-700">
-            Meta
-          </span>
-          <select
-            name="goal"
-            value={form.goal}
-            onChange={handleChange}
-            className="pm-input"
-            required
-          >
-          <option value="">
-            Selecciona una meta
-          </option>
-
-          {goals.map((goal) => (
-            <option
-              key={goal._id}
-              value={goal._id}
+               <FormField
+          id="activity-goal"
+          label="Meta"
+          required
+          helpText="Selecciona la meta que recibirá el avance de esta actividad."
+        >
+          {(fieldProps) => (
+            <select
+              {...fieldProps}
+              name="goal"
+              value={form.goal}
+              onChange={handleChange}
+              className="pm-input"
+              required
             >
-              {goal.title}
-            </option>
-          ))}
-          </select>
-        </label>
+              <option value="">
+                Selecciona una meta
+              </option>
 
-        <label className="block">
-          <span className="mb-1 block text-sm font-semibold text-slate-700">
-            Título
-          </span>
-          <input
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            className="pm-input"
-            placeholder="Título"
-            required
-          />
-        </label>
+              {goals.map((goal) => (
+                <option
+                  key={goal._id}
+                  value={goal._id}
+                >
+                  {goal.title}
+                </option>
+              ))}
+            </select>
+          )}
+        </FormField>
 
-        <label className="block">
-          <span className="mb-1 block text-sm font-semibold text-slate-700">
-            Descripción
-          </span>
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-            className="pm-input"
-            placeholder="Descripción"
-          />
-        </label>
+        <FormField
+          id="activity-title"
+          label="Título"
+          required
+          helpText="Define el trabajo concreto que se va a ejecutar."
+        >
+          {(fieldProps) => (
+            <input
+              {...fieldProps}
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              className="pm-input"
+              placeholder="Título"
+              required
+            />
+          )}
+        </FormField>
 
         <label className="block">
           <span className="mb-1 block text-sm font-semibold text-slate-700">

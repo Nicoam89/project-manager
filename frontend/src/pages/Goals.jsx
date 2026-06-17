@@ -12,6 +12,7 @@ import {
 } from "../api/goals";
 
 
+import FormField from "../components/forms/FormField";
 import MainLayout from "../layouts/MainLayout";
 
 import KanbanBoard from "../components/Kanban/KanbanBoard";
@@ -177,45 +178,55 @@ const Goals = () => {
           </p>
         )}
 
-                <label className="block">
-          <span className="mb-1 block text-sm font-semibold text-slate-700">
-            Objetivo
-          </span>
-          <select
-            name="objective"
-            value={form.objective}
-            onChange={handleChange}
-            className="pm-input"
-            required
-          >
-          <option value="">
-            Selecciona un objetivo
-          </option>
-
-          {objectives.map((objective) => (
-            <option
-              key={objective._id}
-              value={objective._id}
+        <FormField
+          id="goal-objective"
+          label="Objetivo"
+          required
+          helpText="Elige el objetivo estratégico al que pertenece esta meta."
+        >
+          {(fieldProps) => (
+            <select
+              {...fieldProps}
+              name="objective"
+              value={form.objective}
+              onChange={handleChange}
+              className="pm-input"
+              required
             >
-              {objective.title}
-            </option>
-          ))}
-          </select>
-        </label>
+              <option value="">
+                Selecciona un objetivo
+              </option>
 
-        <label className="block">
-          <span className="mb-1 block text-sm font-semibold text-slate-700">
-            Título
-          </span>
-          <input
-            name="title"
-            value={form.title}
-            onChange={handleChange}
-            className="pm-input"
-            placeholder="Título"
-            required
-          />
-        </label>
+              {objectives.map((objective) => (
+                <option
+                  key={objective._id}
+                  value={objective._id}
+                >
+                  {objective.title}
+                </option>
+              ))}
+            </select>
+          )}
+        </FormField>
+
+        <FormField
+          id="goal-title"
+          label="Título"
+          required
+          helpText="Describe el entregable o resultado medible de esta meta."
+        >
+          {(fieldProps) => (
+            <input
+              {...fieldProps}
+              name="title"
+              value={form.title}
+              onChange={handleChange}
+              className="pm-input"
+              placeholder="Título"
+              required
+            />
+          )}
+        </FormField>
 
         <label className="block">
           <span className="mb-1 block text-sm font-semibold text-slate-700">
@@ -254,19 +265,24 @@ const Goals = () => {
          {!goalTypesWithoutTarget.includes(
           form.type
         ) && (
-          <label className="block">
-            <span className="mb-1 block text-sm font-semibold text-slate-700">
-              Valor objetivo
-            </span>
-            <input
-              name="targetValue"
-              value={form.targetValue}
-              onChange={handleChange}
-              className="pm-input"
-              placeholder="Valor objetivo"
-              required
-            />
-          </label>
+          <FormField
+            id="goal-target-value"
+            label="Valor objetivo"
+            required
+            helpText="Indica el valor que permitirá medir si la meta se cumplió."
+          >
+            {(fieldProps) => (
+              <input
+                {...fieldProps}
+                name="targetValue"
+                value={form.targetValue}
+                onChange={handleChange}
+                className="pm-input"
+                placeholder="Valor objetivo"
+                required
+              />
+            )}
+          </FormField>
         )}
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block">
@@ -308,14 +324,6 @@ const Goals = () => {
             placeholder="Comentarios"
           />
         </label>
-
-        <textarea
-          name="comments"
-          value={form.comments}
-          onChange={handleChange}
-          className="pm-input"
-          placeholder="Comentarios"
-        />
 
         <button
           type="submit"

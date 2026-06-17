@@ -2,6 +2,8 @@ import {
   useForm,
 } from "react-hook-form";
 
+import FormField from "../forms/FormField";
+
 const TimeEntryForm = ({
   onSubmit,
 }) => {
@@ -10,6 +12,7 @@ const TimeEntryForm = ({
     handleSubmit,
     reset,
     formState: {
+      errors,
       isSubmitting,
     },
   } = useForm();
@@ -29,40 +32,55 @@ const TimeEntryForm = ({
       )}
       className="space-y-4"
     >
-      <label className="block">
-        <span className="mb-1 block text-sm font-medium text-slate-700">
-          Descripción
-        </span>
+      <FormField
+        id="time-entry-description"
+        label="Descripción"
+        required
+        error={errors.description?.message}
+      >
+        {(fieldProps) => (
+          <input
+            {...fieldProps}
+            className="pm-input"
+            placeholder="Ej. Reunión de seguimiento"
+            {...register(
+              "description",
+              {
+                required:
+                  "La descripción es obligatoria",
+              }
+            )}
+          />
+        )}
+      </FormField>
 
-        <input
-          className="pm-input"
-          placeholder="Ej. Reunión de seguimiento"
-          required
-          {...register(
-            "description",
-            { required: true }
-          )}
-        />
-      </label>
-
-      <label className="block">
-        <span className="mb-1 block text-sm font-medium text-slate-700">
-          Horas
-        </span>
-
-        <input
-          type="number"
-          step="0.1"
-          min="0.1"
-          className="pm-input"
-          placeholder="Ej. 1.5"
-          required
-          {...register("hours", {
-            required: true,
-            valueAsNumber: true,
-          })}
-        />
-      </label>
+      <FormField
+        id="time-entry-hours"
+        label="Horas"
+        required
+        error={errors.hours?.message}
+      >
+        {(fieldProps) => (
+          <input
+            {...fieldProps}
+            type="number"
+            step="0.1"
+            min="0.1"
+            className="pm-input"
+            placeholder="Ej. 1.5"
+            {...register("hours", {
+              required:
+                "Las horas son obligatorias",
+              min: {
+                value: 0.1,
+                message:
+                  "Las horas deben ser mayores a 0",
+              },
+              valueAsNumber: true,
+            })}
+          />
+        )}
+      </FormField>
 
       <button
         type="submit"

@@ -3,6 +3,8 @@ import { useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { login } from "../api/auth";
 
+import FormField from "../components/forms/FormField";
+
 import useAuthStore from "../store/authStore";
 
 const Login = () => {
@@ -11,10 +13,13 @@ const Login = () => {
 
   const navigate = useNavigate();
 
-  const {
+   const {
     register,
     handleSubmit,
-    formState: { isSubmitting },
+    formState: {
+      errors,
+      isSubmitting,
+    },
   } = useForm();
 
   const loginStore =
@@ -99,45 +104,51 @@ const Login = () => {
           </p>
         ) : null}
 
-        <div className="w-full">
-          <label
-            className="mb-1 block text-sm font-semibold text-slate-700"
-            htmlFor="login-email"
-          >
-            Email
-          </label>
-          <input
-            id="login-email"
-            type="email"
-            placeholder="Email"
-            autoComplete="email"
-            {...register("email", {
-              required:
-                "El email es obligatorio",
-            })}
-            className="pm-input"
-          />
-        </div>
+         <FormField
+          id="login-email"
+          label="Email"
+          required
+          error={errors.email?.message}
+        >
+          {(fieldProps) => (
+            <input
+              {...fieldProps}
+              type="email"
+              placeholder="Email"
+              autoComplete="email"
+              {...register("email", {
+                required:
+                  "El email es obligatorio",
+                pattern: {
+                  value: /\S+@\S+\.\S+/,
+                  message: "Email inválido",
+                },
+              })}
+              className="pm-input"
+            />
+          )}
+        </FormField>
 
-        <div className="w-full">
-          <label
-            className="mb-1 block text-sm font-semibold text-slate-700"
-            htmlFor="login-password"
-          >
-            Contraseña
-          </label>
-          <input
-            id="login-password"
-            type="password"
-            placeholder="Password"
-            autoComplete="current-password"
-            {...register("password", {
-              required:
-                "La contraseña es obligatoria",
-            })}
-            className="pm-input"
-          />
-        </div>
+        <FormField
+          id="login-password"
+          label="Contraseña"
+          required
+          error={errors.password?.message}
+        >
+          {(fieldProps) => (
+            <input
+              {...fieldProps}
+              type="password"
+              placeholder="Password"
+              autoComplete="current-password"
+              {...register("password", {
+                required:
+                  "La contraseña es obligatoria",
+              })}
+              className="pm-input"
+            />
+          )}
+        </FormField>
 
         <button
           type="submit"

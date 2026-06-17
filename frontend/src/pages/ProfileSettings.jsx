@@ -10,6 +10,7 @@ import {
 } from "react-icons/fa";
 
 import { updateProfile } from "../api/auth";
+import FormField from "../components/forms/FormField";
 import MainLayout from "../layouts/MainLayout";
 import useAuthStore from "../store/authStore";
 
@@ -164,125 +165,123 @@ const ProfileSettings = () => {
               </p>
             ) : null}
 
-            <div>
-              <label className="text-sm font-semibold text-slate-700" htmlFor="profile-name">
-                Nombre completo
-              </label>
-              <input
-                id="profile-name"
-                type="text"
-                className="pm-input mt-2"
-                placeholder="Tu nombre"
-                {...register("name", {
-                  required: "El nombre es obligatorio",
-                  minLength: {
-                    value: 2,
-                    message: "El nombre debe tener al menos 2 caracteres",
-                  },
-                })}
-              />
-              {errors.name ? (
-                <p className="mt-2 text-sm text-red-600">
-                  {errors.name.message}
-                </p>
-              ) : null}
-            </div>
-
-            <div>
-              <label className="text-sm font-semibold text-slate-700" htmlFor="profile-email">
-                Email
-              </label>
-              <input
-                id="profile-email"
-                type="email"
-                className="pm-input mt-2"
-                placeholder="tu@email.com"
-                {...register("email", {
-                  required: "El email es obligatorio",
-                  pattern: {
-                    value: /\S+@\S+\.\S+/,
-                    message: "Email inválido",
-                  },
-                })}
-              />
-              {errors.email ? (
-                <p className="mt-2 text-sm text-red-600">
-                  {errors.email.message}
-                </p>
-              ) : null}
-            </div>
-
-             <div className="grid gap-5 md:grid-cols-2">
-              <div>
-                <label className="text-sm font-semibold text-slate-700" htmlFor="profile-age">
-                  Edad
-                </label>
+                        <FormField
+              id="profile-name"
+              label="Nombre completo"
+              required
+              error={errors.name?.message}
+            >
+              {(fieldProps) => (
                 <input
-                  id="profile-age"
-                  type="number"
-                  min="13"
-                  max="120"
-                  className="pm-input mt-2"
-                  placeholder="Ej. 32"
-                  {...register("age", {
-                    min: {
-                      value: 13,
-                      message: "La edad mínima es 13 años",
-                    },
-                    max: {
-                      value: 120,
-                      message: "La edad máxima es 120 años",
+                  {...fieldProps}
+                  type="text"
+                  className="pm-input"
+                  placeholder="Tu nombre"
+                  {...register("name", {
+                    required: "El nombre es obligatorio",
+                    minLength: {
+                      value: 2,
+                      message:
+                        "El nombre debe tener al menos 2 caracteres",
                     },
                   })}
                 />
-                {errors.age ? (
-                  <p className="mt-2 text-sm text-red-600">
-                    {errors.age.message}
-                  </p>
-                ) : null}
-              </div>
+              )}
+            </FormField>
 
-              <div>
-                <label className="text-sm font-semibold text-slate-700" htmlFor="profile-sex">
-                  Sexo
-                </label>
-                <select
-                  id="profile-sex"
-                  className="pm-input mt-2"
-                  {...register("sex")}
-                >
-                  <option value="">Seleccionar</option>
-                  <option value="femenino">Femenino</option>
-                  <option value="masculino">Masculino</option>
-                  <option value="no-binario">No binario</option>
-                  <option value="prefiero-no-decir">Prefiero no decir</option>
-                  <option value="otro">Otro</option>
-                </select>
-              </div>
+            <FormField
+              id="profile-email"
+              label="Email"
+              required
+              error={errors.email?.message}
+            >
+              {(fieldProps) => (
+                <input
+                  {...fieldProps}
+                  type="email"
+                  className="pm-input"
+                  placeholder="tu@email.com"
+                  {...register("email", {
+                    required: "El email es obligatorio",
+                    pattern: {
+                      value: /\S+@\S+\.\S+/,
+                      message: "Email inválido",
+                    },
+                  })}
+                />
+              )}
+            </FormField>
+
+            <div className="grid gap-5 md:grid-cols-2">
+              <FormField
+                id="profile-age"
+                label="Edad"
+                error={errors.age?.message}
+              >
+                {(fieldProps) => (
+                  <input
+                    {...fieldProps}
+                    type="number"
+                    min="13"
+                    max="120"
+                    className="pm-input"
+                    placeholder="Ej. 32"
+                    {...register("age", {
+                      min: {
+                        value: 13,
+                        message: "La edad mínima es 13 años",
+                      },
+                      max: {
+                        value: 120,
+                        message: "La edad máxima es 120 años",
+                      },
+                    })}
+                  />
+                )}
+              </FormField>
+
+              <FormField
+                id="profile-sex"
+                label="Sexo"
+              >
+                {(fieldProps) => (
+                  <select
+                    {...fieldProps}
+                    className="pm-input"
+                    {...register("sex")}
+                  >
+                    <option value="">Seleccionar</option>
+                    <option value="femenino">Femenino</option>
+                    <option value="masculino">Masculino</option>
+                    <option value="no-binario">No binario</option>
+                    <option value="prefiero-no-decir">Prefiero no decir</option>
+                    <option value="otro">Otro</option>
+                  </select>
+                )}
+              </FormField>
             </div>
 
-            <div>
-              <label className="text-sm font-semibold text-slate-700" htmlFor="profile-profession">
-                Profesión
-              </label>
-              <input
-                id="profile-profession"
-                type="text"
-                className="pm-input mt-2"
-                placeholder="Ej. Diseñadora UX"
-                {...register("profession", {
-                  maxLength: {
-                    value: 80,
-                    message: "La profesión no puede superar 80 caracteres",
-                  },
-                })}
-              />
-              {errors.profession ? (
-                <p className="mt-2 text-sm text-red-600">
-                  {errors.profession.message}
-                </p>
-              ) : null}
-            </div>
+            <FormField
+              id="profile-profession"
+              label="Profesión"
+              error={errors.profession?.message}
+            >
+              {(fieldProps) => (
+                <input
+                  {...fieldProps}
+                  type="text"
+                  className="pm-input"
+                  placeholder="Ej. Diseñadora UX"
+                  {...register("profession", {
+                    maxLength: {
+                      value: 80,
+                      message:
+                        "La profesión no puede superar 80 caracteres",
+                    },
+                  })}
+                />
+              )}
+            </FormField>
 
             <div className="flex justify-stretch border-t border-slate-100 pt-5 sm:justify-end">
               <button
@@ -301,4 +300,5 @@ const ProfileSettings = () => {
 };
 
 export default ProfileSettings;
+
 
