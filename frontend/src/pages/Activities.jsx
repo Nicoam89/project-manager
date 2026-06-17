@@ -19,6 +19,11 @@ import KanbanBoard from "../components/Kanban/KanbanBoard";
 
 
 import {
+  PRIORITIES,
+  PRIORITY_LABELS,
+  PRIORITY_TYPE_OPTIONS,
+} from "../constants/priorities";
+import {
   WORKFLOW_OPTIONS,
 } from "../constants/workflows";
 
@@ -27,6 +32,9 @@ const initialForm = {
   title: "",
   description: "",
   workflowType: "STANDARD",
+  priorityType: "STANDARD",
+  priority: "MEDIUM",
+  estimatedHours: "",
   startDate: "",
   dueDate: "",
   comments: "",
@@ -99,6 +107,7 @@ const Activities = () => {
     try {
  await createActivity({
         ...form,
+        estimatedHours: form.estimatedHours || 0,
         comments: form.comments
           ? [
               {
@@ -198,26 +207,126 @@ const Activities = () => {
           )}
         </FormField>
 
-        <label className="block">
-          <span className="mb-1 block text-sm font-semibold text-slate-700">
-            Flujo
-          </span>
-          <select
-            name="workflowType"
-            value={form.workflowType}
-            onChange={handleChange}
-            className="pm-input"
+        <FormField
+          id="activity-description"
+          label="Descripción"
+          helpText="Describe el alcance, entregables o criterios de esta actividad."
+        >
+          {(fieldProps) => (
+            <textarea
+              {...fieldProps}
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              className="pm-input"
+              placeholder="Descripción"
+            />
+          )}
+        </FormField>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <FormField
+            id="activity-workflow-type"
+            label="Flujo"
+            helpText="Define las columnas y estados que usará esta actividad."
           >
-          {WORKFLOW_OPTIONS.map((workflowType) => (
-            <option
-              key={workflowType.value}
-              value={workflowType.value}
-            >
-              {workflowType.label}
-            </option>
-          ))}
-          </select>
-        </label>
+            {(fieldProps) => (
+              <select
+                {...fieldProps}
+                name="workflowType"
+                value={form.workflowType}
+                onChange={handleChange}
+                className="pm-input"
+              >
+                {WORKFLOW_OPTIONS.map((workflowType) => (
+                  <option
+                    key={workflowType.value}
+                    value={workflowType.value}
+                  >
+                    {workflowType.label}
+                  </option>
+                ))}
+              </select>
+            )}
+          </FormField>
+
+          <FormField
+            id="activity-estimated-hours"
+            label="Horas estimadas"
+            helpText="Carga el esfuerzo previsto para planificar capacidad."
+          >
+            {(fieldProps) => (
+              <input
+                {...fieldProps}
+                name="estimatedHours"
+                value={form.estimatedHours}
+                onChange={handleChange}
+                className="pm-input"
+                min="0"
+                step="0.25"
+                type="number"
+              />
+            )}
+          </FormField>
+        </div>
+
+        <div className="grid gap-4 md:grid-cols-2">
+          <FormField
+            id="activity-priority-type"
+            label="Tipo de prioridad"
+            helpText="Elige la escala que usará la prioridad."
+          >
+            {(fieldProps) => (
+              <select
+                {...fieldProps}
+                name="priorityType"
+                value={form.priorityType}
+                onChange={(event) => {
+                  handleChange(event);
+                  setForm((current) => ({
+                    ...current,
+                    priority: PRIORITIES[event.target.value][0],
+                  }));
+                }}
+                className="pm-input"
+              >
+                {PRIORITY_TYPE_OPTIONS.map((priorityType) => (
+                  <option
+                    key={priorityType.value}
+                    value={priorityType.value}
+                  >
+                    {priorityType.label}
+                  </option>
+                ))}
+              </select>
+            )}
+          </FormField>
+
+          <FormField
+            id="activity-priority"
+            label="Prioridad"
+            helpText="Ordena la actividad dentro del flujo seleccionado."
+          >
+            {(fieldProps) => (
+              <select
+                {...fieldProps}
+                name="priority"
+                value={form.priority}
+                onChange={handleChange}
+                className="pm-input"
+              >
+                {PRIORITIES[form.priorityType].map((priority) => (
+                  <option
+                    key={priority}
+                    value={priority}
+                  >
+                    {PRIORITY_LABELS[priority]}
+                  </option>
+                ))}
+              </select>
+            )}
+          </FormField>
+        </div>
          <div className="grid gap-4 md:grid-cols-2">
           <label className="block">
             <span className="mb-1 block text-sm font-semibold text-slate-700">

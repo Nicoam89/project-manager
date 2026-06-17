@@ -2,6 +2,12 @@ import { useForm } from "react-hook-form";
 
 import FormField from "../forms/FormField";
 
+const statusOptions = [
+  { value: "ACTIVE", label: "Activo" },
+  { value: "COMPLETED", label: "Completado" },
+  { value: "ARCHIVED", label: "Archivado" },
+];
+
 const ObjectiveForm = ({
   onSubmit,
   defaultValues,
@@ -13,7 +19,11 @@ const ObjectiveForm = ({
       errors,
     },
   } = useForm({
-    defaultValues,
+    defaultValues: {
+      status: "ACTIVE",
+      progress: 0,
+      ...defaultValues,
+    },
   });
 
   return (
@@ -58,6 +68,59 @@ const ObjectiveForm = ({
           />
         )}
       </FormField>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <FormField
+          id="objective-status"
+          label="Estado"
+          helpText="Actualiza el estado operativo del objetivo."
+        >
+          {(fieldProps) => (
+            <select
+              {...fieldProps}
+              className="pm-input"
+              {...register("status")}
+            >
+              {statusOptions.map((status) => (
+                <option
+                  key={status.value}
+                  value={status.value}
+                >
+                  {status.label}
+                </option>
+              ))}
+            </select>
+          )}
+        </FormField>
+
+        <FormField
+          id="objective-progress"
+          label="Progreso (%)"
+          error={errors.progress?.message}
+          helpText="Indica un avance manual entre 0 y 100."
+        >
+          {(fieldProps) => (
+            <input
+              {...fieldProps}
+              className="pm-input"
+              min="0"
+              max="100"
+              type="number"
+              {...register("progress", {
+                min: {
+                  value: 0,
+                  message: "El progreso mínimo es 0",
+                },
+                max: {
+                  value: 100,
+                  message: "El progreso máximo es 100",
+                },
+                valueAsNumber: true,
+              })}
+            />
+          )}
+        </FormField>
+      </div>
 
       <button
         className="pm-button w-full sm:w-auto"

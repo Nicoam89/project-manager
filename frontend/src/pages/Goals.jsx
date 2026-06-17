@@ -48,15 +48,26 @@ const initialForm = {
   description: "",
   type: "ACTIVITIES",
   targetValue: "",
-startDate: "",
+  startDate: "",
   endDate: "",
   comments: "",
+  currentValue: "",
+  progress: 0,
+  status: "ACTIVE",
+  startDate: "",
+
 };
 
 const goalTypesWithoutTarget = [
   "BOOLEAN",
   "ACTIVITIES",
   "QUALITATIVE",
+];
+
+const goalStatuses = [
+  { value: "ACTIVE", label: "Activa" },
+  { value: "COMPLETED", label: "Completada" },
+  { value: "ARCHIVED", label: "Archivada" },
 ];
 
 const formatDate = (date) => {
@@ -126,7 +137,12 @@ const Goals = () => {
           form.type === "BOOLEAN"
             ? true
             : form.targetValue,
-        };
+      };
+
+      if (!form.currentValue) {
+        delete payload.currentValue;
+      }
+
 
       if (
         goalTypesWithoutTarget.includes(
@@ -228,39 +244,47 @@ const Goals = () => {
           )}
         </FormField>
 
-        <label className="block">
-          <span className="mb-1 block text-sm font-semibold text-slate-700">
-            Descripción
-          </span>
-          <textarea
-            name="description"
-            value={form.description}
-            onChange={handleChange}
-            className="pm-input"
-            placeholder="Descripción"
-          />
-        </label>
+         <FormField
+          id="goal-description"
+          label="Descripción"
+          helpText="Agrega el contexto necesario para evaluar esta meta."
+        >
+          {(fieldProps) => (
+            <textarea
+              {...fieldProps}
+              name="description"
+              value={form.description}
+              onChange={handleChange}
+              className="pm-input"
+              placeholder="Descripción"
+            />
+          )}
+        </FormField>
 
-        <label className="block">
-          <span className="mb-1 block text-sm font-semibold text-slate-700">
-            Tipo
-          </span>
-          <select
-            name="type"
-            value={form.type}
-            onChange={handleChange}
-            className="pm-input"
-          >
-          {goalTypes.map((type) => (
-            <option
-              key={type.value}
-              value={type.value}
+        <FormField
+          id="goal-type"
+          label="Tipo"
+          helpText="Selecciona cómo se medirá el cumplimiento de la meta."
+        >
+          {(fieldProps) => (
+            <select
+              {...fieldProps}
+              name="type"
+              value={form.type}
+              onChange={handleChange}
+              className="pm-input"
             >
-              {type.label}
-            </option>
-          ))}
-          </select>
-        </label>
+              {goalTypes.map((type) => (
+                <option
+                  key={type.value}
+                  value={type.value}
+                >
+                  {type.label}
+                </option>
+              ))}
+            </select>
+          )}
+        </FormField>
 
          {!goalTypesWithoutTarget.includes(
           form.type
@@ -284,6 +308,69 @@ const Goals = () => {
             )}
           </FormField>
         )}
+        <div className="grid gap-4 md:grid-cols-3">
+          <FormField
+            id="goal-current-value"
+            label="Valor actual"
+            helpText="Registra el avance cuantitativo actual, si aplica."
+          >
+            {(fieldProps) => (
+              <input
+                {...fieldProps}
+                name="currentValue"
+                value={form.currentValue}
+                onChange={handleChange}
+                className="pm-input"
+                placeholder="Valor actual"
+              />
+            )}
+          </FormField>
+
+          <FormField
+            id="goal-progress"
+            label="Progreso (%)"
+            helpText="Indica un avance manual entre 0 y 100."
+          >
+            {(fieldProps) => (
+              <input
+                {...fieldProps}
+                name="progress"
+                value={form.progress}
+                onChange={handleChange}
+                className="pm-input"
+                min="0"
+                max="100"
+                type="number"
+              />
+            )}
+          </FormField>
+
+          <FormField
+            id="goal-status"
+            label="Estado"
+            helpText="Controla si la meta sigue activa, se completó o se archivó."
+          >
+            {(fieldProps) => (
+              <select
+                {...fieldProps}
+                name="status"
+                value={form.status}
+                onChange={handleChange}
+                className="pm-input"
+              >
+                {goalStatuses.map((status) => (
+                  <option
+                    key={status.value}
+                    value={status.value}
+                  >
+                    {status.label}
+                  </option>
+                ))}
+              </select>
+            )}
+          </FormField>
+        </div>
+
         <div className="grid gap-4 md:grid-cols-2">
           <label className="block">
             <span className="mb-1 block text-sm font-semibold text-slate-700">
