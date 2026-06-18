@@ -59,6 +59,19 @@ const ActivityCard = ({
         </p>
       )}
 
+        {activity.badges?.length > 0 && (
+        <div className="mt-3 flex flex-wrap gap-2">
+          {activity.badges.map((badge, index) => (
+            <span
+              key={`${badge}-${index}`}
+              className="pm-badge bg-indigo-50 text-indigo-700"
+            >
+              {badge}
+            </span>
+          ))}
+        </div>
+      )}
+
       <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
         <span className="pm-badge bg-blue-50 text-blue-700">
           {activity.priority || "MEDIUM"}

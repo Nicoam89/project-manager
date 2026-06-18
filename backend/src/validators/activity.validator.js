@@ -20,6 +20,7 @@ export const activityUpdateFields = [
   "status",
   "priorityType",
   "priority",
+  "badges",
   "startDate",
   "dueDate",
   "completedAt",
@@ -53,6 +54,21 @@ export const createActivityValidation = [
     .isIn(WORKFLOW_TYPES)
     .withMessage(
        "Flujo de trabajo inválido"
+    ),
+
+  body("badges")
+    .optional()
+    .isArray()
+    .withMessage(
+      "Los badges deben ser una lista"
+    ),
+
+  body("badges.*")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage(
+      "Cada badge debe tener texto"
     ),
 
   body("startDate")
@@ -189,6 +205,21 @@ export const updateActivityValidation = [
     .isIn(priorities)
     .withMessage(
       "Prioridad inválida"
+    ),
+
+    body("badges")
+    .optional()
+    .isArray()
+    .withMessage(
+      "Los badges deben ser una lista"
+    ),
+
+  body("badges.*")
+    .optional()
+    .trim()
+    .notEmpty()
+    .withMessage(
+      "Cada badge debe tener texto"
     ),
 
   body("startDate")

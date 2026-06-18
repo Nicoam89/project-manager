@@ -66,6 +66,13 @@ const activitySchema = new mongoose.Schema(
       default: "MEDIUM",
     },
 
+     badges: [
+      {
+        type: String,
+        trim: true,
+      },
+    ],
+
     startDate: Date,
 
     dueDate: Date,

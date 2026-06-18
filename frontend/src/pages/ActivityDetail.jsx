@@ -175,6 +175,18 @@ const DetailHeader = ({ activity }) => {
           <p className="mt-3 text-base leading-7 text-slate-600">
             {activity.description || EMPTY_ACTIVITY_MESSAGE}
           </p>
+            {activity.badges?.length > 0 ? (
+            <div className="mt-5 flex flex-wrap gap-2">
+              {activity.badges.map((badge, index) => (
+                <span
+                  key={`${badge}-${index}`}
+                  className="pm-badge bg-indigo-50 text-indigo-700"
+                >
+                  {badge}
+                </span>
+              ))}
+            </div>
+          ) : null}
 
           {activity.goal ? (
             <div className="mt-5 inline-flex rounded-full border border-blue-100 bg-blue-50 px-4 py-2 text-sm text-slate-600">

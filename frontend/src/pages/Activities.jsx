@@ -38,11 +38,19 @@ const initialForm = {
   workflowType: "STANDARD",
   priorityType: "STANDARD",
   priority: "MEDIUM",
+  badges: "",
   estimatedHours: "",
   startDate: "",
   dueDate: "",
   comments: "",
 };
+
+const parseBadges = (badges) =>
+  badges
+    .split(",")
+    .map((badge) => badge.trim())
+    .filter(Boolean);
+
 
 const formatDate = (date) => {
   if (!date) {
@@ -111,6 +119,7 @@ const Activities = () => {
     try {
  await createActivity({
         ...form,
+        badges: parseBadges(form.badges),
         estimatedHours: form.estimatedHours || 0,
         comments: form.comments
           ? [
@@ -224,6 +233,23 @@ const Activities = () => {
               onChange={handleChange}
               className="pm-input"
               placeholder="Descripción"
+            />
+          )}
+        </FormField>
+
+          <FormField
+          id="activity-badges"
+          label="Badges"
+          helpText="Agrega badges separados por coma para clasificar la actividad."
+        >
+          {(fieldProps) => (
+            <input
+              {...fieldProps}
+              name="badges"
+              value={form.badges}
+              onChange={handleChange}
+              className="pm-input"
+              placeholder="Diseño, Bloqueado, Cliente"
             />
           )}
         </FormField>
@@ -415,6 +441,18 @@ const Activities = () => {
                 <p className="mt-2 text-sm text-slate-500">
                   {activity.description}
                 </p>
+                {activity.badges?.length > 0 && (
+                  <div className="mt-4 flex flex-wrap gap-2">
+                    {activity.badges.map((badge, index) => (
+                      <span
+                        key={`${badge}-${index}`}
+                        className="pm-badge bg-indigo-50 text-indigo-700"
+                      >
+                        {badge}
+                      </span>
+                    ))}
+                  </div>
+                )}
 
                 <p className="mt-4 text-sm text-slate-600">
                   Meta:{" "}

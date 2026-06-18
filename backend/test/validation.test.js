@@ -148,19 +148,30 @@ test("updateGoalValidation rejects invalid objective ids and types", async () =>
   );
 });
 
-test("updateActivityValidation rejects invalid workflow and estimated hours", async () => {
+test("updateActivityValidation rejects invalid workflow, badges, and estimated hours", async () => {
   const errors = await runValidations(
     updateActivityValidation,
     {
       workflowType: "UNKNOWN",
+      badges: "blocked",
       estimatedHours: -1,
     }
   );
 
   assert.deepEqual(
     errors.map((error) => error.path).sort(),
-    ["estimatedHours", "workflowType"]
+    ["badges", "estimatedHours", "workflowType"]
   );
+});
+
+test("activity update whitelist accepts badges", () => {
+  const { response, nextWasCalled } =
+    runAllowedFields(activityUpdateFields, {
+      badges: ["Diseño", "Cliente"],
+    });
+
+  assert.equal(nextWasCalled, true);
+  assert.equal(response.statusCode, null);
 });
 
 test("activity update whitelist rejects owner changes", () => {
@@ -177,3 +188,4 @@ test("activity update whitelist rejects owner changes", () => {
     "owner"
   );
 });
+
