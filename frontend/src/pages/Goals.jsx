@@ -54,8 +54,6 @@ const initialForm = {
   currentValue: "",
   progress: 0,
   status: "ACTIVE",
-  startDate: "",
-
 };
 
 const goalTypesWithoutTarget = [

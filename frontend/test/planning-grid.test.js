@@ -109,6 +109,10 @@ test("PlanningGridView renders objectives, goals, activities, and subtasks", asy
     ],
   });
 
+  assert.match(html, /Objetivo · WBS 1/);
+  assert.match(html, /Meta · WBS 1\.1/);
+  assert.match(html, /<td[^>]*>\s*1\.1\.1\s*<\/td>/);
+  assert.match(html, /1\.1\.1\.1/);
   assert.match(html, /Lanzar producto/);
   assert.match(html, /Validar mercado/);
   assert.match(html, /Entrevistar usuarios/);

@@ -40,6 +40,8 @@ const getId = (entity) =>
     ? entity
     : entity?._id;
 
+const getWbsCode = (...segments) => segments.join(".");
+
 const getActivityProgress = (activity) => {
   if (activity.subtasks?.length) {
     const completed = activity.subtasks.filter(
@@ -132,16 +134,19 @@ export const PlanningGridView = ({
 
       {groupedObjectives.length ? (
         <div className="space-y-6">
-          {groupedObjectives.map((objective) => (
-            <section
-              key={objective._id}
-              className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
-            >
+          {groupedObjectives.map((objective, objectiveIndex) => {
+            const objectiveWbsCode = getWbsCode(objectiveIndex + 1);
+
+            return (
+              <section
+                key={objective._id}
+                className="overflow-hidden rounded-2xl border border-slate-200 bg-white shadow-sm"
+              >
               <header className="border-b border-slate-200 bg-slate-50 px-4 py-4 sm:px-5">
                 <div className="flex flex-col gap-3 lg:flex-row lg:items-center lg:justify-between">
                   <div>
                     <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">
-                      Objetivo
+                      Objetivo · WBS {objectiveWbsCode}
                     </p>
                     <Link
                       to={`/objectives/${objective._id}`}
@@ -164,15 +169,21 @@ export const PlanningGridView = ({
 
               <div className="divide-y divide-slate-100">
                 {objective.goals.length ? (
-                  objective.goals.map((goal) => (
-                    <div
-                      key={goal._id}
-                      className="p-4 sm:p-5"
-                    >
+                  objective.goals.map((goal, goalIndex) => {
+                    const goalWbsCode = getWbsCode(
+                      objectiveWbsCode,
+                      goalIndex + 1
+                    );
+
+                    return (
+                      <div
+                        key={goal._id}
+                        className="p-4 sm:p-5"
+                      >
                       <div className="grid gap-4 lg:grid-cols-[minmax(0,1.2fr)_8rem_9rem_8rem] lg:items-center">
                         <div>
                           <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">
-                            Meta
+                            Meta · WBS {goalWbsCode}
                           </p>
                           <Link
                             to={`/goals/${goal._id}`}
@@ -193,12 +204,13 @@ export const PlanningGridView = ({
                       </div>
 
                       <div className="mt-4 overflow-x-auto rounded-xl border border-slate-200 [-webkit-overflow-scrolling:touch]">
-                      <table className="min-w-[48rem] divide-y divide-slate-200 text-sm">
+                        <table className="min-w-[56rem] divide-y divide-slate-200 text-sm">
                           <caption className="sr-only">
                             Actividades de la meta {goal.title}
                           </caption>
                           <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                             <tr>
+                              <th scope="col" className="px-4 py-3">WBS</th>
                               <th scope="col" className="px-4 py-3">Actividad</th>
                               <th scope="col" className="px-4 py-3">Estado</th>
                               <th scope="col" className="px-4 py-3">Fecha fin</th>
@@ -208,8 +220,17 @@ export const PlanningGridView = ({
                           </thead>
                           <tbody className="divide-y divide-slate-100 bg-white">
                             {goal.activities.length ? (
-                              goal.activities.map((activity) => (
-                                <tr key={activity._id}>
+                              goal.activities.map((activity, activityIndex) => {
+                                const activityWbsCode = getWbsCode(
+                                  goalWbsCode,
+                                  activityIndex + 1
+                                );
+
+                                return (
+                                  <tr key={activity._id}>
+                                  <td className="px-4 py-3 align-top font-mono text-xs font-semibold text-slate-500">
+                                    {activityWbsCode}
+                                  </td>
                                   <td className="px-4 py-3 align-top">
                                     <Link
                                       to={`/activities/${activity._id}`}
@@ -233,14 +254,22 @@ export const PlanningGridView = ({
                                     {activity.subtasks?.length ? (
                                       <ul className="space-y-2">
                                         {activity.subtasks.map(
-                                          (subtask) => (
+                                          (subtask, subtaskIndex) => (
                                             <li
                                               key={subtask._id || subtask.title}
                                               className="flex items-center justify-between gap-3 rounded-lg bg-slate-50 px-3 py-2"
                                             >
-                                              <span className="text-slate-700">
-                                                {subtask.title ||
-                                                  "Subactividad sin título"}
+                                              <span className="flex items-center gap-2 text-slate-700">
+                                                <span className="font-mono text-xs font-semibold text-slate-500">
+                                                  {getWbsCode(
+                                                    activityWbsCode,
+                                                    subtaskIndex + 1
+                                                  )}
+                                                </span>
+                                                <span>
+                                                  {subtask.title ||
+                                                    "Subactividad sin título"}
+                                                </span>
                                               </span>
                                               <span className="shrink-0 text-xs font-semibold text-slate-500">
                                                 {subtask.completed
@@ -257,12 +286,13 @@ export const PlanningGridView = ({
                                       </span>
                                     )}
                                   </td>
-                                </tr>
-                              ))
+                                  </tr>
+                                );
+                              })
                             ) : (
                               <tr>
                                 <td
-                                  colSpan="5"
+                                  colSpan="6"
                                   className="px-4 py-4 text-slate-500"
                                 >
                                   Esta meta aún no tiene actividades.
@@ -273,7 +303,8 @@ export const PlanningGridView = ({
                         </table>
                       </div>
                     </div>
-                  ))
+                    );
+                  })
                 ) : (
                   <div className="p-4 sm:p-5">
                     <EmptyRow>
@@ -283,7 +314,8 @@ export const PlanningGridView = ({
                 )}
               </div>
             </section>
-          ))}
+            );
+          })}
         </div>
       ) : (
         <EmptyRow>
@@ -293,6 +325,7 @@ export const PlanningGridView = ({
     </MainLayout>
   );
 };
+
 
 const PlanningGrid = () => {
   const [objectives, setObjectives] =
