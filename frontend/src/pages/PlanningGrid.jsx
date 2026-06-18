@@ -42,6 +42,23 @@ const getId = (entity) =>
 
 const getWbsCode = (...segments) => segments.join(".");
 
+const wbsHelpMessages = {
+  objective:
+    "WBS 1 identifica el objetivo estratégico que agrupa metas, actividades y subactividades relacionadas.",
+  goal:
+    "WBS 1.1 identifica una meta vinculada al objetivo; úsala para medir un resultado específico.",
+  activity:
+    "WBS 1.1.1 identifica una actividad operativa que contribuye al avance de la meta.",
+  subactivity:
+    "WBS 1.1.1.1 identifica una subactividad o checklist puntual dentro de la actividad.",
+};
+
+const WbsHelpText = ({ children }) => (
+  <p className="mt-1 max-w-2xl text-xs leading-5 text-slate-500">
+    {children}
+  </p>
+);
+
 const getActivityProgress = (activity) => {
   if (activity.subtasks?.length) {
     const completed = activity.subtasks.filter(
@@ -128,10 +145,18 @@ export const PlanningGridView = ({
         <p className="mt-2 max-w-3xl text-slate-500">
           Vista agrupada de objetivos, metas,
           actividades y subactividades con su grado
-          de avance y fecha de fin.
+          de avance y fecha de fin. Cada código WBS
+          documenta el nivel de desglose del trabajo
+          para ubicar rápidamente cada elemento.
         </p>
+        <div className="mt-4 grid gap-3 rounded-2xl border border-blue-100 bg-blue-50 p-4 text-sm text-blue-950 sm:grid-cols-2">
+          {Object.entries(wbsHelpMessages).map(([level, message]) => (
+            <p key={level}>
+              {message}
+            </p>
+          ))}
+        </div>
       </div>
-
       {groupedObjectives.length ? (
         <div className="space-y-6">
           {groupedObjectives.map((objective, objectiveIndex) => {
@@ -148,6 +173,10 @@ export const PlanningGridView = ({
                     <p className="text-xs font-semibold uppercase tracking-wide text-blue-600">
                       Objetivo · WBS {objectiveWbsCode}
                     </p>
+                    <WbsHelpText>
+                      {wbsHelpMessages.objective}
+                    </WbsHelpText>
+
                     <Link
                       to={`/objectives/${objective._id}`}
                       className="text-xl font-bold text-slate-950 hover:text-blue-700"
@@ -185,6 +214,9 @@ export const PlanningGridView = ({
                           <p className="text-xs font-semibold uppercase tracking-wide text-emerald-600">
                             Meta · WBS {goalWbsCode}
                           </p>
+                          <WbsHelpText>
+                            {wbsHelpMessages.goal}
+                          </WbsHelpText>
                           <Link
                             to={`/goals/${goal._id}`}
                             className="font-semibold text-slate-900 hover:text-blue-700"
@@ -210,7 +242,12 @@ export const PlanningGridView = ({
                           </caption>
                           <thead className="bg-slate-50 text-left text-xs font-semibold uppercase tracking-wide text-slate-500">
                             <tr>
-                              <th scope="col" className="px-4 py-3">WBS</th>
+                              <th scope="col" className="px-4 py-3">
+                                WBS
+                                <span className="block normal-case tracking-normal text-slate-400">
+                                  {wbsHelpMessages.activity}
+                                </span>
+                              </th>
                               <th scope="col" className="px-4 py-3">Actividad</th>
                               <th scope="col" className="px-4 py-3">Estado</th>
                               <th scope="col" className="px-4 py-3">Fecha fin</th>
@@ -269,6 +306,9 @@ export const PlanningGridView = ({
                                                 <span>
                                                   {subtask.title ||
                                                     "Subactividad sin título"}
+                                                  <span className="block text-xs text-slate-500">
+                                                    {wbsHelpMessages.subactivity}
+                                                  </span>
                                                 </span>
                                               </span>
                                               <span className="shrink-0 text-xs font-semibold text-slate-500">

@@ -26,6 +26,17 @@ Este documento define el flujo esperado para planificar y medir el avance en la 
    - Funciona como checklist de trabajo específico.
    - Se considera completada cuando su campo `completed` es `true`.
 
+## Mensajes de ayuda por nivel WBS
+
+Estos mensajes deben acompañar la grilla de planificación para que cada usuario entienda qué representa cada código WBS:
+
+| Nivel WBS | Ejemplo | Mensaje de ayuda |
+| --- | --- | --- |
+| Objetivo | `1` | WBS 1 identifica el objetivo estratégico que agrupa metas, actividades y subactividades relacionadas. |
+| Meta | `1.1` | WBS 1.1 identifica una meta vinculada al objetivo; úsala para medir un resultado específico. |
+| Actividad | `1.1.1` | WBS 1.1.1 identifica una actividad operativa que contribuye al avance de la meta. |
+| Subactividad | `1.1.1.1` | WBS 1.1.1.1 identifica una subactividad o checklist puntual dentro de la actividad. |
+
 ## Reglas de avance
 
 ### Subactividad
