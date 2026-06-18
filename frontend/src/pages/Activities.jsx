@@ -26,6 +26,10 @@ import {
 import {
   WORKFLOW_OPTIONS,
 } from "../constants/workflows";
+import {
+  getDueUrgency,
+  getDueUrgencyClass,
+} from "../utils/dueUrgency";
 
 const initialForm = {
   goal: "",
@@ -390,7 +394,11 @@ const Activities = () => {
 
 
        <div className="space-y-4">
-        {activities.map((activity) => (
+        {activities.map((activity) => {
+          const dueUrgency = getDueUrgency(activity);
+
+          return (
+
           <div
             key={activity._id}
               className="pm-card pm-card-hover p-4 sm:p-5"
@@ -431,6 +439,13 @@ const Activities = () => {
                 <p className="text-sm text-slate-600">
                   Fin: {formatDate(activity.dueDate)}
                 </p>
+ <span
+                  className={`w-fit rounded-full border px-3 py-1 text-xs font-semibold ${getDueUrgencyClass(
+                    dueUrgency.urgency
+                  )}`}
+                >
+                  Urgencia: {dueUrgency.label}
+                </span>
 
                 {activity.comments?.[0]?.text && (
                   <p className="text-sm text-slate-600">
@@ -450,7 +465,8 @@ const Activities = () => {
               </div>
             </div>
           </div>
-        ))}
+         );
+        })}
         </div>
       </section>
 

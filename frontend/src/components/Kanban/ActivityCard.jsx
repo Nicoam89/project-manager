@@ -4,6 +4,11 @@ import {
   useDraggable,
 } from "@dnd-kit/core";
 
+import {
+  getDueUrgency,
+  getDueUrgencyClass,
+} from "../../utils/dueUrgency";
+
 const ActivityCard = ({
   activity,
 }) => {
@@ -26,9 +31,10 @@ const ActivityCard = ({
         )`
       : undefined,
   };
- const priorityClass =
+  const priorityClass =
     priorityColors[activity.priority] ||
     priorityColors.MEDIUM;
+  const dueUrgency = getDueUrgency(activity);
 
   return (
     <div
@@ -53,9 +59,16 @@ const ActivityCard = ({
         </p>
       )}
 
-      <div className="mt-3 flex items-center justify-between gap-2">
+      <div className="mt-3 flex flex-wrap items-center justify-between gap-2">
         <span className="pm-badge bg-blue-50 text-blue-700">
           {activity.priority || "MEDIUM"}
+        </span>
+        <span
+          className={`rounded-full border px-2 py-1 text-xs font-semibold ${getDueUrgencyClass(
+            dueUrgency.urgency
+          )}`}
+        >
+          {dueUrgency.label}
         </span>
         <span className="text-xs text-slate-400">
           Arrastrar

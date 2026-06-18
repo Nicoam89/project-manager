@@ -2,6 +2,7 @@ import Objective from "../models/Objective.js";
 import Goal from "../models/Goal.js";
 import Activity from "../models/Activity.js";
 import { isCompletedActivityStatus } from "../utils/activityStatus.js";
+import { calculateDueUrgency } from "../../../shared/dueUrgency.js";
 
 const DAY_IN_MS = 24 * 60 * 60 * 1000;
 
@@ -155,7 +156,9 @@ export const getSummary = async (req, res) => {
 
 const mapAgendaItem = (item, type, dueDateField, parentLabel, today) => {
   const dueDate = item[dueDateField];
-  const due = new Date(dueDate);
+  const dueUrgency = calculateDueUrgency(dueDate, {
+    now: today,
+  });
 
   return {
     id: item._id,
@@ -164,11 +167,13 @@ const mapAgendaItem = (item, type, dueDateField, parentLabel, today) => {
     description: item.description || "",
     status: item.status,
     dueDate,
-    daysUntilDue: Math.ceil((due.getTime() - today.getTime()) / DAY_IN_MS),
-    urgency: due < today ? "OVERDUE" : "DUE_SOON",
+    dueUrgency,
+    daysUntilDue: dueUrgency.daysUntilDue,
+    urgency: dueUrgency.isOverdue ? "OVERDUE" : "DUE_SOON",
     parent: parentLabel,
   };
 };
+
 
 export const getAgenda = async (req, res) => {
   try {

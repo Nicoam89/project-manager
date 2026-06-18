@@ -7,7 +7,18 @@ import {
 } from "../utils/workflows.js";
 import { pickAllowedFields } from "../utils/payload.js";
 import { activityUpdateFields } from "../validators/activity.validator.js";
+import { calculateDueUrgency } from "../../../shared/dueUrgency.js";
 
+const withDueUrgency = (activity) => {
+  const data = activity.toObject
+    ? activity.toObject()
+    : activity;
+
+  return {
+    ...data,
+    dueUrgency: calculateDueUrgency(data.dueDate),
+  };
+};
 
 export const createActivity = async (
   req,
@@ -41,7 +52,7 @@ export const createActivity = async (
       });
 
 
-    res.status(201).json(activity);
+    res.status(201).json(withDueUrgency(activity));
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -70,7 +81,7 @@ export const getActivityById = async (
       });
     }
 
-    res.json(activity);
+    res.json(withDueUrgency(activity));
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -168,7 +179,7 @@ const existingActivity =
       });
     }
 
-    res.json(activity);
+    res.json(withDueUrgency(activity));
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -243,7 +254,7 @@ export const getActivityDetails =
         );
 
       res.json({
-        activity,
+         activity: withDueUrgency(activity),
 
         stats: {
           trackedHours,
@@ -334,7 +345,7 @@ export const updateActivityStatus =
 
       await activity.save();
 
-      res.json(activity);
+      res.json(withDueUrgency(activity));
     } catch (error) {
       res.status(500).json({
         message: error.message,
@@ -363,7 +374,11 @@ export const updateActivityStatus =
             createdAt: -1,
           });
 
-      res.json(activities);
+       res.json(
+        activities.map((activity) =>
+          withDueUrgency(activity)
+        )
+      );
     } catch (error) {
       res.status(500).json({
         message:

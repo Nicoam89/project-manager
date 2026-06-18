@@ -20,6 +20,10 @@ import {
 import MainLayout from "../layouts/MainLayout";
 
 import TimeEntryForm from "../components/activities/TimeEntryForm";
+import {
+  getDueUrgency,
+  getDueUrgencyClass,
+} from "../utils/dueUrgency";
 
 const EMPTY_ACTIVITY_MESSAGE = "Sin descripción registrada.";
 
@@ -152,7 +156,10 @@ const EmptyState = ({ children }) => (
   </div>
 );
 
-const DetailHeader = ({ activity }) => (
+const DetailHeader = ({ activity }) => {
+  const dueUrgency = getDueUrgency(activity);
+
+  return (
   <section className="pm-card overflow-hidden">
     <div className="bg-gradient-to-br from-blue-50 via-white to-slate-50 p-6">
       <div className="flex flex-col gap-6 lg:flex-row lg:items-start lg:justify-between">
@@ -201,12 +208,30 @@ const DetailHeader = ({ activity }) => (
             label="Fecha de fin"
             value={formatDate(activity.dueDate)}
           />
+          <div
+            className={`rounded-2xl border px-4 py-3 shadow-sm ${getDueUrgencyClass(
+              dueUrgency.urgency
+            )}`}
+          >
+            <p className="text-xs font-semibold uppercase tracking-wide">
+              Urgencia
+            </p>
+            <p className="mt-1 text-sm font-semibold">
+              {dueUrgency.label}
+            </p>
+            <p className="mt-1 text-xs">
+              Puntaje: {dueUrgency.score}
+            </p>
+          </div>
 
         </div>
       </div>
     </div>
   </section>
-);
+  );
+};
+
+
 
 const StatsGrid = ({
   dependenciesCount,
