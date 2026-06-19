@@ -1,12 +1,17 @@
-import { useEffect } from "react";
+import {
+  useEffect,
+  useState,
+} from "react";
 
 import MainLayout from "../layouts/MainLayout";
+import SortByUrgencyControl from "../components/SortByUrgencyControl";
 
 import useObjectiveStore from "../store/objectiveStore";
 
 import ObjectiveForm from "../components/objectives/ObjectiveForm";
 
 import ObjectiveGrid from "../components/objectives/ObjectiveGrid";
+import { sortItems } from "../utils/urgencySort";
 
 const Objectives = () => {
   const {
@@ -15,6 +20,9 @@ const Objectives = () => {
     createObjective,
     deleteObjective,
   } = useObjectiveStore();
+
+  const [sortBy, setSortBy] =
+    useState("createdAt");
 
   useEffect(() => {
     loadObjectives();
@@ -34,6 +42,11 @@ const Objectives = () => {
       loadObjectives();
     };
 
+  const sortedObjectives = sortItems(objectives, {
+    dueDateField: "endDate",
+    sortBy,
+  });
+
   return (
     <MainLayout>
       <h1 className="pm-page-title mb-5 sm:mb-6">
@@ -46,8 +59,16 @@ const Objectives = () => {
         />
       </div>
 
+      <div className="mb-4 flex justify-end">
+        <SortByUrgencyControl
+          id="objectives-sort-by"
+          value={sortBy}
+          onChange={setSortBy}
+        />
+      </div>
+
       <ObjectiveGrid
-        objectives={objectives}
+        objectives={sortedObjectives}
         onDelete={handleDelete}
       />
     </MainLayout>

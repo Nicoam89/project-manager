@@ -33,6 +33,10 @@ const objectiveSchema = new mongoose.Schema(
       type: Number,
       default: 0,
     },
+    
+    startDate: Date,
+
+    endDate: Date,
   },
   {
     timestamps: true,

@@ -14,6 +14,7 @@ import { getGoals } from "../api/goals";
 
 import FormField from "../components/forms/FormField";
 import MainLayout from "../layouts/MainLayout";
+import SortByUrgencyControl from "../components/SortByUrgencyControl";
 
 import KanbanBoard from "../components/Kanban/KanbanBoard";
 
@@ -83,6 +84,9 @@ const Activities = () => {
     const activitiesData =
       await getActivities();
 
+  const [sortBy, setSortBy] =
+    useState("createdAt");
+
     setActivities(activitiesData);
   };
 
@@ -148,6 +152,12 @@ const Activities = () => {
 
     await loadActivities();
   };
+
+
+  const sortedActivities = sortItems(activities, {
+    dueDateField: "dueDate",
+    sortBy,
+  });
 
   return (
     <MainLayout>
@@ -409,18 +419,25 @@ const Activities = () => {
         </button>
       </form>
       <section className="mb-10 space-y-4">
-        <div>
+        <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
           <h2 className="text-2xl font-semibold text-slate-950">
             Listado de actividades
           </h2>
           <p className="mt-1 text-sm text-slate-500">
             Gestiona las actividades en lista o arrástralas en la vista Kanban.
           </p>
+          </div>
+
+          <SortByUrgencyControl
+            id="activities-sort-by"
+            value={sortBy}
+            onChange={setSortBy}
+          />
         </div>
 
-
        <div className="space-y-4">
-        {activities.map((activity) => {
+        {sortedActivities.map((activity) => {
           const dueUrgency = getDueUrgency(activity);
 
           return (

@@ -11,6 +11,8 @@ export const objectiveUpdateFields = [
   "description",
   "status",
   "progress",
+  "startDate",
+  "endDate",
 ];
 
 export const createObjectiveValidation = [
@@ -44,6 +46,16 @@ export const createObjectiveValidation = [
     .withMessage(
       "El progreso debe estar entre 0 y 100"
     ),
+
+  body("startDate")
+    .optional({ values: "falsy" })
+    .isISO8601()
+    .withMessage("Fecha de inicio inválida"),
+
+  body("endDate")
+    .optional({ values: "falsy" })
+    .isISO8601()
+    .withMessage("Fecha de fin inválida"),
 ];
 
 export const updateObjectiveValidation = [
@@ -83,4 +95,14 @@ export const updateObjectiveValidation = [
     .withMessage(
       "El progreso debe estar entre 0 y 100"
     ),
+
+  body("startDate")
+    .optional({ values: "falsy" })
+    .isISO8601()
+    .withMessage("Fecha de inicio inválida"),
+
+  body("endDate")
+    .optional({ values: "falsy" })
+    .isISO8601()
+    .withMessage("Fecha de fin inválida"),
 ];

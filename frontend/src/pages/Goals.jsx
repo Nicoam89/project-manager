@@ -14,10 +14,14 @@ import {
 
 import FormField from "../components/forms/FormField";
 import MainLayout from "../layouts/MainLayout";
+import SortByUrgencyControl from "../components/SortByUrgencyControl";
 
 import KanbanBoard from "../components/Kanban/KanbanBoard";
 
 import useObjectiveStore from "../store/objectiveStore";
+import { calculateDueUrgency } from "../../../shared/dueUrgency.js";
+import { getDueUrgencyClass } from "../utils/dueUrgency";
+import { sortItems } from "../utils/urgencySort";
 
 const goalTypes = [
   {
@@ -91,6 +95,9 @@ const Goals = () => {
 
   const [error, setError] =
     useState("");
+
+   const [sortBy, setSortBy] =
+    useState("createdAt");
 
   const {
     objectives,
@@ -171,6 +178,11 @@ const Goals = () => {
 
     await loadGoals();
   };
+
+  const sortedGoals = sortItems(goals, {
+    dueDateField: "endDate",
+    sortBy,
+  });
 
   return (
     <MainLayout>
@@ -422,15 +434,26 @@ const Goals = () => {
       </form>
 
        <section className="mb-10 space-y-4">
-        <div>
+       <div className="flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+          <div>
           <h2 className="text-2xl font-semibold text-slate-950">
             Listado de metas
           </h2>
           <p className="mt-1 text-sm text-slate-500">
             Cada meta se conecta con sus actividades y también puede revisarse en Kanban.
           </p>
+          </div>
+
+          <SortByUrgencyControl
+            id="goals-sort-by"
+            value={sortBy}
+            onChange={setSortBy}
+          />
         </div>
-        {goals.map((goal) => (
+        {sortedGoals.map((goal) => {
+          const dueUrgency = calculateDueUrgency(goal.endDate);
+
+          return (
           <div
             key={goal._id}
             className="pm-card pm-card-hover p-4 sm:p-5"
@@ -464,6 +487,14 @@ const Goals = () => {
                   Fin: {formatDate(goal.endDate)}
                 </p>
 
+                <span
+                  className={`mt-2 inline-flex w-fit rounded-full border px-3 py-1 text-xs font-semibold ${getDueUrgencyClass(
+                    dueUrgency.urgency
+                  )}`}
+                >
+                  Urgencia: {dueUrgency.label}
+                </span>
+
                 {goal.comments && (
                   <p className="text-sm text-slate-600">
                     Comentarios: {goal.comments}
@@ -489,7 +520,8 @@ const Goals = () => {
               </div>
             </div>
           </div>
-        ))}
+        );
+        })}
       </section>
 
       <KanbanBoard

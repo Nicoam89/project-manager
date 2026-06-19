@@ -22,6 +22,8 @@ const ObjectiveForm = ({
     defaultValues: {
       status: "ACTIVE",
       progress: 0,
+      startDate: "",
+      endDate: "",
       ...defaultValues,
     },
   });
@@ -117,6 +119,38 @@ const ObjectiveForm = ({
                 },
                 valueAsNumber: true,
               })}
+            />
+          )}
+        </FormField>
+      </div>
+
+      <div className="grid gap-4 md:grid-cols-2">
+        <FormField
+          id="objective-start-date"
+          label="Fecha de inicio"
+          helpText="Indica cuándo inicia el objetivo."
+        >
+          {(fieldProps) => (
+            <input
+              {...fieldProps}
+              className="pm-input"
+              type="date"
+              {...register("startDate")}
+            />
+          )}
+        </FormField>
+
+        <FormField
+          id="objective-end-date"
+          label="Fecha de fin"
+          helpText="Define el vencimiento para calcular su urgencia."
+        >
+          {(fieldProps) => (
+            <input
+              {...fieldProps}
+              className="pm-input"
+              type="date"
+              {...register("endDate")}
             />
           )}
         </FormField>

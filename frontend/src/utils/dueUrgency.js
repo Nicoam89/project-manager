@@ -1,4 +1,4 @@
-import { calculateDueUrgency } from "../../../shared/dueUrgency";
+import { calculateDueUrgency } from "../../../shared/dueUrgency.js";
 
 export const getDueUrgency = (activity) =>
   activity?.dueUrgency ||
