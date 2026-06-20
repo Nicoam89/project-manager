@@ -26,7 +26,15 @@ api.interceptors.response.use(
     const isLoginRequest =
       requestUrl.includes("/auth/login");
 
-    if (status === 401 && !isLoginRequest) {
+       const isEmailVerificationError =
+      status === 403 &&
+      error.response?.data?.code === "EMAIL_NOT_VERIFIED";
+
+    if (
+      (status === 401 && !isLoginRequest) ||
+      isEmailVerificationError
+    ) {
+
       localStorage.removeItem("token");
 
       if (

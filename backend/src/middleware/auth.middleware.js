@@ -29,6 +29,19 @@ export const protect = async (
         decoded.id
       ).select("-password");
 
+      if (!req.user) {
+        return res.status(401).json({
+          message: "No autorizado",
+        });
+      }
+
+      if (!req.user.isEmailVerified) {
+        return res.status(403).json({
+          message: "Debes verificar tu email para acceder",
+          code: "EMAIL_NOT_VERIFIED",
+        });
+      }
+
       next();
     } catch (error) {
       return res.status(401).json({

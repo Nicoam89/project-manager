@@ -1,5 +1,5 @@
 import { useState } from "react";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { useForm } from "react-hook-form";
 import { login } from "../api/auth";
 
@@ -159,7 +159,13 @@ const Login = () => {
             ? "Ingresando..."
             : "Login"}
         </button>
-      </form>
+         <p className="login__help">
+          ¿Nuevo por aqui?{ " " }
+          <Link to="/verify-email">
+            <Regirstarse></Regirstarse>
+          </Link>
+        </p>
+      </form>    
     </main>
   );
 };

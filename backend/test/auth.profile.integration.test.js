@@ -2,6 +2,7 @@ import assert from "node:assert/strict";
 import { afterEach, before, test } from "node:test";
 import http from "node:http";
 
+import bcrypt from "bcryptjs";
 import express from "express";
 
 import authRoutes from "../src/routes/auth.routes.js";
@@ -10,8 +11,10 @@ import generateToken from "../src/utils/generateToken.js";
 
 const originalFindById = User.findById;
 const originalFindOne = User.findOne;
+const originalCreate = User.create;
 
 const createTestServer = () => {
+
   const app = express();
 
   app.use(express.json());
@@ -81,6 +84,7 @@ test("PUT /api/auth/profile rejects duplicate email updates", async () => {
     _id: "64b7f5f0f5f0f5f0f5f0f5f0",
     name: "Usuario Uno",
     email: "uno@example.com",
+    isEmailVerified: true,
   };
   const duplicateUser = {
     _id: "64b7f5f0f5f0f5f0f5f0f5f1",
@@ -129,11 +133,13 @@ test("PUT /api/auth/profile clears optional fields when empty values are submitt
     _id: "64b7f5f0f5f0f5f0f5f0f5f2",
     name: "Usuario Dos",
     email: "dos@example.com",
+    isEmailVerified: true,
   };
   const persistedUser = {
     _id: authUser._id,
     name: "Usuario Dos",
     email: "dos@example.com",
+    isEmailVerified: true,
     age: 39,
     sex: "femenino",
     profession: "Ingeniera",
@@ -172,7 +178,10 @@ test("PUT /api/auth/profile clears optional fields when empty values are submitt
         age: null,
         sex: "",
         profession: "",
+        isEmailVerified: false,
       },
+      message:
+        "Perfil actualizado. Verifica tu nuevo email antes de volver a acceder.",
     });
     assert.equal(persistedUser.age, null);
     assert.equal(persistedUser.sex, "");
@@ -187,6 +196,7 @@ test("auth endpoints use a consistent user response shape", async () => {
     _id: "64b7f5f0f5f0f5f0f5f0f5f3",
     name: "Usuario Tres",
     email: "tres@example.com",
+    isEmailVerified: true,
     age: 31,
     sex: "masculino",
     profession: "Diseñador",
@@ -214,6 +224,7 @@ test("auth endpoints use a consistent user response shape", async () => {
       return {
         ...authUser,
         password: passwordHash,
+        isEmailVerified: true,
       };
     }
 
@@ -257,12 +268,19 @@ test("auth endpoints use a consistent user response shape", async () => {
     );
 
     assert.equal(registerResponse.status, 201);
-    assert.equal(typeof registerResponse.body.token, "string");
-    assert.deepEqual(registerResponse.body.user, createdUser);
+    assert.equal(registerResponse.body.message, "Registro exitoso. Verifica tu email antes de iniciar sesión.");
+    assert.equal(typeof registerResponse.body.verificationToken, "string");
+    assert.deepEqual(registerResponse.body.user, {
+      ...createdUser,
+      isEmailVerified: false,
+    });
 
     assert.equal(loginResponse.status, 200);
     assert.equal(typeof loginResponse.body.token, "string");
-    assert.deepEqual(loginResponse.body.user, authUser);
+    assert.deepEqual(loginResponse.body.user, {
+      ...authUser,
+      isEmailVerified: true,
+    });
 
     assert.equal(meResponse.status, 200);
     assert.deepEqual(meResponse.body, {

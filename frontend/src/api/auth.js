@@ -18,3 +18,10 @@ export const updateProfile = async (profile) => {
 
   return response.data;
 };
+
+
+export const verifyEmail = async (token) => {
+  const response = await api.get(`/auth/verify-email/${token}`);
+
+  return response.data;
+};

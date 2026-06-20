@@ -12,6 +12,7 @@ const normalizeUser = (user) => ({
   age: user.age || "",
   sex: user.sex || "",
   profession: user.profession || "",
+  isEmailVerified: Boolean(user.isEmailVerified),
 });
 
 const useAuthStore = create((set, get) => ({
@@ -24,6 +25,20 @@ const useAuthStore = create((set, get) => ({
   initialized: false,
 
   login: (user, token) => {
+    localStorage.setItem(
+      "token",
+      token
+    );
+
+    set({
+      user: normalizeUser(user),
+      token,
+      initialized: true,
+    });
+  },
+  
+  setUser: (user) => {
+
     localStorage.setItem(
       "token",
       token

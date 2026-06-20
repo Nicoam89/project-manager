@@ -22,6 +22,7 @@ import GoalDetail from "../pages/GoalDetail";
 
 import ActivityDetail from "../pages/ActivityDetail";
 import ProfileSettings from "../pages/ProfileSettings";
+import VerifyEmail from "../pages/VerifyEmail";
 
 const protectedPage = (children) => (
   <ProtectedRoute>
@@ -46,6 +47,15 @@ const AppRouter = () => {
         <Route
           path="/login"
           element={<Login />}
+        />
+        <Route
+          path="/verify-email"
+          element={<VerifyEmail />}
+        />
+
+        <Route
+          path="/verify-email/:token"
+          element={<VerifyEmail />}
         />
 
         <Route

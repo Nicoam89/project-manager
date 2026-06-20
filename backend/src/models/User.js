@@ -20,6 +20,21 @@ const userSchema = new mongoose.Schema(
       required: true,
       minlength: 6,
     },
+    
+    isEmailVerified: {
+      type: Boolean,
+      default: false,
+    },
+
+    emailVerificationToken: {
+      type: String,
+      default: null,
+    },
+
+    emailVerificationExpires: {
+      type: Date,
+      default: null,
+    },
 
      age: {
       type: Number,

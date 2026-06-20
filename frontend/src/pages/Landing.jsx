@@ -66,6 +66,7 @@ const Landing = () => {
         <div className="landing-nav__actions">
           <a href="#capacidades">Capacidades</a>
           <a href="#uso">Cómo usarla</a>
+          <Link to="/verify-email">Registarse</Link>
           <Link to="/login" className="landing-nav__button">
             Iniciar sesión
           </Link>
@@ -88,6 +89,10 @@ const Landing = () => {
             <a href="#uso" className="pm-button pm-button-secondary landing-cta">
               Ver cómo funciona
             </a>
+            <Link to="/verify-email" className="pm-button pm-button-secondary landing-cta">
+              <Registrarse></Registrarse>
+            </Link>
+
           </div>
         </div>
 
