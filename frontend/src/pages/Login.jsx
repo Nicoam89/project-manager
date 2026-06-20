@@ -162,7 +162,7 @@ const Login = () => {
          <p className="login__help">
           ¿Nuevo por aqui?{ " " }
           <Link to="/verify-email">
-            <Regirstarse></Regirstarse>
+             Registrarse
           </Link>
         </p>
       </form>    

@@ -15,6 +15,7 @@ import { getGoals } from "../api/goals";
 import FormField from "../components/forms/FormField";
 import MainLayout from "../layouts/MainLayout";
 import SortByUrgencyControl from "../components/SortByUrgencyControl";
+import { sortItems } from "../utils/urgencySort";
 
 import KanbanBoard from "../components/Kanban/KanbanBoard";
 
@@ -80,12 +81,12 @@ const Activities = () => {
   const [error, setError] =
     useState("");
 
+  const [sortBy, setSortBy] =
+    useState("createdAt");
+
   const loadActivities = async () => {
     const activitiesData =
       await getActivities();
-
-  const [sortBy, setSortBy] =
-    useState("createdAt");
 
     setActivities(activitiesData);
   };

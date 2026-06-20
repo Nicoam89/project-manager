@@ -38,20 +38,6 @@ const useAuthStore = create((set, get) => ({
   },
   
   setUser: (user) => {
-
-    localStorage.setItem(
-      "token",
-      token
-    );
-
-    set({
-      user: normalizeUser(user),
-      token,
-      initialized: true,
-    });
-  },
-  
-  setUser: (user) => {
     set({
       user: normalizeUser(user),
       initialized: true,
