@@ -2,6 +2,7 @@ import bcrypt from "bcryptjs";
 import crypto from "node:crypto";
 import User from "../models/User.js";
 import generateToken from "../utils/generateToken.js";
+import { sendVerificationEmail } from "../services/email.service.js";
 
 const VERIFICATION_TOKEN_BYTES = 32;
 const VERIFICATION_TOKEN_TTL_HOURS = 24;
@@ -90,6 +91,12 @@ export const register = async (req, res) => {
       isEmailVerified: false,
       emailVerificationToken: verification.tokenHash,
       emailVerificationExpires: verification.expires,
+    });
+
+    await sendVerificationEmail({
+      email: user.email,
+      name: user.name,
+      token: verification.token,
     });
 
     res.status(201).json(
@@ -203,14 +210,24 @@ export const updateProfile = async (req, res) => {
     user.sex = sex || "";
     user.profession = profession || "";
 
+     let verification = null;
+
     if (emailChanged) {
-      const verification = createEmailVerificationToken();
+      verification = createEmailVerificationToken();
       user.isEmailVerified = false;
       user.emailVerificationToken = verification.tokenHash;
       user.emailVerificationExpires = verification.expires;
     }
 
     const updatedUser = await user.save();
+
+    if (emailChanged) {
+      await sendVerificationEmail({
+        email: updatedUser.email,
+        name: updatedUser.name,
+        token: verification.token,
+      });
+    }
 
     res.status(200).json({
       user: buildUserResponse(updatedUser),
