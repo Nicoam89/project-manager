@@ -10,6 +10,7 @@ import Landing from "../pages/Landing";
 import Dashboard from "../pages/Dashboard";
 import PlanningGrid from "../pages/PlanningGrid";
 import Agenda from "../pages/Agenda";
+import GanttBoard from "../pages/GanttBoard";
 
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -92,6 +93,11 @@ const AppRouter = () => {
           path="/planning-grid"
           element={protectedPage(<PlanningGrid />)}
         />
+        <Route
+          path="/gantt"
+          element={protectedPage(<GanttBoard />)}
+        />
+
          <Route
           path="/agenda"
           element={protectedPage(<Agenda />)}

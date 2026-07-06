@@ -5,6 +5,7 @@ import {
   FaCog,
   FaTable,
   FaCalendarAlt,
+  FaChartBar,
 } from "react-icons/fa";
 
 import { NavLink } from "react-router-dom";
@@ -29,6 +30,11 @@ const links = [
     to: "/agenda",
     label: "Agenda",
     icon: FaCalendarAlt,
+  },
+  {
+    to: "/gantt",
+    label: "Gantt",
+    icon: FaChartBar,
   },
   {
     to: "/goals",
