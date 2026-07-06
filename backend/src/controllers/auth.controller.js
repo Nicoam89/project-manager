@@ -49,11 +49,15 @@ const getVerificationUrl = (token) => {
   return `${baseUrl.replace(/\/$/, "")}/verify-email/${token}`;
 };
 
-const buildVerificationResponse = (user, token) => {
+const buildVerificationResponse = (user, token, emailDelivery) => {
+  const emailSkipped = emailDelivery?.skipped === true;
   const response = {
-    message:
-      "Registro exitoso. Verifica tu email antes de iniciar sesión.",
+    message: emailSkipped
+      ? "Registro exitoso, pero el mail de verificación no se envió porque SMTP no está configurado."
+      : "Registro exitoso. Verifica tu email antes de iniciar sesión.",
     user: buildUserResponse(user),
+    emailDelivery: emailSkipped ? "skipped" : "sent",
+
   };
 
   const verificationUrl = getVerificationUrl(token);
@@ -93,15 +97,16 @@ export const register = async (req, res) => {
       emailVerificationExpires: verification.expires,
     });
 
-    await sendVerificationEmail({
+        const emailDelivery = await sendVerificationEmail({
       email: user.email,
       name: user.name,
       token: verification.token,
     });
 
     res.status(201).json(
-      buildVerificationResponse(user, verification.token)
+      buildVerificationResponse(user, verification.token, emailDelivery)
     );
+    
   } catch (error) {
     res.status(500).json({
       message: error.message,
@@ -222,11 +227,12 @@ export const updateProfile = async (req, res) => {
     const updatedUser = await user.save();
 
     if (emailChanged) {
-      await sendVerificationEmail({
+       const emailDelivery = await sendVerificationEmail({
         email: updatedUser.email,
         name: updatedUser.name,
         token: verification.token,
       });
+      verification.emailDelivery = emailDelivery;
     }
 
     res.status(200).json({
@@ -234,7 +240,11 @@ export const updateProfile = async (req, res) => {
       ...(emailChanged
         ? {
             message:
-              "Perfil actualizado. Verifica tu nuevo email antes de volver a acceder.",
+              verification.emailDelivery?.skipped
+                ? "Perfil actualizado, pero el mail de verificación no se envió porque SMTP no está configurado."
+                : "Perfil actualizado. Verifica tu nuevo email antes de volver a acceder.",
+            emailDelivery: verification.emailDelivery?.skipped ? "skipped" : "sent",
+
           }
         : {}),
     });

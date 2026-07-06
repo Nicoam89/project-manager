@@ -71,6 +71,10 @@ const createSelectableQuery = (value) => ({
 
 before(() => {
   process.env.JWT_SECRET = "test-secret";
+  delete process.env.SMTP_HOST;
+  delete process.env.SMTP_FROM;
+  delete process.env.FRONTEND_URL;
+
 });
 
 afterEach(() => {
@@ -181,7 +185,9 @@ test("PUT /api/auth/profile clears optional fields when empty values are submitt
         isEmailVerified: false,
       },
       message:
-        "Perfil actualizado. Verifica tu nuevo email antes de volver a acceder.",
+          "Perfil actualizado, pero el mail de verificación no se envió porque SMTP no está configurado.",
+      emailDelivery: "skipped",
+
     });
     assert.equal(persistedUser.age, null);
     assert.equal(persistedUser.sex, "");
@@ -268,7 +274,8 @@ test("auth endpoints use a consistent user response shape", async () => {
     );
 
     assert.equal(registerResponse.status, 201);
-    assert.equal(registerResponse.body.message, "Registro exitoso. Verifica tu email antes de iniciar sesión.");
+    assert.equal(registerResponse.body.message, "Registro exitoso, pero el mail de verificación no se envió porque SMTP no está configurado.");
+    assert.equal(registerResponse.body.emailDelivery, "skipped");
     assert.equal(typeof registerResponse.body.verificationToken, "string");
     assert.deepEqual(registerResponse.body.user, {
       ...createdUser,

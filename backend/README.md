@@ -10,8 +10,7 @@
 
 2. Completa `MONGODB_URI`, `JWT_SECRET` y `FRONTEND_URL` en `.env`.
 
-   Para que el mail de verificación llegue realmente, también configura `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` y `SMTP_FROM_NAME`. El backend usa SMTP, así que puedes contratar o usar cualquier proveedor que entregue credenciales SMTP (por ejemplo SendGrid, Mailgun, AWS SES, Gmail SMTP, etc.). En desarrollo, si SMTP no está configurado, el envío se omite y la API sigue devolviendo `verificationToken` para pruebas locales.
-
+   Para que el mail de verificación llegue realmente, también configura `SMTP_HOST`, `SMTP_PORT`, `SMTP_USER`, `SMTP_PASS`, `SMTP_FROM` y `SMTP_FROM_NAME`. El backend usa SMTP, así que puedes contratar o usar cualquier proveedor que entregue credenciales SMTP (por ejemplo SendGrid, Mailgun, AWS SES, Gmail SMTP, etc.). En desarrollo, si SMTP no está configurado, el envío se omite, la API devuelve `emailDelivery: "skipped"` y sigue incluyendo `verificationToken` para pruebas locales; en ese caso no habrá nada en la bandeja de salida del remitente ni llegará un email real al destinatario.
 
 3. Si usas MongoDB Atlas y ves un error como `Could not connect to any servers in your MongoDB Atlas cluster`, entra en **Network Access > IP Access List** y permite tu IP actual. También verifica que el usuario y la contraseña de la URI sean correctos.
 
