@@ -10,7 +10,8 @@ import Landing from "../pages/Landing";
 import Dashboard from "../pages/Dashboard";
 import PlanningGrid from "../pages/PlanningGrid";
 import Agenda from "../pages/Agenda";
-import GanttBoard from "../pages/GanttBoard";
+import GanttBoard from "../pages/GanttBoard.jsx";
+import Timeline from "../pages/Timeline";
 
 import ProtectedRoute from "./ProtectedRoute";
 
@@ -96,6 +97,11 @@ const AppRouter = () => {
         <Route
           path="/gantt"
           element={protectedPage(<GanttBoard />)}
+        />
+        
+        <Route
+          path="/timeline"
+          element={protectedPage(<Timeline />)}
         />
 
          <Route

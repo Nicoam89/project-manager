@@ -6,6 +6,7 @@ import {
   FaTable,
   FaCalendarAlt,
   FaChartBar,
+  FaStream,
 } from "react-icons/fa";
 
 import { NavLink } from "react-router-dom";
@@ -36,6 +37,12 @@ const links = [
     label: "Gantt",
     icon: FaChartBar,
   },
+  {
+    to: "/timeline",
+    label: "Línea de tiempo",
+    icon: FaStream,
+  },
+
   {
     to: "/goals",
     label: "Metas",
