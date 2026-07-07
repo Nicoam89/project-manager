@@ -1,5 +1,6 @@
 import { useEffect, useState } from "react";
 
+import EmptyState from "../components/EmptyState";
 import MainLayout from "../layouts/MainLayout";
 import SortByUrgencyControl from "../components/SortByUrgencyControl";
 
@@ -73,7 +74,16 @@ const Objectives = () => {
         />
       </div>
 
-      <ObjectiveGrid objectives={sortedObjectives} onDelete={handleDelete} />
+      {sortedObjectives.length === 0 ? (
+        <EmptyState
+          title="Todavía no tienes objetivos"
+          description="Define un resultado grande y mantenlo simple. Después podrás agregar metas y actividades para avanzar."
+          actionLabel="Crear objetivo"
+          onAction={() => setShowCreateForm(true)}
+        />
+      ) : (
+        <ObjectiveGrid objectives={sortedObjectives} onDelete={handleDelete} />
+      )}
     </MainLayout>
   );
 };

@@ -9,6 +9,8 @@ import {
 } from "../api/activities";
 import { getGoals } from "../api/goals";
 
+import AdvancedOptions from "../components/AdvancedOptions";
+import EmptyState from "../components/EmptyState";
 import FormField from "../components/forms/FormField";
 import MainLayout from "../layouts/MainLayout";
 import SortByUrgencyControl from "../components/SortByUrgencyControl";
@@ -225,170 +227,164 @@ const Activities = () => {
             </FormField>
           </div>
 
-          <details className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-            <summary className="cursor-pointer text-sm font-semibold text-slate-700">
-              Opciones avanzadas
-            </summary>
+          <AdvancedOptions>
+            <FormField id="activity-description" label="Descripción">
+              {(fieldProps) => (
+                <textarea
+                  {...fieldProps}
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  className="pm-input"
+                  placeholder="Agrega contexto opcional"
+                />
+              )}
+            </FormField>
 
-            <div className="mt-4 space-y-4">
-              <FormField id="activity-description" label="Descripción">
+            <FormField
+              id="activity-badges"
+              label="Badges"
+              helpText="Agrega badges separados por coma para clasificar la actividad."
+            >
+              {(fieldProps) => (
+                <input
+                  {...fieldProps}
+                  name="badges"
+                  value={form.badges}
+                  onChange={handleChange}
+                  className="pm-input"
+                  placeholder="Diseño, Bloqueado, Cliente"
+                />
+              )}
+            </FormField>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <FormField
+                id="activity-workflow-type"
+                label="Flujo"
+                helpText="Define las columnas y estados que usará esta actividad."
+              >
                 {(fieldProps) => (
-                  <textarea
+                  <select
                     {...fieldProps}
-                    name="description"
-                    value={form.description}
+                    name="workflowType"
+                    value={form.workflowType}
                     onChange={handleChange}
                     className="pm-input"
-                    placeholder="Agrega contexto opcional"
-                  />
+                  >
+                    {WORKFLOW_OPTIONS.map((workflowType) => (
+                      <option
+                        key={workflowType.value}
+                        value={workflowType.value}
+                      >
+                        {workflowType.label}
+                      </option>
+                    ))}
+                  </select>
                 )}
               </FormField>
 
               <FormField
-                id="activity-badges"
-                label="Badges"
-                helpText="Agrega badges separados por coma para clasificar la actividad."
+                id="activity-estimated-hours"
+                label="Horas estimadas"
+                helpText="Carga el esfuerzo previsto para planificar capacidad."
               >
                 {(fieldProps) => (
                   <input
                     {...fieldProps}
-                    name="badges"
-                    value={form.badges}
+                    name="estimatedHours"
+                    value={form.estimatedHours}
                     onChange={handleChange}
                     className="pm-input"
-                    placeholder="Diseño, Bloqueado, Cliente"
-                  />
-                )}
-              </FormField>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <FormField
-                  id="activity-workflow-type"
-                  label="Flujo"
-                  helpText="Define las columnas y estados que usará esta actividad."
-                >
-                  {(fieldProps) => (
-                    <select
-                      {...fieldProps}
-                      name="workflowType"
-                      value={form.workflowType}
-                      onChange={handleChange}
-                      className="pm-input"
-                    >
-                      {WORKFLOW_OPTIONS.map((workflowType) => (
-                        <option
-                          key={workflowType.value}
-                          value={workflowType.value}
-                        >
-                          {workflowType.label}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                </FormField>
-
-                <FormField
-                  id="activity-estimated-hours"
-                  label="Horas estimadas"
-                  helpText="Carga el esfuerzo previsto para planificar capacidad."
-                >
-                  {(fieldProps) => (
-                    <input
-                      {...fieldProps}
-                      name="estimatedHours"
-                      value={form.estimatedHours}
-                      onChange={handleChange}
-                      className="pm-input"
-                      min="0"
-                      step="0.25"
-                      type="number"
-                    />
-                  )}
-                </FormField>
-              </div>
-
-              <div className="grid gap-4 md:grid-cols-2">
-                <FormField
-                  id="activity-priority-type"
-                  label="Tipo de prioridad"
-                  helpText="Elige la escala que usará la prioridad."
-                >
-                  {(fieldProps) => (
-                    <select
-                      {...fieldProps}
-                      name="priorityType"
-                      value={form.priorityType}
-                      onChange={(event) => {
-                        handleChange(event);
-                        setForm((current) => ({
-                          ...current,
-                          priority: PRIORITIES[event.target.value][0],
-                        }));
-                      }}
-                      className="pm-input"
-                    >
-                      {PRIORITY_TYPE_OPTIONS.map((priorityType) => (
-                        <option
-                          key={priorityType.value}
-                          value={priorityType.value}
-                        >
-                          {priorityType.label}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                </FormField>
-
-                <FormField
-                  id="activity-priority"
-                  label="Prioridad"
-                  helpText="Ordena la actividad dentro del flujo seleccionado."
-                >
-                  {(fieldProps) => (
-                    <select
-                      {...fieldProps}
-                      name="priority"
-                      value={form.priority}
-                      onChange={handleChange}
-                      className="pm-input"
-                    >
-                      {PRIORITIES[form.priorityType].map((priority) => (
-                        <option key={priority} value={priority}>
-                          {PRIORITY_LABELS[priority]}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                </FormField>
-              </div>
-
-              <FormField id="activity-start-date" label="Fecha de inicio">
-                {(fieldProps) => (
-                  <input
-                    {...fieldProps}
-                    name="startDate"
-                    type="date"
-                    value={form.startDate}
-                    onChange={handleChange}
-                    className="pm-input"
-                  />
-                )}
-              </FormField>
-
-              <FormField id="activity-comments" label="Comentarios">
-                {(fieldProps) => (
-                  <textarea
-                    {...fieldProps}
-                    name="comments"
-                    value={form.comments}
-                    onChange={handleChange}
-                    className="pm-input"
-                    placeholder="Ej: Pendiente validar con el equipo"
+                    min="0"
+                    step="0.25"
+                    type="number"
                   />
                 )}
               </FormField>
             </div>
-          </details>
+
+            <div className="grid gap-4 md:grid-cols-2">
+              <FormField
+                id="activity-priority-type"
+                label="Tipo de prioridad"
+                helpText="Elige la escala que usará la prioridad."
+              >
+                {(fieldProps) => (
+                  <select
+                    {...fieldProps}
+                    name="priorityType"
+                    value={form.priorityType}
+                    onChange={(event) => {
+                      handleChange(event);
+                      setForm((current) => ({
+                        ...current,
+                        priority: PRIORITIES[event.target.value][0],
+                      }));
+                    }}
+                    className="pm-input"
+                  >
+                    {PRIORITY_TYPE_OPTIONS.map((priorityType) => (
+                      <option
+                        key={priorityType.value}
+                        value={priorityType.value}
+                      >
+                        {priorityType.label}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </FormField>
+
+              <FormField
+                id="activity-priority"
+                label="Prioridad"
+                helpText="Ordena la actividad dentro del flujo seleccionado."
+              >
+                {(fieldProps) => (
+                  <select
+                    {...fieldProps}
+                    name="priority"
+                    value={form.priority}
+                    onChange={handleChange}
+                    className="pm-input"
+                  >
+                    {PRIORITIES[form.priorityType].map((priority) => (
+                      <option key={priority} value={priority}>
+                        {PRIORITY_LABELS[priority]}
+                      </option>
+                    ))}
+                  </select>
+                )}
+              </FormField>
+            </div>
+
+            <FormField id="activity-start-date" label="Fecha de inicio">
+              {(fieldProps) => (
+                <input
+                  {...fieldProps}
+                  name="startDate"
+                  type="date"
+                  value={form.startDate}
+                  onChange={handleChange}
+                  className="pm-input"
+                />
+              )}
+            </FormField>
+
+            <FormField id="activity-comments" label="Comentarios">
+              {(fieldProps) => (
+                <textarea
+                  {...fieldProps}
+                  name="comments"
+                  value={form.comments}
+                  onChange={handleChange}
+                  className="pm-input"
+                  placeholder="Ej: Pendiente validar con el equipo"
+                />
+              )}
+            </FormField>
+          </AdvancedOptions>
 
           <button type="submit" disabled={loading} className="pm-button">
             {loading ? "Creando..." : "Crear actividad"}
@@ -414,88 +410,97 @@ const Activities = () => {
           />
         </div>
 
-        <div className="space-y-4">
-          {sortedActivities.map((activity) => {
-            const dueUrgency = getDueUrgency(activity);
+        {sortedActivities.length === 0 ? (
+          <EmptyState
+            title="Todavía no tienes actividades"
+            description="Crea una tarea simple para avanzar una meta. Luego podrás sumar prioridad, horas, comentarios y otros detalles."
+            actionLabel="Crear actividad"
+            onAction={() => setShowCreateForm(true)}
+          />
+        ) : (
+          <div className="space-y-4">
+            {sortedActivities.map((activity) => {
+              const dueUrgency = getDueUrgency(activity);
 
-            return (
-              <div
-                key={activity._id}
-                className="pm-card pm-card-hover p-4 sm:p-5"
-              >
-                <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
-                  <div className="min-w-0">
-                    <Link
-                      to={`/activities/${activity._id}`}
-                      className="text-xl font-semibold text-slate-950 hover:text-blue-700"
-                    >
-                      {activity.title}
-                    </Link>
+              return (
+                <div
+                  key={activity._id}
+                  className="pm-card pm-card-hover p-4 sm:p-5"
+                >
+                  <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
+                    <div className="min-w-0">
+                      <Link
+                        to={`/activities/${activity._id}`}
+                        className="text-xl font-semibold text-slate-950 hover:text-blue-700"
+                      >
+                        {activity.title}
+                      </Link>
 
-                    <p className="mt-2 text-sm text-slate-500">
-                      {activity.description}
-                    </p>
-                    {activity.badges?.length > 0 && (
-                      <div className="mt-4 flex flex-wrap gap-2">
-                        {activity.badges.map((badge, index) => (
-                          <span
-                            key={`${badge}-${index}`}
-                            className="pm-badge bg-indigo-50 text-indigo-700"
-                          >
-                            {badge}
-                          </span>
-                        ))}
-                      </div>
-                    )}
-
-                    <p className="mt-4 text-sm text-slate-600">
-                      Meta: {activity.goal?.title || "Sin meta"}
-                    </p>
-
-                    <p className="text-sm text-slate-600">
-                      Flujo: {activity.workflowType}
-                    </p>
-
-                    <p className="text-sm text-slate-600">
-                      Estado: {activity.status}
-                    </p>
-                  </div>
-
-                  <div className="flex flex-col gap-1 sm:items-end">
-                    <p className="text-sm text-slate-600">
-                      Inicio: {formatDate(activity.startDate)}
-                    </p>
-
-                    <p className="text-sm text-slate-600">
-                      Fin: {formatDate(activity.dueDate)}
-                    </p>
-                    <span
-                      className={`w-fit rounded-full border px-3 py-1 text-xs font-semibold ${getDueUrgencyClass(
-                        dueUrgency.urgency,
-                      )}`}
-                    >
-                      Urgencia: {dueUrgency.label}
-                    </span>
-
-                    {activity.comments?.[0]?.text && (
-                      <p className="text-sm text-slate-600">
-                        Comentarios: {activity.comments[0].text}
+                      <p className="mt-2 text-sm text-slate-500">
+                        {activity.description}
                       </p>
-                    )}
+                      {activity.badges?.length > 0 && (
+                        <div className="mt-4 flex flex-wrap gap-2">
+                          {activity.badges.map((badge, index) => (
+                            <span
+                              key={`${badge}-${index}`}
+                              className="pm-badge bg-indigo-50 text-indigo-700"
+                            >
+                              {badge}
+                            </span>
+                          ))}
+                        </div>
+                      )}
 
-                    <button
-                      type="button"
-                      onClick={() => handleDelete(activity._id)}
-                      className="pm-button pm-button-secondary mt-2 h-fit px-3 py-1 text-sm"
-                    >
-                      Eliminar
-                    </button>
+                      <p className="mt-4 text-sm text-slate-600">
+                        Meta: {activity.goal?.title || "Sin meta"}
+                      </p>
+
+                      <p className="text-sm text-slate-600">
+                        Flujo: {activity.workflowType}
+                      </p>
+
+                      <p className="text-sm text-slate-600">
+                        Estado: {activity.status}
+                      </p>
+                    </div>
+
+                    <div className="flex flex-col gap-1 sm:items-end">
+                      <p className="text-sm text-slate-600">
+                        Inicio: {formatDate(activity.startDate)}
+                      </p>
+
+                      <p className="text-sm text-slate-600">
+                        Fin: {formatDate(activity.dueDate)}
+                      </p>
+                      <span
+                        className={`w-fit rounded-full border px-3 py-1 text-xs font-semibold ${getDueUrgencyClass(
+                          dueUrgency.urgency,
+                        )}`}
+                      >
+                        Urgencia: {dueUrgency.label}
+                      </span>
+
+                      {activity.comments?.[0]?.text && (
+                        <p className="text-sm text-slate-600">
+                          Comentarios: {activity.comments[0].text}
+                        </p>
+                      )}
+
+                      <button
+                        type="button"
+                        onClick={() => handleDelete(activity._id)}
+                        className="pm-button pm-button-secondary mt-2 h-fit px-3 py-1 text-sm"
+                      >
+                        Eliminar
+                      </button>
+                    </div>
                   </div>
                 </div>
-              </div>
-            );
-          })}
-        </div>
+              );
+            })}
+          </div>
+        )}
       </section>
 
       <KanbanBoard

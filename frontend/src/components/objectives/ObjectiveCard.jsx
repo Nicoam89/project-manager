@@ -1,32 +1,31 @@
 import { Link } from "react-router-dom";
+
 import { calculateDueUrgency } from "../../../../shared/dueUrgency.js";
 import { getDueUrgencyClass } from "../../utils/dueUrgency";
 
-const ObjectiveCard = ({
-  objective,
-  onDelete,
-}) => {
-  const dueUrgency = calculateDueUrgency(
-    objective.endDate
-  );
+const ObjectiveCard = ({ objective, onDelete }) => {
+  const dueUrgency = calculateDueUrgency(objective.endDate);
 
   return (
-    <div className="pm-card pm-card-hover p-4 sm:p-5">
-      <h3 className="text-xl font-semibold">
+    <article className="pm-card pm-card-hover p-4 sm:p-5">
+      <Link
+        to={`/objectives/${objective._id}`}
+        className="block text-xl font-semibold text-slate-950 hover:text-blue-700"
+      >
         {objective.title}
-      </h3>
+      </Link>
 
-      <p className="text-gray-500 mt-2">
-        {objective.description}
-      </p>
+      {objective.description ? (
+        <p className="mt-2 text-sm text-slate-500">{objective.description}</p>
+      ) : (
+        <p className="mt-2 text-sm text-slate-400">Sin descripción.</p>
+      )}
 
       <div className="mt-4 flex flex-wrap items-center gap-2">
-        <span className="text-sm">
-          {objective.status}
-        </span>
+        <span className="pm-badge">{objective.status}</span>
         <span
           className={`rounded-full border px-3 py-1 text-xs font-semibold ${getDueUrgencyClass(
-            dueUrgency.urgency
+            dueUrgency.urgency,
           )}`}
         >
           Urgencia: {dueUrgency.label}
@@ -34,40 +33,37 @@ const ObjectiveCard = ({
       </div>
 
       <div className="mt-4">
-        <div className="w-full bg-gray-200 rounded-full h-3">
+        <div className="h-3 w-full rounded-full bg-slate-200">
           <div
-            className="bg-blue-500 h-3 rounded-full"
+            className="h-3 rounded-full bg-blue-500"
             style={{
               width: `${objective.progress}%`,
             }}
           />
         </div>
 
-        <span className="text-sm">
-          {objective.progress}%
+        <span className="mt-2 block text-sm text-slate-600">
+          Progreso: {objective.progress}%
         </span>
       </div>
 
       <div className="mt-4 flex flex-col gap-2 sm:flex-row">
-        <button className="pm-button pm-button-secondary w-full sm:w-auto">
-          Editar
-        </button>
+        <Link
+          to={`/objectives/${objective._id}`}
+          className="pm-button pm-button-secondary w-full sm:w-auto"
+        >
+          Ver detalle
+        </Link>
 
         <button
-          onClick={() =>
-            onDelete(objective._id)
-          }
+          type="button"
+          onClick={() => onDelete(objective._id)}
           className="pm-button pm-button-secondary w-full sm:w-auto"
         >
           Eliminar
         </button>
       </div>
-        <Link to={`/objectives/${objective._id}`}>
-            <h3 className="text-xl font-semibold"> {objective.title}
-        </h3>
-        </Link>
-
-    </div>
+    </article>
   );
 };
 

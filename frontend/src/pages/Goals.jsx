@@ -4,6 +4,8 @@ import { Link } from "react-router-dom";
 
 import { createGoal, deleteGoal, getGoals } from "../api/goals";
 
+import AdvancedOptions from "../components/AdvancedOptions";
+import EmptyState from "../components/EmptyState";
 import FormField from "../components/forms/FormField";
 import MainLayout from "../layouts/MainLayout";
 import SortByUrgencyControl from "../components/SortByUrgencyControl";
@@ -240,155 +242,149 @@ const Goals = () => {
             </FormField>
           </div>
 
-          <details className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-            <summary className="cursor-pointer text-sm font-semibold text-slate-700">
-              Opciones avanzadas
-            </summary>
+          <AdvancedOptions>
+            <FormField id="goal-description" label="Descripción">
+              {(fieldProps) => (
+                <textarea
+                  {...fieldProps}
+                  name="description"
+                  value={form.description}
+                  onChange={handleChange}
+                  className="pm-input"
+                  placeholder="Agrega contexto opcional"
+                />
+              )}
+            </FormField>
 
-            <div className="mt-4 space-y-4">
-              <FormField id="goal-description" label="Descripción">
+            <FormField
+              id="goal-type"
+              label="Tipo"
+              helpText="Selecciona cómo se medirá el cumplimiento de la meta."
+            >
+              {(fieldProps) => (
+                <select
+                  {...fieldProps}
+                  name="type"
+                  value={form.type}
+                  onChange={handleChange}
+                  className="pm-input"
+                >
+                  {goalTypes.map((type) => (
+                    <option key={type.value} value={type.value}>
+                      {type.label}
+                    </option>
+                  ))}
+                </select>
+              )}
+            </FormField>
+
+            {!goalTypesWithoutTarget.includes(form.type) && (
+              <FormField
+                id="goal-target-value"
+                label="Valor objetivo"
+                required
+                helpText="Indica el valor que permitirá medir si la meta se cumplió."
+              >
                 {(fieldProps) => (
-                  <textarea
+                  <input
                     {...fieldProps}
-                    name="description"
-                    value={form.description}
+                    name="targetValue"
+                    value={form.targetValue}
                     onChange={handleChange}
                     className="pm-input"
-                    placeholder="Agrega contexto opcional"
+                    placeholder="Valor objetivo"
+                    required
+                  />
+                )}
+              </FormField>
+            )}
+
+            <div className="grid gap-4 md:grid-cols-3">
+              <FormField
+                id="goal-current-value"
+                label="Valor actual"
+                helpText="Registra el avance cuantitativo actual, si aplica."
+              >
+                {(fieldProps) => (
+                  <input
+                    {...fieldProps}
+                    name="currentValue"
+                    value={form.currentValue}
+                    onChange={handleChange}
+                    className="pm-input"
+                    placeholder="Valor actual"
                   />
                 )}
               </FormField>
 
               <FormField
-                id="goal-type"
-                label="Tipo"
-                helpText="Selecciona cómo se medirá el cumplimiento de la meta."
+                id="goal-progress"
+                label="Progreso (%)"
+                helpText="Indica un avance manual entre 0 y 100."
+              >
+                {(fieldProps) => (
+                  <input
+                    {...fieldProps}
+                    name="progress"
+                    value={form.progress}
+                    onChange={handleChange}
+                    className="pm-input"
+                    min="0"
+                    max="100"
+                    type="number"
+                  />
+                )}
+              </FormField>
+
+              <FormField
+                id="goal-status"
+                label="Estado"
+                helpText="Controla si la meta sigue activa, se completó o se archivó."
               >
                 {(fieldProps) => (
                   <select
                     {...fieldProps}
-                    name="type"
-                    value={form.type}
+                    name="status"
+                    value={form.status}
                     onChange={handleChange}
                     className="pm-input"
                   >
-                    {goalTypes.map((type) => (
-                      <option key={type.value} value={type.value}>
-                        {type.label}
+                    {goalStatuses.map((status) => (
+                      <option key={status.value} value={status.value}>
+                        {status.label}
                       </option>
                     ))}
                   </select>
                 )}
               </FormField>
-
-              {!goalTypesWithoutTarget.includes(form.type) && (
-                <FormField
-                  id="goal-target-value"
-                  label="Valor objetivo"
-                  required
-                  helpText="Indica el valor que permitirá medir si la meta se cumplió."
-                >
-                  {(fieldProps) => (
-                    <input
-                      {...fieldProps}
-                      name="targetValue"
-                      value={form.targetValue}
-                      onChange={handleChange}
-                      className="pm-input"
-                      placeholder="Valor objetivo"
-                      required
-                    />
-                  )}
-                </FormField>
-              )}
-
-              <div className="grid gap-4 md:grid-cols-3">
-                <FormField
-                  id="goal-current-value"
-                  label="Valor actual"
-                  helpText="Registra el avance cuantitativo actual, si aplica."
-                >
-                  {(fieldProps) => (
-                    <input
-                      {...fieldProps}
-                      name="currentValue"
-                      value={form.currentValue}
-                      onChange={handleChange}
-                      className="pm-input"
-                      placeholder="Valor actual"
-                    />
-                  )}
-                </FormField>
-
-                <FormField
-                  id="goal-progress"
-                  label="Progreso (%)"
-                  helpText="Indica un avance manual entre 0 y 100."
-                >
-                  {(fieldProps) => (
-                    <input
-                      {...fieldProps}
-                      name="progress"
-                      value={form.progress}
-                      onChange={handleChange}
-                      className="pm-input"
-                      min="0"
-                      max="100"
-                      type="number"
-                    />
-                  )}
-                </FormField>
-
-                <FormField
-                  id="goal-status"
-                  label="Estado"
-                  helpText="Controla si la meta sigue activa, se completó o se archivó."
-                >
-                  {(fieldProps) => (
-                    <select
-                      {...fieldProps}
-                      name="status"
-                      value={form.status}
-                      onChange={handleChange}
-                      className="pm-input"
-                    >
-                      {goalStatuses.map((status) => (
-                        <option key={status.value} value={status.value}>
-                          {status.label}
-                        </option>
-                      ))}
-                    </select>
-                  )}
-                </FormField>
-              </div>
-
-              <FormField id="goal-start-date" label="Fecha de inicio">
-                {(fieldProps) => (
-                  <input
-                    {...fieldProps}
-                    name="startDate"
-                    type="date"
-                    value={form.startDate}
-                    onChange={handleChange}
-                    className="pm-input"
-                  />
-                )}
-              </FormField>
-
-              <FormField id="goal-comments" label="Comentarios">
-                {(fieldProps) => (
-                  <textarea
-                    {...fieldProps}
-                    name="comments"
-                    value={form.comments}
-                    onChange={handleChange}
-                    className="pm-input"
-                    placeholder="Ej: Pendiente validar con el equipo"
-                  />
-                )}
-              </FormField>
             </div>
-          </details>
+
+            <FormField id="goal-start-date" label="Fecha de inicio">
+              {(fieldProps) => (
+                <input
+                  {...fieldProps}
+                  name="startDate"
+                  type="date"
+                  value={form.startDate}
+                  onChange={handleChange}
+                  className="pm-input"
+                />
+              )}
+            </FormField>
+
+            <FormField id="goal-comments" label="Comentarios">
+              {(fieldProps) => (
+                <textarea
+                  {...fieldProps}
+                  name="comments"
+                  value={form.comments}
+                  onChange={handleChange}
+                  className="pm-input"
+                  placeholder="Ej: Pendiente validar con el equipo"
+                />
+              )}
+            </FormField>
+          </AdvancedOptions>
 
           <button type="submit" disabled={loading} className="pm-button">
             {loading ? "Creando..." : "Crear meta"}
@@ -414,67 +410,76 @@ const Goals = () => {
             onChange={setSortBy}
           />
         </div>
-        {sortedGoals.map((goal) => {
-          const dueUrgency = calculateDueUrgency(goal.endDate);
+        {sortedGoals.length === 0 ? (
+          <EmptyState
+            title="Todavía no tienes metas"
+            description="Crea una meta concreta para convertir tus objetivos en resultados medibles."
+            actionLabel="Crear meta"
+            onAction={() => setShowCreateForm(true)}
+          />
+        ) : (
+          sortedGoals.map((goal) => {
+            const dueUrgency = calculateDueUrgency(goal.endDate);
 
-          return (
-            <div key={goal._id} className="pm-card pm-card-hover p-4 sm:p-5">
-              <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
-                <div className="min-w-0">
-                  <Link
-                    to={`/goals/${goal._id}`}
-                    className="text-xl font-semibold text-slate-950 hover:text-blue-700"
-                  >
-                    {goal.title}
-                  </Link>
+            return (
+              <div key={goal._id} className="pm-card pm-card-hover p-4 sm:p-5">
+                <div className="grid gap-4 sm:grid-cols-[1fr_auto]">
+                  <div className="min-w-0">
+                    <Link
+                      to={`/goals/${goal._id}`}
+                      className="text-xl font-semibold text-slate-950 hover:text-blue-700"
+                    >
+                      {goal.title}
+                    </Link>
 
-                  <p className="mt-2 text-sm text-slate-500">
-                    {goal.description}
-                  </p>
-
-                  <p className="mt-4 text-sm text-slate-600">
-                    Objetivo: {goal.objective?.title || "Sin objetivo"}
-                  </p>
-
-                  <p className="text-sm text-slate-600">Tipo: {goal.type}</p>
-                  <p className="text-sm text-slate-600">
-                    Inicio: {formatDate(goal.startDate)}
-                  </p>
-
-                  <p className="text-sm text-slate-600">
-                    Fin: {formatDate(goal.endDate)}
-                  </p>
-
-                  <span
-                    className={`mt-2 inline-flex w-fit rounded-full border px-3 py-1 text-xs font-semibold ${getDueUrgencyClass(
-                      dueUrgency.urgency,
-                    )}`}
-                  >
-                    Urgencia: {dueUrgency.label}
-                  </span>
-
-                  {goal.comments && (
-                    <p className="text-sm text-slate-600">
-                      Comentarios: {goal.comments}
+                    <p className="mt-2 text-sm text-slate-500">
+                      {goal.description}
                     </p>
-                  )}
-                </div>
 
-                <div className="flex flex-wrap items-center gap-3 sm:block sm:text-right">
-                  <p className="pm-badge">Progreso: {goal.progress}%</p>
+                    <p className="mt-4 text-sm text-slate-600">
+                      Objetivo: {goal.objective?.title || "Sin objetivo"}
+                    </p>
 
-                  <button
-                    type="button"
-                    onClick={() => handleDelete(goal._id)}
-                    className="pm-button pm-button-secondary h-fit px-3 py-1 text-sm sm:mt-3"
-                  >
-                    Eliminar
-                  </button>
+                    <p className="text-sm text-slate-600">Tipo: {goal.type}</p>
+                    <p className="text-sm text-slate-600">
+                      Inicio: {formatDate(goal.startDate)}
+                    </p>
+
+                    <p className="text-sm text-slate-600">
+                      Fin: {formatDate(goal.endDate)}
+                    </p>
+
+                    <span
+                      className={`mt-2 inline-flex w-fit rounded-full border px-3 py-1 text-xs font-semibold ${getDueUrgencyClass(
+                        dueUrgency.urgency,
+                      )}`}
+                    >
+                      Urgencia: {dueUrgency.label}
+                    </span>
+
+                    {goal.comments && (
+                      <p className="text-sm text-slate-600">
+                        Comentarios: {goal.comments}
+                      </p>
+                    )}
+                  </div>
+
+                  <div className="flex flex-wrap items-center gap-3 sm:block sm:text-right">
+                    <p className="pm-badge">Progreso: {goal.progress}%</p>
+
+                    <button
+                      type="button"
+                      onClick={() => handleDelete(goal._id)}
+                      className="pm-button pm-button-secondary h-fit px-3 py-1 text-sm sm:mt-3"
+                    >
+                      Eliminar
+                    </button>
+                  </div>
                 </div>
               </div>
-            </div>
-          );
-        })}
+            );
+          })
+        )}
       </section>
 
       <KanbanBoard

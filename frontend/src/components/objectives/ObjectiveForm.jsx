@@ -1,5 +1,6 @@
 import { useForm } from "react-hook-form";
 
+import AdvancedOptions from "../AdvancedOptions";
 import FormField from "../forms/FormField";
 
 const statusOptions = [
@@ -68,81 +69,75 @@ const ObjectiveForm = ({
         </FormField>
       </div>
 
-      <details className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
-        <summary className="cursor-pointer text-sm font-semibold text-slate-700">
-          Opciones avanzadas
-        </summary>
+      <AdvancedOptions>
+        <FormField id="objective-description" label="Descripción">
+          {(fieldProps) => (
+            <textarea
+              {...fieldProps}
+              className="pm-input"
+              placeholder="Agrega contexto opcional"
+              {...register("description")}
+            />
+          )}
+        </FormField>
 
-        <div className="mt-4 space-y-4">
-          <FormField id="objective-description" label="Descripción">
+        <div className="grid gap-4 md:grid-cols-2">
+          <FormField id="objective-status" label="Estado">
             {(fieldProps) => (
-              <textarea
+              <select
                 {...fieldProps}
                 className="pm-input"
-                placeholder="Agrega contexto opcional"
-                {...register("description")}
-              />
+                {...register("status")}
+              >
+                {statusOptions.map((status) => (
+                  <option key={status.value} value={status.value}>
+                    {status.label}
+                  </option>
+                ))}
+              </select>
             )}
           </FormField>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <FormField id="objective-status" label="Estado">
-              {(fieldProps) => (
-                <select
-                  {...fieldProps}
-                  className="pm-input"
-                  {...register("status")}
-                >
-                  {statusOptions.map((status) => (
-                    <option key={status.value} value={status.value}>
-                      {status.label}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </FormField>
-
-            <FormField
-              id="objective-progress"
-              label="Progreso (%)"
-              error={errors.progress?.message}
-              helpText="Indica un avance manual entre 0 y 100."
-            >
-              {(fieldProps) => (
-                <input
-                  {...fieldProps}
-                  className="pm-input"
-                  min="0"
-                  max="100"
-                  type="number"
-                  {...register("progress", {
-                    min: {
-                      value: 0,
-                      message: "El progreso mínimo es 0",
-                    },
-                    max: {
-                      value: 100,
-                      message: "El progreso máximo es 100",
-                    },
-                    valueAsNumber: true,
-                  })}
-                />
-              )}
-            </FormField>
-          </div>
-
-          <FormField id="objective-start-date" label="Fecha de inicio">
+          <FormField
+            id="objective-progress"
+            label="Progreso (%)"
+            error={errors.progress?.message}
+            helpText="Indica un avance manual entre 0 y 100."
+          >
             {(fieldProps) => (
               <input
                 {...fieldProps}
                 className="pm-input"
-                type="date"
-                {...register("startDate")}
+                min="0"
+                max="100"
+                type="number"
+                {...register("progress", {
+                  min: {
+                    value: 0,
+                    message: "El progreso mínimo es 0",
+                  },
+                  max: {
+                    value: 100,
+                    message: "El progreso máximo es 100",
+                  },
+                  valueAsNumber: true,
+                })}
               />
             )}
           </FormField>
         </div>
-      </details>
+
+        <FormField id="objective-start-date" label="Fecha de inicio">
+          {(fieldProps) => (
+            <input
+              {...fieldProps}
+              className="pm-input"
+              type="date"
+              {...register("startDate")}
+            />
+          )}
+        </FormField>
+      </AdvancedOptions>
 
       <button
         className="pm-button w-full sm:w-auto"
