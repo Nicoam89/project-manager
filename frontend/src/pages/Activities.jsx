@@ -171,205 +171,224 @@ const Activities = () => {
 
           {error && <p className="text-red-700">{error}</p>}
 
-          <FormField id="activity-goal" label="Meta" required>
-            {(fieldProps) => (
-              <select
-                {...fieldProps}
-                name="goal"
-                value={form.goal}
-                onChange={handleChange}
-                className="pm-input"
-                required
-              >
-                <option value="">Selecciona una meta</option>
+          <div className="space-y-4">
+            <p className="text-sm font-semibold uppercase tracking-wide text-slate-500">
+              Información básica
+            </p>
 
-                {goals.map((goal) => (
-                  <option key={goal._id} value={goal._id}>
-                    {goal.title}
-                  </option>
-                ))}
-              </select>
-            )}
-          </FormField>
+            <FormField id="activity-title" label="Título" required>
+              {(fieldProps) => (
+                <input
+                  {...fieldProps}
+                  name="title"
+                  value={form.title}
+                  onChange={handleChange}
+                  className="pm-input"
+                  placeholder="Ej: Preparar propuesta comercial"
+                  required
+                />
+              )}
+            </FormField>
 
-          <FormField id="activity-title" label="Título" required>
-            {(fieldProps) => (
-              <input
-                {...fieldProps}
-                name="title"
-                value={form.title}
-                onChange={handleChange}
-                className="pm-input"
-                placeholder="Ej: Preparar propuesta comercial"
-                required
-              />
-            )}
-          </FormField>
-
-          <FormField id="activity-description" label="Descripción">
-            {(fieldProps) => (
-              <textarea
-                {...fieldProps}
-                name="description"
-                value={form.description}
-                onChange={handleChange}
-                className="pm-input"
-                placeholder="Agrega contexto opcional"
-              />
-            )}
-          </FormField>
-
-          <FormField
-            id="activity-badges"
-            label="Badges"
-            helpText="Agrega badges separados por coma para clasificar la actividad."
-          >
-            {(fieldProps) => (
-              <input
-                {...fieldProps}
-                name="badges"
-                value={form.badges}
-                onChange={handleChange}
-                className="pm-input"
-                placeholder="Diseño, Bloqueado, Cliente"
-              />
-            )}
-          </FormField>
-
-          <div className="grid gap-4 md:grid-cols-2">
-            <FormField
-              id="activity-workflow-type"
-              label="Flujo"
-              helpText="Define las columnas y estados que usará esta actividad."
-            >
+            <FormField id="activity-goal" label="Meta" required>
               {(fieldProps) => (
                 <select
                   {...fieldProps}
-                  name="workflowType"
-                  value={form.workflowType}
+                  name="goal"
+                  value={form.goal}
                   onChange={handleChange}
                   className="pm-input"
+                  required
                 >
-                  {WORKFLOW_OPTIONS.map((workflowType) => (
-                    <option key={workflowType.value} value={workflowType.value}>
-                      {workflowType.label}
+                  <option value="">Selecciona una meta</option>
+
+                  {goals.map((goal) => (
+                    <option key={goal._id} value={goal._id}>
+                      {goal.title}
                     </option>
                   ))}
                 </select>
               )}
             </FormField>
 
-            <FormField
-              id="activity-estimated-hours"
-              label="Horas estimadas"
-              helpText="Carga el esfuerzo previsto para planificar capacidad."
-            >
+            <FormField id="activity-due-date" label="Fecha límite">
               {(fieldProps) => (
                 <input
                   {...fieldProps}
-                  name="estimatedHours"
-                  value={form.estimatedHours}
+                  name="dueDate"
+                  type="date"
+                  value={form.dueDate}
                   onChange={handleChange}
                   className="pm-input"
-                  min="0"
-                  step="0.25"
-                  type="number"
                 />
               )}
             </FormField>
           </div>
 
-          <div className="grid gap-4 md:grid-cols-2">
-            <FormField
-              id="activity-priority-type"
-              label="Tipo de prioridad"
-              helpText="Elige la escala que usará la prioridad."
-            >
-              {(fieldProps) => (
-                <select
-                  {...fieldProps}
-                  name="priorityType"
-                  value={form.priorityType}
-                  onChange={(event) => {
-                    handleChange(event);
-                    setForm((current) => ({
-                      ...current,
-                      priority: PRIORITIES[event.target.value][0],
-                    }));
-                  }}
-                  className="pm-input"
+          <details className="rounded-2xl border border-slate-200 bg-slate-50/70 p-4">
+            <summary className="cursor-pointer text-sm font-semibold text-slate-700">
+              Opciones avanzadas
+            </summary>
+
+            <div className="mt-4 space-y-4">
+              <FormField id="activity-description" label="Descripción">
+                {(fieldProps) => (
+                  <textarea
+                    {...fieldProps}
+                    name="description"
+                    value={form.description}
+                    onChange={handleChange}
+                    className="pm-input"
+                    placeholder="Agrega contexto opcional"
+                  />
+                )}
+              </FormField>
+
+              <FormField
+                id="activity-badges"
+                label="Badges"
+                helpText="Agrega badges separados por coma para clasificar la actividad."
+              >
+                {(fieldProps) => (
+                  <input
+                    {...fieldProps}
+                    name="badges"
+                    value={form.badges}
+                    onChange={handleChange}
+                    className="pm-input"
+                    placeholder="Diseño, Bloqueado, Cliente"
+                  />
+                )}
+              </FormField>
+
+              <div className="grid gap-4 md:grid-cols-2">
+                <FormField
+                  id="activity-workflow-type"
+                  label="Flujo"
+                  helpText="Define las columnas y estados que usará esta actividad."
                 >
-                  {PRIORITY_TYPE_OPTIONS.map((priorityType) => (
-                    <option key={priorityType.value} value={priorityType.value}>
-                      {priorityType.label}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </FormField>
+                  {(fieldProps) => (
+                    <select
+                      {...fieldProps}
+                      name="workflowType"
+                      value={form.workflowType}
+                      onChange={handleChange}
+                      className="pm-input"
+                    >
+                      {WORKFLOW_OPTIONS.map((workflowType) => (
+                        <option
+                          key={workflowType.value}
+                          value={workflowType.value}
+                        >
+                          {workflowType.label}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </FormField>
 
-            <FormField
-              id="activity-priority"
-              label="Prioridad"
-              helpText="Ordena la actividad dentro del flujo seleccionado."
-            >
-              {(fieldProps) => (
-                <select
-                  {...fieldProps}
-                  name="priority"
-                  value={form.priority}
-                  onChange={handleChange}
-                  className="pm-input"
+                <FormField
+                  id="activity-estimated-hours"
+                  label="Horas estimadas"
+                  helpText="Carga el esfuerzo previsto para planificar capacidad."
                 >
-                  {PRIORITIES[form.priorityType].map((priority) => (
-                    <option key={priority} value={priority}>
-                      {PRIORITY_LABELS[priority]}
-                    </option>
-                  ))}
-                </select>
-              )}
-            </FormField>
-          </div>
-          <div className="grid gap-4 md:grid-cols-2">
-            <label className="block">
-              <span className="mb-1 block text-sm font-semibold text-slate-700">
-                Fecha de inicio
-              </span>
-              <input
-                name="startDate"
-                type="date"
-                value={form.startDate}
-                onChange={handleChange}
-                className="pm-input"
-              />
-            </label>
+                  {(fieldProps) => (
+                    <input
+                      {...fieldProps}
+                      name="estimatedHours"
+                      value={form.estimatedHours}
+                      onChange={handleChange}
+                      className="pm-input"
+                      min="0"
+                      step="0.25"
+                      type="number"
+                    />
+                  )}
+                </FormField>
+              </div>
 
-            <label className="block">
-              <span className="mb-1 block text-sm font-semibold text-slate-700">
-                Fecha de fin
-              </span>
-              <input
-                name="dueDate"
-                type="date"
-                value={form.dueDate}
-                onChange={handleChange}
-                className="pm-input"
-              />
-            </label>
-          </div>
+              <div className="grid gap-4 md:grid-cols-2">
+                <FormField
+                  id="activity-priority-type"
+                  label="Tipo de prioridad"
+                  helpText="Elige la escala que usará la prioridad."
+                >
+                  {(fieldProps) => (
+                    <select
+                      {...fieldProps}
+                      name="priorityType"
+                      value={form.priorityType}
+                      onChange={(event) => {
+                        handleChange(event);
+                        setForm((current) => ({
+                          ...current,
+                          priority: PRIORITIES[event.target.value][0],
+                        }));
+                      }}
+                      className="pm-input"
+                    >
+                      {PRIORITY_TYPE_OPTIONS.map((priorityType) => (
+                        <option
+                          key={priorityType.value}
+                          value={priorityType.value}
+                        >
+                          {priorityType.label}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </FormField>
 
-          <label className="block">
-            <span className="mb-1 block text-sm font-semibold text-slate-700">
-              Comentarios
-            </span>
-            <textarea
-              name="comments"
-              value={form.comments}
-              onChange={handleChange}
-              className="pm-input"
-              placeholder="Comentarios"
-            />
-          </label>
+                <FormField
+                  id="activity-priority"
+                  label="Prioridad"
+                  helpText="Ordena la actividad dentro del flujo seleccionado."
+                >
+                  {(fieldProps) => (
+                    <select
+                      {...fieldProps}
+                      name="priority"
+                      value={form.priority}
+                      onChange={handleChange}
+                      className="pm-input"
+                    >
+                      {PRIORITIES[form.priorityType].map((priority) => (
+                        <option key={priority} value={priority}>
+                          {PRIORITY_LABELS[priority]}
+                        </option>
+                      ))}
+                    </select>
+                  )}
+                </FormField>
+              </div>
+
+              <FormField id="activity-start-date" label="Fecha de inicio">
+                {(fieldProps) => (
+                  <input
+                    {...fieldProps}
+                    name="startDate"
+                    type="date"
+                    value={form.startDate}
+                    onChange={handleChange}
+                    className="pm-input"
+                  />
+                )}
+              </FormField>
+
+              <FormField id="activity-comments" label="Comentarios">
+                {(fieldProps) => (
+                  <textarea
+                    {...fieldProps}
+                    name="comments"
+                    value={form.comments}
+                    onChange={handleChange}
+                    className="pm-input"
+                    placeholder="Ej: Pendiente validar con el equipo"
+                  />
+                )}
+              </FormField>
+            </div>
+          </details>
 
           <button type="submit" disabled={loading} className="pm-button">
             {loading ? "Creando..." : "Crear actividad"}
