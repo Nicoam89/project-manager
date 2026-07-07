@@ -11,13 +11,13 @@ const statusOptions = [
 const ObjectiveForm = ({
   onSubmit,
   defaultValues,
+  submitLabel = "Crear objetivo",
+  submittingLabel = "Creando...",
 }) => {
   const {
     register,
     handleSubmit,
-    formState: {
-      errors,
-    },
+    formState: { errors, isSubmitting },
   } = useForm({
     defaultValues: {
       status: "ACTIVE",
@@ -30,9 +30,7 @@ const ObjectiveForm = ({
 
   return (
     <form
-      onSubmit={handleSubmit(
-        onSubmit
-      )}
+      onSubmit={handleSubmit(onSubmit)}
       className="pm-card space-y-4 p-4 sm:p-5"
     >
       <FormField
@@ -40,13 +38,12 @@ const ObjectiveForm = ({
         label="Título"
         required
         error={errors.title?.message}
-        helpText="Define el resultado principal del objetivo."
       >
         {(fieldProps) => (
           <input
             {...fieldProps}
             className="pm-input"
-            placeholder="Título"
+            placeholder="Ej: Mejorar la experiencia de clientes"
             {...register("title", {
               required: "El título es obligatorio",
             })}
@@ -54,29 +51,19 @@ const ObjectiveForm = ({
         )}
       </FormField>
 
-      <FormField
-        id="objective-description"
-        label="Descripción"
-        helpText="Agrega contexto para entender el alcance del objetivo."
-      >
+      <FormField id="objective-description" label="Descripción">
         {(fieldProps) => (
           <textarea
             {...fieldProps}
             className="pm-input"
-            placeholder="Descripción"
-            {...register(
-              "description"
-            )}
+            placeholder="Agrega contexto opcional"
+            {...register("description")}
           />
         )}
       </FormField>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <FormField
-          id="objective-status"
-          label="Estado"
-          helpText="Actualiza el estado operativo del objetivo."
-        >
+        <FormField id="objective-status" label="Estado">
           {(fieldProps) => (
             <select
               {...fieldProps}
@@ -84,10 +71,7 @@ const ObjectiveForm = ({
               {...register("status")}
             >
               {statusOptions.map((status) => (
-                <option
-                  key={status.value}
-                  value={status.value}
-                >
+                <option key={status.value} value={status.value}>
                   {status.label}
                 </option>
               ))}
@@ -125,11 +109,7 @@ const ObjectiveForm = ({
       </div>
 
       <div className="grid gap-4 md:grid-cols-2">
-        <FormField
-          id="objective-start-date"
-          label="Fecha de inicio"
-          helpText="Indica cuándo inicia el objetivo."
-        >
+        <FormField id="objective-start-date" label="Fecha de inicio">
           {(fieldProps) => (
             <input
               {...fieldProps}
@@ -140,11 +120,7 @@ const ObjectiveForm = ({
           )}
         </FormField>
 
-        <FormField
-          id="objective-end-date"
-          label="Fecha de fin"
-          helpText="Define el vencimiento para calcular su urgencia."
-        >
+        <FormField id="objective-end-date" label="Fecha de fin">
           {(fieldProps) => (
             <input
               {...fieldProps}
@@ -159,8 +135,9 @@ const ObjectiveForm = ({
       <button
         className="pm-button w-full sm:w-auto"
         type="submit"
+        disabled={isSubmitting}
       >
-        Guardar
+        {isSubmitting ? submittingLabel : submitLabel}
       </button>
     </form>
   );

@@ -1,7 +1,4 @@
-import {
-  useEffect,
-  useState,
-} from "react";
+import { useEffect, useState } from "react";
 
 import MainLayout from "../layouts/MainLayout";
 import SortByUrgencyControl from "../components/SortByUrgencyControl";
@@ -14,33 +11,29 @@ import ObjectiveGrid from "../components/objectives/ObjectiveGrid";
 import { sortItems } from "../utils/urgencySort";
 
 const Objectives = () => {
-  const {
-    objectives,
-    loadObjectives,
-    createObjective,
-    deleteObjective,
-  } = useObjectiveStore();
+  const { objectives, loadObjectives, createObjective, deleteObjective } =
+    useObjectiveStore();
 
-  const [sortBy, setSortBy] =
-    useState("createdAt");
+  const [sortBy, setSortBy] = useState("createdAt");
+
+  const [showCreateForm, setShowCreateForm] = useState(false);
 
   useEffect(() => {
     loadObjectives();
   }, [loadObjectives]);
 
-  const handleCreate =
-    async (data) => {
-      await createObjective(data);
+  const handleCreate = async (data) => {
+    await createObjective(data);
 
-      loadObjectives();
-    };
+    loadObjectives();
+    setShowCreateForm(false);
+  };
 
-  const handleDelete =
-    async (id) => {
-      await deleteObjective(id);
+  const handleDelete = async (id) => {
+    await deleteObjective(id);
 
-      loadObjectives();
-    };
+    loadObjectives();
+  };
 
   const sortedObjectives = sortItems(objectives, {
     dueDateField: "endDate",
@@ -49,15 +42,28 @@ const Objectives = () => {
 
   return (
     <MainLayout>
-      <h1 className="pm-page-title mb-5 sm:mb-6">
-        Objetivos
-      </h1>
+      <div className="mb-6 flex flex-col gap-4 sm:flex-row sm:items-end sm:justify-between">
+        <div>
+          <h1 className="pm-page-title mb-2">Objetivos</h1>
+          <p className="text-sm text-slate-500">Define grandes resultados.</p>
+        </div>
 
-      <div className="mb-6 sm:mb-8">
-        <ObjectiveForm
-          onSubmit={handleCreate}
-        />
+        <button
+          type="button"
+          onClick={() => setShowCreateForm((current) => !current)}
+          className="pm-button w-full sm:w-auto"
+          aria-expanded={showCreateForm}
+          aria-controls="objective-create-form"
+        >
+          {showCreateForm ? "Cerrar" : "+ Nuevo objetivo"}
+        </button>
       </div>
+
+      {showCreateForm && (
+        <div id="objective-create-form" className="mb-6 sm:mb-8">
+          <ObjectiveForm onSubmit={handleCreate} />
+        </div>
+      )}
 
       <div className="mb-4 flex justify-end">
         <SortByUrgencyControl
@@ -67,10 +73,7 @@ const Objectives = () => {
         />
       </div>
 
-      <ObjectiveGrid
-        objectives={sortedObjectives}
-        onDelete={handleDelete}
-      />
+      <ObjectiveGrid objectives={sortedObjectives} onDelete={handleDelete} />
     </MainLayout>
   );
 };
